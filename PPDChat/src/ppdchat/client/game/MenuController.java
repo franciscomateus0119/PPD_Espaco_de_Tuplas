@@ -64,7 +64,7 @@ public class MenuController {
     @FXML
     public void connect(ActionEvent event){
         try{
-            Registry registry = LocateRegistry.getRegistry();
+            //Registry registry = LocateRegistry.getRegistry();
             //ServerInterface server = (ServerInterface) registry.lookup("BizingoRMIServer");
             //client = new Client(server,TF_NOME.getText());
             client.setMenuController(this);

@@ -14,35 +14,4 @@
     <stylesheets>
         <URL value="@chattoolbarcontroller.css" />
     </stylesheets>
-   <children>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="76.0" layoutY="154.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@conteudo/Welcome.png" />
-         </image>
-      </ImageView>
-      <TextArea fx:id="TA_BOX_AB" layoutX="11.0" layoutY="14.0" prefHeight="380.0" prefWidth="330.0" visible="false">
-         <effect>
-            <DropShadow height="7.0" radius="3.0" width="7.0" />
-         </effect></TextArea>
-      <TextArea fx:id="TA_BOX_AC" layoutX="11.0" layoutY="14.0" prefHeight="380.0" prefWidth="330.0" visible="false">
-         <effect>
-            <DropShadow height="7.0" radius="3.0" width="7.0" />
-         </effect></TextArea>
-      <TextArea fx:id="TA_BOX_AD" layoutX="11.0" layoutY="14.0" prefHeight="380.0" prefWidth="330.0" visible="false">
-         <effect>
-            <DropShadow height="7.0" radius="3.0" width="7.0" />
-         </effect></TextArea>
-      <TextArea fx:id="TA_BOX_BC" layoutX="11.0" layoutY="14.0" prefHeight="380.0" prefWidth="330.0" visible="false">
-         <effect>
-            <DropShadow height="7.0" radius="3.0" width="7.0" />
-         </effect></TextArea>
-      <TextArea fx:id="TA_BOX_BD" layoutX="11.0" layoutY="14.0" prefHeight="380.0" prefWidth="330.0" visible="false">
-         <effect>
-            <DropShadow height="7.0" radius="3.0" width="7.0" />
-         </effect></TextArea>
-      <TextArea fx:id="TA_BOX_CD" layoutX="11.0" layoutY="14.0" prefHeight="380.0" prefWidth="330.0" visible="false">
-         <effect>
-            <DropShadow height="7.0" radius="3.0" width="7.0" />
-         </effect></TextArea>
-   </children>
 </AnchorPane>

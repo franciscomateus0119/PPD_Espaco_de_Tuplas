@@ -1,7 +1,8 @@
 package ppdchat.utils;
-
+import ppdchat.client.Client;
 import net.jini.core.entry.Entry;
 public class Message implements Entry {
+    public Client client;
     public String type;
     public String chatname;
     public String name;

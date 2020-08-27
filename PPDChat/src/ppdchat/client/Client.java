@@ -4,19 +4,15 @@
  * and open the template in the editor.
  */
 package ppdchat.client;
-import javax.jms.*;
-import javax.jms.JMSException;
 import ppdchat.client.game.MainGameController;
 import ppdchat.client.game.MenuController;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
+import ppdchat.utils.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javax.naming.NamingException;
 
 /**
  *
@@ -27,6 +23,7 @@ public class Client{
     private MainGameController mainController;
     private MenuController menuController;
     private String nome;
+    private SpaceHandler spacehandler;
     Map<Integer, String> names = new HashMap<>();
     private int nameCounter = 0;
     
@@ -34,6 +31,7 @@ public class Client{
     
     public Client(String nome){
         super();
+        this.spacehandler = SpaceHandler.getInstance();
         this.nome = nome;        
     }
     
@@ -42,7 +40,7 @@ public class Client{
         menuController = menucontroller;
     }
 
-    public void setGameController(MainGameController mainController) throws RemoteException {
+    public void setGameController(MainGameController mainController) {
         this.mainController = mainController;
         //enviarStart();
     }
@@ -50,6 +48,18 @@ public class Client{
     public String getNome() {
         return nome;
     }
+    
+    public SpaceHandler getSpacehandler() {
+        return spacehandler;
+    }
+    
+    public void enviarTextoMensagem(String nome, String texto){
+        Platform.runLater(() -> {
+            mainController.getChatToolbarController().mostrarTextoMensagem(nome, texto);
+        });
+        
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="Old Project">
 
     /*
@@ -168,5 +178,7 @@ public class Client{
     }
     */
     //</editor-fold>
+
+    
 
 }

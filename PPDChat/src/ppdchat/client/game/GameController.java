@@ -49,10 +49,11 @@ import net.jini.space.JavaSpace;
  * @author Matheus
  */
 public class GameController{
-    private MainGameController main; 
+    private MainGameController main;
+    private SpaceHandler spacehandler = main.getClient().getSpacehandler();
     Stage stage;
     
-    String nome;
+    String nome = "Anonimo";
     String nChat;
     Map<Integer, String> chats = new HashMap<>();
     
@@ -137,12 +138,13 @@ public class GameController{
     
     @FXML
     public void sendText(MouseEvent event){
-        String texto = TF_MSG.getText();
-        
+        String texto = TF_MSG.getText() + "\n";
+        TA_BOX.appendText(texto);
+        enviarTextoMensagem(texto);
     }
     
-    public void enviar(String texto){
-        
+    public void enviarTextoMensagem(String texto){
+        spacehandler.writeMessage(nome, texto);
     }
     
     public void aceitarEnter() {

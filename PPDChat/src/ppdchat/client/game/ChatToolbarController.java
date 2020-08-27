@@ -71,6 +71,13 @@ public class ChatToolbarController{
         
     }
     
+    public void mostrarTextoMensagem(String nome, String texto){
+        String mensagem = (nome + ": " + texto);
+        Platform.runLater(() -> {
+            main.getGameController().TA_BOX.appendText(mensagem);
+        });
+    }
+    
     
     // <editor-fold defaultstate="collapsed" desc="Old Project">
 

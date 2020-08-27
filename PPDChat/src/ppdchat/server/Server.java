@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import net.jini.space.JavaSpace;
+import ppdchat.client.Client;
+import ppdchat.utils.*;
+import ppdchat.server.Lookup;
 
 /**
  *
@@ -19,14 +23,51 @@ import java.util.Random;
 public class Server{
     private int clientesConectados = 0;
     private int reiniciarpartida = 0;
+    //private SpaceHandler spacehandler = SpaceHandler.getInstance();
 
-    //protected ArrayList<ClientInterface> clients;
+    protected ArrayList<Client> clients;
+    protected Map<String, Client> clientbyname = new HashMap<>();
+    protected Map<String, String> clientchat = new HashMap<>();
     //public Map<Integer, String> names = new HashMap<>();
     
+    Lookup finder;
+    JavaSpace space;
+    
     public Server() throws RemoteException{
-        super();
-        //clients = new ArrayList<>();
+        clients = new ArrayList<>();
+        finder = new Lookup(JavaSpace.class);
+        space = (JavaSpace) finder.getService();
+        
     }
+    
+    public void messageHandler(){
+        while(true){
+            try{
+                Message template = new Message();
+                Message msg = (Message) space.take(template, null, 300 * 1000);
+                if (msg != null) {
+                    switch (msg.type) {
+                        case "Client":
+                            clients.add(msg.client);
+                            clientbyname.put(msg.name, msg.client);
+                            break;
+                        case "Mensagem":
+                            System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content);
+                            clientbyname.get(msg.name).enviarTextoMensagem(msg.name, msg.content);
+                            break;
+                        case "ChatSelect":
+                            System.out.println("Usuário " + msg.name + " se conectou ao chat " + msg.chatname);
+                            clientchat.put(msg.name, msg.chatname);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            catch(Exception e){e.printStackTrace();}
+        }
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="Old Project">
 
     /*

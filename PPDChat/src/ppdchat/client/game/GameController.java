@@ -7,7 +7,6 @@ package ppdchat.client.game;
 
 import ppdchat.PPDChat;
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -38,12 +38,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javax.jms.JMSException;
-import javax.jms.TextMessage;
-import javax.naming.NamingException;
-import javax.jms.*;
-import org.apache.activemq.ActiveMQConnection;
-import org.apache.activemq.ActiveMQConnectionFactory;
+
+import ppdchat.utils.*;
+import net.jini.space.JavaSpace;
 
 
 /**
@@ -54,6 +51,11 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 public class GameController{
     private MainGameController main; 
     Stage stage;
+    
+    String nome;
+    String nChat;
+    Map<Integer, String> chats = new HashMap<>();
+    
     // <editor-fold defaultstate="collapsed" desc="Old Project">
     /*
     Boolean circle_a_on = true;
@@ -119,18 +121,53 @@ public class GameController{
     @FXML ImageView IMAGE_SEND;
     */
     //</editor-fold>
+    
+    @FXML TextArea TA_BOX;
+    @FXML TextField TF_MSG;
+    @FXML Button BUTTON_SEND;
+    
 
     
     public void init(MainGameController mainGameController){
         main = mainGameController;
-        /*
-        initbuttons();
-        aceitarEnter();
-        
-        */
+        //initbuttons();
         stage = PPDChat.getStage();   
-
+        aceitarEnter();
     }
+    
+    @FXML
+    public void sendText(MouseEvent event){
+        String texto = TF_MSG.getText();
+        
+    }
+    
+    public void enviar(String texto){
+        
+    }
+    
+    public void aceitarEnter() {
+        TF_MSG.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.isShiftDown()) {
+                    if (event.getCode() == KeyCode.ENTER) {
+                        String texto = TF_MSG.getText();
+                        TF_MSG.setText(texto + "\n");
+                        TF_MSG.positionCaret(TF_MSG.getText().length());
+                    }
+                } else {
+                    if (event.getCode() == KeyCode.ENTER) {
+                        String texto = TF_MSG.getText();
+                        event.consume(); 
+                        System.out.println("Mensagem Enviada");
+                        TF_MSG.clear();
+                    }
+                }
+            }
+        });     
+    }
+
+    
     // <editor-fold defaultstate="collapsed" desc="Old Project">
     /*
     @FXML

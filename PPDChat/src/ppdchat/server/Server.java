@@ -37,8 +37,10 @@ public class Server{
         clients = new ArrayList<>();
         finder = new Lookup(JavaSpace.class);
         space = (JavaSpace) finder.getService();
-        
+        messageHandler();
+        System.out.println("Server Started Sucessfully!");
     }
+    
     
     public void messageHandler(){
         while(true){
@@ -47,13 +49,20 @@ public class Server{
                 Message msg = (Message) space.take(template, null, 300 * 1000);
                 if (msg != null) {
                     switch (msg.type) {
-                        case "Client":
+                        case "NewClient":
                             clients.add(msg.client);
                             clientbyname.put(msg.name, msg.client);
                             break;
                         case "Mensagem":
                             System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content);
-                            clientbyname.get(msg.name).enviarTextoMensagem(msg.name, msg.content);
+                            int x = 0;
+                            while(x<clients.size()){
+                                if(clients.get(x) != clientbyname.get(msg.name)){
+                                    clients.get(x).enviarTextoMensagem(msg.name, msg.content);
+                                }
+                                x = x + 1;
+                            }
+                            //clientbyname.get(msg.name).enviarTextoMensagem(msg.name, msg.content);
                             break;
                         case "ChatSelect":
                             System.out.println("Usuário " + msg.name + " se conectou ao chat " + msg.chatname);

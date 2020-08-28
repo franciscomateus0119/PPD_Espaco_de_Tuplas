@@ -49,13 +49,8 @@ public class MenuController {
     
     @FXML TextField TF_NOME;
     
-    
-    
-    @FXML
-    private Button buttonConnect;
-    
-    
-    
+    @FXML private Button buttonConnect;
+
     @FXML
     public void initialize() {
         buttonConnect.setBackground(startbg);
@@ -66,7 +61,14 @@ public class MenuController {
         try{
             //Registry registry = LocateRegistry.getRegistry();
             //ServerInterface server = (ServerInterface) registry.lookup("BizingoRMIServer");
-            //client = new Client(server,TF_NOME.getText());
+            if (!TF_NOME.getText().equals("")) {
+                client = new Client(TF_NOME.getText());
+            }
+            else {
+                client = new Client("Anonimo");
+            }
+            
+            System.out.println("Setting MenuController");
             client.setMenuController(this);
             //server.registerClient(client);
         }

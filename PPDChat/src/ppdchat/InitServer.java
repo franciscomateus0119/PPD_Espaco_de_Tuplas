@@ -4,11 +4,6 @@
  * and open the template in the editor.
  */
 package ppdchat;
-
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 //import ppdchat.server.ServerInterface;
 import ppdchat.server.Server;
 import ppdchat.server.Server;
@@ -25,6 +20,14 @@ public class InitServer extends Application{
     public void start(Stage primaryStage) throws Exception {}
     public static void main(String args[]){
         System.out.println("Starting...");
+        try {
+            Server server = new Server();
+            System.out.println("Server Started Sucessfully!");
+            
+        } catch (Exception e) {
+            System.out.println("Failed Server Initialization!");
+            e.printStackTrace();
+        }
         /*
         try{
             ServerInterface server = new Server();

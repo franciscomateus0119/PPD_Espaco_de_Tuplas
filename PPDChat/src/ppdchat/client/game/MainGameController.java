@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;
+import ppdchat.utils.*;
 
 /** 
  * FXML Controller class
@@ -33,6 +34,7 @@ public class MainGameController {
     private ChatToolbarController chatToolbarController;
     private Client client;
     private Stage mainStage;
+    private SpaceHandler spacehandler;
     
     @FXML
     public void initialize() {
@@ -63,6 +65,7 @@ public class MainGameController {
     public void initControllers() throws RemoteException{
         chatToolbarController.init(this);        
         gameController.init(this);
+        //client.setSpacehandler(SpaceHandler.getInstance());
         client.setGameController(this);
     }
 

@@ -1,5 +1,5 @@
 package ppdchat.utils;
-
+import ppdchat.client.Client;
 import net.jini.space.JavaSpace;
 public class SpaceHandler {
     private static SpaceHandler instance;
@@ -51,6 +51,18 @@ public class SpaceHandler {
         catch(Exception e){e.printStackTrace();}
     }
     
+    public void writeNewClient(Client client, String name){
+        try {
+            Message msg = new Message();
+            msg.type = "NewClient";
+            msg.client = client;
+            msg.name = name;
+            space.write(msg, null, 60 * 1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
     
     public void readMessage(){
         try {

@@ -31,18 +31,31 @@ public class Client{
     
     public Client(String nome){
         super();
-        this.spacehandler = SpaceHandler.getInstance();
-        this.nome = nome;        
+        //this.spacehandler = SpaceHandler.getInstance();
+        this.nome = nome;
+        //writeClient();
+        
     }
+
+    public void setSpacehandler(SpaceHandler spacehandler) {
+        this.spacehandler = spacehandler;
+    }
+
     
+    public void writeClient(){
+        SpaceHandler.getInstance().writeNewClient(this, nome);
+    }
     
     public void setMenuController(MenuController menucontroller){
         menuController = menucontroller;
+        System.out.println("Set MenuController");
     }
 
     public void setGameController(MainGameController mainController) {
         this.mainController = mainController;
+        //mainController.getGameController().setSpacehandler(spacehandler);
         //enviarStart();
+        //writeClient();
     }
 
     public String getNome() {

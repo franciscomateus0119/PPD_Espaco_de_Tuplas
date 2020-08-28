@@ -50,7 +50,7 @@ import net.jini.space.JavaSpace;
  */
 public class GameController{
     private MainGameController main;
-    private SpaceHandler spacehandler = main.getClient().getSpacehandler();
+    private SpaceHandler spacehandler;
     Stage stage;
     
     String nome = "Anonimo";
@@ -135,7 +135,7 @@ public class GameController{
         stage = PPDChat.getStage();   
         aceitarEnter();
     }
-    
+     
     @FXML
     public void sendText(MouseEvent event){
         String texto = TF_MSG.getText() + "\n";
@@ -169,6 +169,9 @@ public class GameController{
         });     
     }
 
+    public void setSpacehandler(SpaceHandler spacehandler) {
+        this.spacehandler = spacehandler;
+    }
     
     // <editor-fold defaultstate="collapsed" desc="Old Project">
     /*
@@ -687,6 +690,8 @@ public class GameController{
     }
         */
             //</editor-fold>
+
+    
 
     
 }

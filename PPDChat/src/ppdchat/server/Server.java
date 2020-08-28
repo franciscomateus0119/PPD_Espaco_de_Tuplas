@@ -50,6 +50,7 @@ public class Server{
                 if (msg != null) {
                     switch (msg.type) {
                         case "NewClient":
+                            System.out.println("Received client " + msg.name);
                             clients.add(msg.client);
                             clientbyname.put(msg.name, msg.client);
                             break;

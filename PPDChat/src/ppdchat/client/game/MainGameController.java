@@ -65,7 +65,7 @@ public class MainGameController {
     public void initControllers() throws RemoteException{
         chatToolbarController.init(this);        
         gameController.init(this);
-        //client.setSpacehandler(SpaceHandler.getInstance());
+        client.setSpacehandler(SpaceHandler.getInstance());
         client.setGameController(this);
     }
 

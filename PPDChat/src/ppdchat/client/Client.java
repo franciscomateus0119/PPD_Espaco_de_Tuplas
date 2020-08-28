@@ -33,15 +33,15 @@ public class Client{
         super();
         //this.spacehandler = SpaceHandler.getInstance();
         this.nome = nome;
-        //writeClient();
+        
         
     }
 
     public void setSpacehandler(SpaceHandler spacehandler) {
         this.spacehandler = spacehandler;
-        System.out.println("SpaceHandler set!");
     }
 
+    
     
     public void writeClient(){
         SpaceHandler.getInstance().writeNewClient(this, nome);
@@ -56,9 +56,10 @@ public class Client{
 
     public void setGameController(MainGameController mainController) {
         this.mainController = mainController;
-        System.out.println("Set MainController");
+        //System.out.println("Set MainController");
         mainController.getGameController().setSpacehandler(spacehandler);
-        //enviarStart()
+        mainController.getClient().getSpacehandler().writeNewClient(this, nome);
+        System.out.println("Client sent to TupleSpace!");
         
         //writeClient();
     }

@@ -37,9 +37,7 @@ public class Client{
         
     }
 
-    public void setSpacehandler(SpaceHandler spacehandler) {
-        this.spacehandler = spacehandler;
-    }
+   
 
     
     
@@ -56,9 +54,14 @@ public class Client{
 
     public void setGameController(MainGameController mainController) {
         this.mainController = mainController;
+        System.out.println("GAMECONTROLLER set!");
         //System.out.println("Set MainController");
-        mainController.getGameController().setSpacehandler(spacehandler);
-        mainController.getClient().getSpacehandler().writeNewClient(this, nome);
+        //System.out.println("Setting SpaceHandler");
+        //mainController.getClient().setSpacehandler(mainController.getSpacehandler());
+        //System.out.println("SpaceHandler SET");
+        //mainController.getGameController().setSpacehandler(spacehandler);
+        //mainController.getClient().getSpacehandler().writeNewClient(this, nome);
+        mainController.getSpacehandler().getInstance().writeNewClient(this, nome);
         System.out.println("Client sent to TupleSpace!");
         
         //writeClient();
@@ -68,6 +71,9 @@ public class Client{
         return nome;
     }
     
+     public void setSpacehandler(SpaceHandler spacehandler) {
+        this.spacehandler = spacehandler;
+    }
     public SpaceHandler getSpacehandler() {
         return spacehandler;
     }

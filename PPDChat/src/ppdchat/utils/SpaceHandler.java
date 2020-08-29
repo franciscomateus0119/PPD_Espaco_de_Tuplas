@@ -1,10 +1,13 @@
 package ppdchat.utils;
 import ppdchat.client.Client;
+import ppdchat.client.game.MainGameController;
 import net.jini.space.JavaSpace;
 public class SpaceHandler {
     private static SpaceHandler instance;
     private JavaSpace space;
     private Lookup finder;
+    private MainGameController maingamecontroller;
+    
     private SpaceHandler(){
         try{
             System.out.println("Procurando pelo servico JavaSpace...");
@@ -23,12 +26,26 @@ public class SpaceHandler {
     }
     
     public static SpaceHandler getInstance(){
+        return SpaceHandlerHolder.INSTANCE;
+    }
+    
+    private static class SpaceHandlerHolder{
+        private static final SpaceHandler INSTANCE = new SpaceHandler();
+    }
+    
+    public void init(MainGameController main){
+        maingamecontroller = main; 
+        
+    }
+    
+    /*
+    public static SpaceHandler getInstance(){
         if(instance == null){
             instance = new SpaceHandler();
         }
         return instance;
     }
-    
+    */
     public void writeMessage(String name, String message){
         try{
             Message msg = new Message();

@@ -65,12 +65,17 @@ public class MainGameController {
     public void initControllers() throws RemoteException{
         chatToolbarController.init(this);    
         System.out.println("CHATTOOLBARCONTROLLER set!");
+        
         gameController.init(this);
         System.out.println("GAMECONTROLLER set!");
-        client.setSpacehandler(SpaceHandler.getInstance());
-        System.out.println("SPACEHANDLER set!");
+        
+        //client.setSpacehandler(SpaceHandler.getInstance());
+        //System.out.println("SPACEHANDLER set!");
+        
+        spacehandler.getInstance().init(this);
+        
         client.setGameController(this);
-        System.out.println("GAMECONTROLLER set!");
+        //System.out.println("GAMECONTROLLER set!");
     }
 
     public GameController getGameController() {
@@ -84,6 +89,12 @@ public class MainGameController {
     public Client getClient() {
         return client;
     }
+
+    public SpaceHandler getSpacehandler() {
+        return spacehandler;
+    }
+    
+    
 
     public static MainGameController getG() {
         return g;

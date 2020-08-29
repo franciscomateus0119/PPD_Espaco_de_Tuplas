@@ -41,7 +41,7 @@ import javafx.stage.Stage;
  * @author Matheus
  */
 public class MenuController {
-    private Client client;
+    //private Client client;
     private boolean jogoIniciado;
     BackgroundImage startimg = new BackgroundImage( new Image( getClass().getResource("conteudo/start.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
     Background startbg = new Background(startimg);
@@ -50,6 +50,8 @@ public class MenuController {
     @FXML TextField TF_NOME;
     
     @FXML private Button buttonConnect;
+    
+    private Client clientInstance;
 
     @FXML
     public void initialize() {
@@ -59,17 +61,20 @@ public class MenuController {
     @FXML
     public void connect(ActionEvent event){
         try{
+            clientInstance = Client.getInstance();
             //Registry registry = LocateRegistry.getRegistry();
             //ServerInterface server = (ServerInterface) registry.lookup("BizingoRMIServer");
             if (!TF_NOME.getText().equals("")) {
-                client = new Client(TF_NOME.getText());
+                clientInstance.setNome(TF_NOME.getText());
+                //client = new Client(TF_NOME.getText());
             }
             else {
-                client = new Client("Anonimo");
+                //client = new Client("Anonimo");
+                clientInstance.setNome("Anonimo");
             }
             
             System.out.println("Setting MenuController");
-            client.setMenuController(this);
+            clientInstance.setMenuController(this);
             //server.registerClient(client);
         }
         catch(Exception e){
@@ -79,7 +84,7 @@ public class MenuController {
      
     public void gameStartReady(){
         Map<String, Object> data = new HashMap<>();
-        data.put("client", client);
+        data.put("client", clientInstance);
         jogoIniciado = true;
         PPDChat.changeScreen("game", data);
         

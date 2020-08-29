@@ -50,7 +50,7 @@ import net.jini.space.JavaSpace;
  */
 public class GameController{
     private MainGameController main;
-    private SpaceHandler spacehandler;
+    //private SpaceHandler spacehandler;
     Stage stage;
     
     String nome = "Anonimo";
@@ -131,6 +131,7 @@ public class GameController{
     
     public void init(MainGameController mainGameController){
         main = mainGameController;
+        
         //initbuttons();
         stage = PPDChat.getStage();   
         aceitarEnter();
@@ -144,8 +145,20 @@ public class GameController{
     }
     
     public void enviarTextoMensagem(String texto){
-        spacehandler.writeMessage(nome, texto);
+        if(nome.equals("Anonimo")){
+            Platform.runLater(() -> nome = main.getClient().getNome());
+        }
+        Platform.runLater(() -> main.getClient().writeMessage(nome, texto));
     }
+
+    public void setNome(String nome) {
+        if(!nome.equals("") && !(nome == null)){
+            this.nome = nome;
+        }
+        
+    }
+    
+    
     
     public void aceitarEnter() {
         TF_MSG.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
@@ -168,10 +181,11 @@ public class GameController{
             }
         });     
     }
-
+    /*
     public void setSpacehandler(SpaceHandler spacehandler) {
         this.spacehandler = spacehandler;
     }
+    */
     
     // <editor-fold defaultstate="collapsed" desc="Old Project">
     /*

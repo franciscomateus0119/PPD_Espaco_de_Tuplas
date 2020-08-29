@@ -37,8 +37,8 @@ public class Server{
         clients = new ArrayList<>();
         finder = new Lookup(JavaSpace.class);
         space = (JavaSpace) finder.getService();
-        messageHandler();
         System.out.println("Server Started Sucessfully!");
+        messageHandler();
     }
     
     

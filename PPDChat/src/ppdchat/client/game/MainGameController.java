@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;
@@ -34,7 +35,8 @@ public class MainGameController {
     private ChatToolbarController chatToolbarController;
     private Client client;
     private Stage mainStage;
-    private SpaceHandler spacehandler;
+    //private Client clientInstance
+    //private SpaceHandler spacehandler;
     
     @FXML
     public void initialize() {
@@ -72,9 +74,11 @@ public class MainGameController {
         //client.setSpacehandler(SpaceHandler.getInstance());
         //System.out.println("SPACEHANDLER set!");
         
-        spacehandler.getInstance().init(this);
-        
+        client = Client.getInstance();
+        Platform.runLater(() -> client.writeNewClient(client, client.getNome()));
         client.setGameController(this);
+        
+        //client.setGameController(this);
         //System.out.println("GAMECONTROLLER set!");
     }
 
@@ -89,11 +93,11 @@ public class MainGameController {
     public Client getClient() {
         return client;
     }
-
+    /*
     public SpaceHandler getSpacehandler() {
         return spacehandler;
     }
-    
+    */
     
 
     public static MainGameController getG() {

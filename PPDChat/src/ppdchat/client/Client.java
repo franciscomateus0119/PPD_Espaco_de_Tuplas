@@ -45,12 +45,14 @@ public class Client{
             System.out.println("Procurando pelo servico JavaSpace...");
             finder = new Lookup(JavaSpace.class);
             space = (JavaSpace) finder.getService();
-            writeNewClient(clientForm, nome);
+            
             if (space == null) {
                 System.out.println("O servico JavaSpace nao foi encontrado. Encerrando...");
                 System.exit(-1);
             }
+            
             System.out.println("O servico JavaSpace foi encontrado.");
+            //writeNewClient(clientForm, nome);
         } catch (Exception e) {
             System.out.println("Não foi possível encontrar o espaço!");
             e.printStackTrace();
@@ -76,6 +78,7 @@ public class Client{
     }
     */
     public void startThread(){
+        writeNewClient(clientForm, nome);
         Runnable runnable = new ReadMessageThread(space, clientForm, nome);
         Thread thread = new Thread(runnable);
         thread.start();
@@ -179,7 +182,7 @@ public class Client{
             
             Platform.runLater(() -> {
                 try {
-                    space.write(msg, null, 60 * 1000);
+                    this.space.write(msg, null, 60 * 1000);
                     System.out.println("Cliente " + msg.clientForm+ " enviado!");
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);

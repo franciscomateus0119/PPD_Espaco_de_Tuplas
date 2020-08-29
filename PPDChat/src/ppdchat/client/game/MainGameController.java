@@ -18,7 +18,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;
-import ppdchat.utils.*;
 
 /** 
  * FXML Controller class
@@ -74,9 +73,14 @@ public class MainGameController {
         //client.setSpacehandler(SpaceHandler.getInstance());
         //System.out.println("SPACEHANDLER set!");
         
-        client = Client.getInstance();
-        Platform.runLater(() -> client.writeNewClient(client, client.getNome()));
+        //client = Client.getInstance();
+        //Platform.runLater(() -> client.writeNewClient(client, client.getNome()));
         client.setGameController(this);
+        Platform.runLater(() -> {
+            client.createClientForm();
+            client.startThread();
+        });
+        
         
         //client.setGameController(this);
         //System.out.println("GAMECONTROLLER set!");

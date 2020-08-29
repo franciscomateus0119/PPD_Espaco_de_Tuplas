@@ -51,7 +51,8 @@ public class MenuController {
     
     @FXML private Button buttonConnect;
     
-    private Client clientInstance;
+    //private Client clientInstance;
+    private Client client;
 
     @FXML
     public void initialize() {
@@ -61,20 +62,24 @@ public class MenuController {
     @FXML
     public void connect(ActionEvent event){
         try{
-            clientInstance = Client.getInstance();
+            client = new Client();
+            //clientInstance = Client.getInstance();
             //Registry registry = LocateRegistry.getRegistry();
             //ServerInterface server = (ServerInterface) registry.lookup("BizingoRMIServer");
             if (!TF_NOME.getText().equals("")) {
-                clientInstance.setNome(TF_NOME.getText());
+                //clientInstance.setNome(TF_NOME.getText());
                 //client = new Client(TF_NOME.getText());
+                client.setNome(TF_NOME.getText());
             }
             else {
                 //client = new Client("Anonimo");
-                clientInstance.setNome("Anonimo");
+                //clientInstance.setNome("Anonimo");
+                client.setNome("Anonimo");
             }
             
             System.out.println("Setting MenuController");
-            clientInstance.setMenuController(this);
+            //clientInstance.setMenuController(this);
+            client.setMenuController(this);
             //server.registerClient(client);
         }
         catch(Exception e){
@@ -84,7 +89,8 @@ public class MenuController {
      
     public void gameStartReady(){
         Map<String, Object> data = new HashMap<>();
-        data.put("client", clientInstance);
+        //data.put("client", clientInstance);
+        data.put("client", client);
         jogoIniciado = true;
         PPDChat.changeScreen("game", data);
         

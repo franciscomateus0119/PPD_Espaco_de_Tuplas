@@ -39,7 +39,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-import ppdchat.utils.*;
 import net.jini.space.JavaSpace;
 
 
@@ -145,9 +144,11 @@ public class GameController{
     }
     
     public void enviarTextoMensagem(String texto){
+        /*
         if(nome.equals("Anonimo")){
             Platform.runLater(() -> nome = main.getClient().getNome());
         }
+        */
         Platform.runLater(() -> main.getClient().writeMessage(nome, texto));
     }
 

@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
-
+import ppdchat.client.ClientForm;
 
 /**
  *
@@ -27,13 +27,17 @@ public class Client{
     //private ServerInterface server;
     private MainGameController mainController;
     private MenuController menuController;
-    private static Client instance;
+    private ClientForm clientForm;
     private JavaSpace space;
     private Lookup finder;
     private String nome;
     private int nameCounter = 0;
+    
+    Runnable runnable;
+    Thread thread;
 
     public Client() {
+        //clientForm = new ClientForm();
         try {
             System.out.println("Procurando pelo servico JavaSpace...");
             finder = new Lookup(JavaSpace.class);
@@ -49,14 +53,30 @@ public class Client{
             System.exit(-1);
         }
     }
-    
+    /*
     public static Client getInstance() {
         if(instance == null){
             instance = new Client();
         }
         return instance;
     }
-   
+   */
+    
+    public void createClientForm(){
+        Platform.runLater(() -> {
+            clientForm = new ClientForm(space, nome, mainController);
+            writeNewClient(clientForm, nome);
+            mainController.getGameController().setNome(nome);
+        });
+        
+    }
+    
+    public void startThread(){
+        Runnable runnable = new ReadMessageThread(space, clientForm, nome);
+        Thread thread = new Thread(runnable);
+        thread.start();
+    }
+    /*
     public void writeClient(){
         Platform.runLater(() -> {
             this.writeNewClient(this, nome);
@@ -65,7 +85,7 @@ public class Client{
         });
         
     }
-    
+    */
     public void setMenuController(MenuController menucontroller){
         menuController = menucontroller;
         System.out.println("Set MenuController");
@@ -89,25 +109,22 @@ public class Client{
     public JavaSpace getSpace() {
         return space;
     }
-    
-    /*
-     public void setSpacehandler(SpaceHandler spacehandler) {
-        this.spacehandler = spacehandler;
+
+    public ClientForm getClientForm() {
+        return clientForm;
     }
-    public SpaceHandler getSpacehandler() {
-        return spacehandler;
-    }
-    */
+/*
     public void enviarTextoMensagem(String nome, String texto){
         Platform.runLater(() -> {
             mainController.getChatToolbarController().mostrarTextoMensagem(nome, texto);
         });
         
     }
-    
+*/  
     public void writeMessage(String name, String message){
         try{
             Message msg = new Message();
+            msg.destination = "Servidor";
             msg.type = "Mensagem";
             msg.name = name;
             msg.content = message;
@@ -128,6 +145,7 @@ public class Client{
     public void writeChatSelect(String chatname, String name){
         try{
             Message msg = new Message();
+            msg.destination = "Servidor";
             msg.type = "ChatSelect";
             msg.chatname = chatname;
             msg.name = name;
@@ -145,12 +163,15 @@ public class Client{
         catch(Exception e){e.printStackTrace();}
     }
     
-    public void writeNewClient(Client client, String name){
+    public void writeNewClient(ClientForm client, String name){
         try {
             Message msg = new Message();
+            msg.destination = "Servidor";
             msg.type = "NewClient";
-            msg.client = client;
+            msg.clientForm = client;
             msg.name = name;
+            //clientForm.writeMessage(msg);
+            
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);
@@ -161,33 +182,12 @@ public class Client{
                 }
             });
             
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-    
-    public void readMessage(){
-        try {
-            Message template = new Message();
-            Message msg = (Message) space.take(template, null, 60 * 1000);
-            if (msg == null) {
-                System.out.println("Tempo de espera esgotado. Encerrando...");
-                System.exit(0);
-            }
-            if (msg.type.equals("Mensagem")) {
-                System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content);
-            } else if (msg.type.equals("ChatSelect")) {
-                System.out.println("Usuário " + msg.name + " se conectou ao chat " + msg.chatname);
-            }
             
-            System.out.println("Mensagem recebida: " + msg.content);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    
+  
     
     // <editor-fold defaultstate="collapsed" desc="Old Project">
 

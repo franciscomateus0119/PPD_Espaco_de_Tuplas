@@ -1,9 +1,10 @@
 package ppdchat.client;
 import ppdchat.client.*;
-import ppdchat.client.Client;
+import ppdchat.client.ClientForm;
 import net.jini.core.entry.Entry;
 public class Message implements Entry {
-    public Client client;
+    public ClientForm clientForm = null;
+    public String destination;
     public String type;
     public String chatname;
     public String name;

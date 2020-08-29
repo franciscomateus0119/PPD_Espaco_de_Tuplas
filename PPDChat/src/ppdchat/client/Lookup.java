@@ -1,6 +1,5 @@
 package ppdchat.client;
 
-import ppdchat.client.*;
 import java.io.IOException;
 
 import java.rmi.RemoteException;

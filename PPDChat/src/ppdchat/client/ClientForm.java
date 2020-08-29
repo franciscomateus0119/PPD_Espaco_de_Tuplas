@@ -18,7 +18,7 @@ public class ClientForm implements java.io.Serializable{
     MainGameController main;
     public ArrayList<String> chatlist;
     
-    public ClientForm(JavaSpace space, String nome, MainGameController main){
+    public ClientForm(String nome){
         this.space = space;
         this.nome = nome;
         this.main = main;
@@ -47,6 +47,16 @@ public class ClientForm implements java.io.Serializable{
     public void setChatlist(ArrayList<String> chatlist) {
         this.chatlist = chatlist;
     }
+
+    public MainGameController getMain() {
+        return main;
+    }
+
+    public void setMain(MainGameController main) {
+        this.main = main;
+    }
+    
+    
     
     public void enviarTextoMensagem(String nome, String texto){
         Platform.runLater(() -> {
@@ -55,23 +65,6 @@ public class ClientForm implements java.io.Serializable{
         
     }
     
-    public void writeMessage(Message msg){
-        try {
-            Platform.runLater(() -> {
-                try {
-                    System.out.println(space);
-                    space.write(msg, null, 60 * 1000);
-                } catch (TransactionException ex) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            });
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     
     /*
     public void writeSomething(String texto){

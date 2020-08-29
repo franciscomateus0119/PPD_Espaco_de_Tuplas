@@ -77,7 +77,7 @@ public class MainGameController {
         //Platform.runLater(() -> client.writeNewClient(client, client.getNome()));
         client.setGameController(this);
         Platform.runLater(() -> {
-            client.createClientForm();
+            //client.createClientForm();
             client.startThread();
         });
         

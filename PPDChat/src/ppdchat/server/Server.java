@@ -53,6 +53,7 @@ public class Server{
                 Message template = new Message();
                 Message msg = (Message) space.take(template, null, 300 * 1000);
                 if (msg != null) {
+                    System.out.println("Mensagem recebida!");
                     if (msg.destination.equals("Servidor")) {
                         switch (msg.type) {
                             case "NewClient":

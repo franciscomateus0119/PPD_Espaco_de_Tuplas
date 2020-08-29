@@ -36,12 +36,16 @@ public class Client{
     Runnable runnable;
     Thread thread;
 
-    public Client() {
+    public Client(String nome) {
+        this.nome = nome;
+        clientForm = new ClientForm(nome);
+        System.out.println(clientForm);
         //clientForm = new ClientForm();
         try {
             System.out.println("Procurando pelo servico JavaSpace...");
             finder = new Lookup(JavaSpace.class);
             space = (JavaSpace) finder.getService();
+            writeNewClient(clientForm, nome);
             if (space == null) {
                 System.out.println("O servico JavaSpace nao foi encontrado. Encerrando...");
                 System.exit(-1);
@@ -61,7 +65,7 @@ public class Client{
         return instance;
     }
    */
-    
+    /*
     public void createClientForm(){
         Platform.runLater(() -> {
             clientForm = new ClientForm(space, nome, mainController);
@@ -70,7 +74,7 @@ public class Client{
         });
         
     }
-    
+    */
     public void startThread(){
         Runnable runnable = new ReadMessageThread(space, clientForm, nome);
         Thread thread = new Thread(runnable);
@@ -94,6 +98,7 @@ public class Client{
 
     public void setGameController(MainGameController mainController) {
         this.mainController = mainController;
+        this.clientForm.setMain(mainController);
         System.out.println("GAMECONTROLLER set!");
     }
 
@@ -175,6 +180,7 @@ public class Client{
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);
+                    System.out.println("Cliente " + msg.clientForm+ " enviado!");
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (RemoteException ex) {

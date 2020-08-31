@@ -41,8 +41,8 @@ public class Server {
     public Server() throws RemoteException {
         //clients = new ArrayList<>();
         names = new ArrayList<>();
-        finder = new Lookup(JavaSpace.class);
-        space = (JavaSpace) finder.getService();
+        this.finder = new Lookup(JavaSpace.class);
+        this.space = (JavaSpace) finder.getService();
         if(space==null){
             System.out.println("Não foi possível encontrar o JavaSpace!");
         }
@@ -60,6 +60,9 @@ public class Server {
                 Message template = new Message();
                 if(template==null){
                     System.out.println("Template nulo!");
+                }
+                else{
+                    System.out.println("Template não nulo!");
                 }
                 Message msg = (Message) space.take(template, null, 300 * 1000);
                 if (msg != null) {

@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
-import ppdchat.client.ClientForm;
+//import ppdchat.client.ClientForm;
 
 /**
  *
@@ -27,7 +27,7 @@ public class Client{
     //private ServerInterface server;
     private MainGameController mainController;
     private MenuController menuController;
-    private ClientForm clientForm;
+    //private ClientForm clientForm;
     private JavaSpace space;
     private Lookup finder;
     private String nome;
@@ -38,9 +38,6 @@ public class Client{
 
     public Client(String nome) {
         this.nome = nome;
-        clientForm = new ClientForm(nome);
-        System.out.println(clientForm);
-        //clientForm = new ClientForm();
         try {
             System.out.println("Procurando pelo servico JavaSpace...");
             finder = new Lookup(JavaSpace.class);
@@ -52,6 +49,11 @@ public class Client{
             }
             
             System.out.println("O servico JavaSpace foi encontrado.");
+            System.out.println("Enviando mensagens de teste");
+            writeMessage(this.nome, "Mensagem Teste 1");
+            writeMessage(this.nome, "Mensagem Teste 2");
+            writeMessage(this.nome, "Mensagem Teste 3");
+            writeMessage(this.nome, "Mensagem Teste 4");
             //writeNewClient(clientForm, nome);
         } catch (Exception e) {
             System.out.println("Não foi possível encontrar o espaço!");
@@ -59,40 +61,13 @@ public class Client{
             System.exit(-1);
         }
     }
-    /*
-    public static Client getInstance() {
-        if(instance == null){
-            instance = new Client();
-        }
-        return instance;
-    }
-   */
-    /*
-    public void createClientForm(){
-        Platform.runLater(() -> {
-            clientForm = new ClientForm(space, nome, mainController);
-            writeNewClient(clientForm, nome);
-            mainController.getGameController().setNome(nome);
-        });
-        
-    }
-    */
+
     public void startThread(){
-        writeNewClient(clientForm, nome);
-        Runnable runnable = new ReadMessageThread(space, clientForm, nome);
+        Runnable runnable = new ReadMessageThread(space, nome);
         Thread thread = new Thread(runnable);
         thread.start();
     }
-    /*
-    public void writeClient(){
-        Platform.runLater(() -> {
-            this.writeNewClient(this, nome);
-            System.out.println("Client sent to TupleSpace!");
-            //mainController.getGameController().setNome(nome);
-        });
-        
-    }
-    */
+
     public void setMenuController(MenuController menucontroller){
         menuController = menucontroller;
         System.out.println("Set MenuController");
@@ -101,8 +76,9 @@ public class Client{
 
     public void setGameController(MainGameController mainController) {
         this.mainController = mainController;
-        this.clientForm.setMain(mainController);
-        System.out.println("GAMECONTROLLER set!");
+        //this.clientForm.setMain(mainController);
+        System.out.println("MAINGAMECONTROLLER set!");
+        writeMessage(this.nome, "O MainGameController foi setado!");
     }
 
     public String getNome() {
@@ -118,33 +94,15 @@ public class Client{
         return space;
     }
 
-    public ClientForm getClientForm() {
-        return clientForm;
-    }
-/*
-    public void enviarTextoMensagem(String nome, String texto){
-        Platform.runLater(() -> {
-            mainController.getChatToolbarController().mostrarTextoMensagem(nome, texto);
-        });
-        
-    }
-*/  
     public void writeMessage(String name, String message){
         try{
             Message msg = new Message();
-            msg.destination = "Servidor";
             msg.type = "Mensagem";
             msg.name = name;
             msg.content = message;
-            Platform.runLater(() -> {
-                try {
-                    space.write(msg, null, 60 * 1000);
-                } catch (TransactionException ex) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            });
+            space.write(msg, null, 60 * 1000);
+            System.out.println("MENSAGEM ENVIADA: " + msg.content);
+                
             
         }
         catch(Exception e){e.printStackTrace();}
@@ -153,7 +111,6 @@ public class Client{
     public void writeChatSelect(String chatname, String name){
         try{
             Message msg = new Message();
-            msg.destination = "Servidor";
             msg.type = "ChatSelect";
             msg.chatname = chatname;
             msg.name = name;
@@ -171,31 +128,7 @@ public class Client{
         catch(Exception e){e.printStackTrace();}
     }
     
-    public void writeNewClient(ClientForm client, String name){
-        try {
-            Message msg = new Message();
-            msg.destination = "Servidor";
-            msg.type = "NewClient";
-            msg.clientForm = client;
-            msg.name = name;
-            //clientForm.writeMessage(msg);
-            
-            Platform.runLater(() -> {
-                try {
-                    this.space.write(msg, null, 60 * 1000);
-                    System.out.println("Cliente " + msg.clientForm+ " enviado!");
-                } catch (TransactionException ex) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            });
-            
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
   
     
     // <editor-fold defaultstate="collapsed" desc="Old Project">

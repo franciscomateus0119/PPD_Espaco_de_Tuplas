@@ -5,7 +5,6 @@
  */
 package ppdchat.server;
 
-
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +16,6 @@ import javafx.application.Platform;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
 import ppdchat.client.Client;
-import ppdchat.client.ClientForm;
 import ppdchat.server.Message;
 import ppdchat.server.Lookup;
 
@@ -25,77 +23,71 @@ import ppdchat.server.Lookup;
  *
  * @author Matheus
  */
-public class Server{
+public class Server {
+
     private int clientesConectados = 0;
     private int reiniciarpartida = 0;
     //private SpaceHandler spacehandler = SpaceHandler.getInstance();
 
-    protected ArrayList<ClientForm> clients;
-    protected Map<String, ClientForm> clientbyname = new HashMap<>();
+    //protected ArrayList<ClientForm> clients;
+    //protected Map<String, ClientForm> clientbyname = new HashMap<>();
     protected Map<String, String> clientchat = new HashMap<>();
+    protected ArrayList<String> names;
     //public Map<Integer, String> names = new HashMap<>();
-    
+
     Lookup finder;
     JavaSpace space;
-    
-    public Server() throws RemoteException{
-        clients = new ArrayList<>();
+
+    public Server() throws RemoteException {
+        //clients = new ArrayList<>();
+        names = new ArrayList<>();
         finder = new Lookup(JavaSpace.class);
         space = (JavaSpace) finder.getService();
+        if(space==null){
+            System.out.println("Não foi possível encontrar o JavaSpace!");
+        }
+        else{
+            System.out.println("JavaSpace encontrado: " + space);
+        }
         System.out.println("Server Started Sucessfully!");
         messageHandler();
     }
-    
-    
-    public void messageHandler(){
-        while(true){
-            try{
+
+    public void messageHandler() {
+        System.out.println("A função messageHandler() foi iniciada!");
+        while (true) {
+            try {
                 Message template = new Message();
+                if(template==null){
+                    System.out.println("Template nulo!");
+                }
                 Message msg = (Message) space.take(template, null, 300 * 1000);
                 if (msg != null) {
                     System.out.println("Mensagem recebida!");
-                    if (msg.destination.equals("Servidor")) {
-                        switch (msg.type) {
-                            case "NewClient":
-                                System.out.println("Received client " + msg.clientForm + msg.name);
-                                clients.add(msg.clientForm);
-                                clientbyname.put(msg.name, msg.clientForm);
-                                break;
-                            case "Mensagem":
-                                System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content);
-                                Platform.runLater(() -> {
-                                    writeMessage(msg.name +": ", msg.content);
-                                });
-                                /*
-                                int x = 0;
-                                while (x < clients.size()) {
-                                    if (clients.get(x) != clientbyname.get(msg.name)) {
-                                        clients.get(x).enviarTextoMensagem(msg.name, msg.content);    
-                                    }
-                                    x = x + 1;
-                                }
-                                */
-                                //clientbyname.get(msg.name).enviarTextoMensagem(msg.name, msg.content);
-                                break;
-                            case "ChatSelect":
-                                System.out.println("Usuário " + msg.name + " se conectou ao chat " + msg.chatname);
-                                clientchat.put(msg.name, msg.chatname);
-                                break;
-                            default:
-                                break;
-                        }
+                    switch (msg.type) {
+                        case "Mensagem":
+                            System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content);
+                            writeMessage(msg.name + ": ", msg.content);
+                            break;
+                        case "ChatSelect":
+                            System.out.println("Usuário " + msg.name + " se conectou ao chat " + msg.chatname);
+                            clientchat.put(msg.name, msg.chatname);
+                            break;
+                        default:
+                            break;
                     }
-                    
                 }
+                
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            catch(Exception e){e.printStackTrace();}
         }
     }
-    
-    public void writeMessage(String name, String message){
-        try{
+
+    public void writeMessage(String name, String message) {
+        try {
             Message msg = new Message();
-            msg.destination = "Cliente";
             msg.type = "Mensagem";
             msg.name = name;
             msg.content = message;
@@ -108,12 +100,12 @@ public class Server{
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
-            
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch(Exception e){e.printStackTrace();}
     }
-    
-    
+
     // <editor-fold defaultstate="collapsed" desc="Old Project">
 
     /*
@@ -352,7 +344,6 @@ public class Server{
         }
     }
     
-*/
+     */
 //</editor-fold>
-
 }

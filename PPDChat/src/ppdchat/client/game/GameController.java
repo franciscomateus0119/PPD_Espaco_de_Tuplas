@@ -130,7 +130,6 @@ public class GameController{
     
     public void init(MainGameController mainGameController){
         main = mainGameController;
-        
         //initbuttons();
         stage = PPDChat.getStage();   
         aceitarEnter();
@@ -139,17 +138,13 @@ public class GameController{
     @FXML
     public void sendText(MouseEvent event){
         String texto = TF_MSG.getText() + "\n";
-        TA_BOX.appendText(texto);
+        TA_BOX.appendText("Você: " + texto);
         enviarTextoMensagem(texto);
     }
     
     public void enviarTextoMensagem(String texto){
-        /*
-        if(nome.equals("Anonimo")){
-            Platform.runLater(() -> nome = main.getClient().getNome());
-        }
-        */
-        Platform.runLater(() -> main.getClient().writeMessage(nome, texto));
+        //Platform.runLater(() -> main.getClient().writeMessageToServer(nome, texto));
+        Platform.runLater(() -> main.getClient().writeMessageToClient(nome, texto));
     }
 
     public void setNome(String nome) {

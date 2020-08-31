@@ -69,21 +69,12 @@ public class MainGameController {
         
         gameController.init(this);
         System.out.println("GAMECONTROLLER set!");
-        
-        //client.setSpacehandler(SpaceHandler.getInstance());
-        //System.out.println("SPACEHANDLER set!");
-        
-        //client = Client.getInstance();
-        //Platform.runLater(() -> client.writeNewClient(client, client.getNome()));
+
         client.setGameController(this);
         Platform.runLater(() -> {
-            //client.createClientForm();
             client.startThread();
         });
-        
-        
-        //client.setGameController(this);
-        //System.out.println("GAMECONTROLLER set!");
+
     }
 
     public GameController getGameController() {

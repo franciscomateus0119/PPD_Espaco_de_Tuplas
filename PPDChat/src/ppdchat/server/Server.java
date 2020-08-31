@@ -16,7 +16,8 @@ import javafx.application.Platform;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
 import ppdchat.client.Client;
-import ppdchat.server.Message;
+//import ppdchat.server.Message;
+import ppdchat.utils.*;
 import ppdchat.server.Lookup;
 
 /**
@@ -43,10 +44,9 @@ public class Server {
         names = new ArrayList<>();
         this.finder = new Lookup(JavaSpace.class);
         this.space = (JavaSpace) finder.getService();
-        if(space==null){
+        if (space == null) {
             System.out.println("Não foi possível encontrar o JavaSpace!");
-        }
-        else{
+        } else {
             System.out.println("JavaSpace encontrado: " + space);
         }
         System.out.println("Server Started Sucessfully!");
@@ -58,19 +58,23 @@ public class Server {
         while (true) {
             try {
                 Message template = new Message();
-                if(template==null){
+
+                if (template == null) {
                     System.out.println("Template nulo!");
                 }
-                else{
-                    System.out.println("Template não nulo!");
-                }
                 Message msg = (Message) space.take(template, null, 300 * 1000);
-                if (msg != null) {
-                    System.out.println("Mensagem recebida!");
+                if (msg != null && msg.destino.equals("Servidor") && msg.servidorLeu==false) {
+                    //System.out.println("Mensagem recebida com destino: " + msg.destino);
+                    
                     switch (msg.type) {
                         case "Mensagem":
-                            System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content);
-                            writeMessage(msg.name + ": ", msg.content);
+                            //Se o servidor ainda não leu a mensagem -> Confirma que leu a mensagem
+                            if(msg.servidorLeu==false){
+                                System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content);
+                                msg.servidorLeu = true;
+                                writeMessage(msg.name + ": ", msg.content);
+                            }
+                            
                             break;
                         case "ChatSelect":
                             System.out.println("Usuário " + msg.name + " se conectou ao chat " + msg.chatname);
@@ -79,8 +83,22 @@ public class Server {
                         default:
                             break;
                     }
+                } else if (msg != null && msg.destino.equals("Cliente") && msg.destino != null) {
+                    //Se é a primeira vez que o Servidor recebe uma mensagem enderaçada para os Clientes -> Marca que já leu e a repassa
+                    if(msg.servidorLeu==false){
+                        System.out.println("Servidor Recebeu a mensagem: "+ msg.name + " - " + msg.content);
+                        msg.content = msg.content + " (Servidor)";
+                        msg.servidorLeu = true;
+                        space.write(msg, null, 60 * 1000);
+                    }
+                    //Se o servidor já leu esta mensagem, apenas a repassa
+                    else{
+                        System.out.println("O servidor já leu esta mensagem: "+ msg.name + " - " + msg.content);
+                        space.write(msg, null, 60 * 1000);
+                    }
+                    
+
                 }
-                
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -92,6 +110,7 @@ public class Server {
         try {
             Message msg = new Message();
             msg.type = "Mensagem";
+            msg.destino = "Cliente";
             msg.name = name;
             msg.content = message;
             Platform.runLater(() -> {

@@ -8,7 +8,8 @@ import java.rmi.RemoteException;
 import ppdchat.client.game.MainGameController;
 import ppdchat.client.game.MenuController;
 import ppdchat.client.Lookup;
-import ppdchat.client.Message;
+//import ppdchat.client.Message;
+import ppdchat.utils.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,12 +50,6 @@ public class Client{
             }
             
             System.out.println("O servico JavaSpace foi encontrado.");
-            System.out.println("Enviando mensagens de teste");
-            writeMessage(this.nome, "Mensagem Teste 1");
-            writeMessage(this.nome, "Mensagem Teste 2");
-            writeMessage(this.nome, "Mensagem Teste 3");
-            writeMessage(this.nome, "Mensagem Teste 4");
-            //writeNewClient(clientForm, nome);
         } catch (Exception e) {
             System.out.println("Não foi possível encontrar o espaço!");
             e.printStackTrace();
@@ -63,7 +58,7 @@ public class Client{
     }
 
     public void startThread(){
-        Runnable runnable = new ReadMessageThread(space, nome);
+        Runnable runnable = new ReadMessageThread(space, nome, mainController);
         Thread thread = new Thread(runnable);
         thread.start();
     }
@@ -78,7 +73,7 @@ public class Client{
         this.mainController = mainController;
         //this.clientForm.setMain(mainController);
         System.out.println("MAINGAMECONTROLLER set!");
-        writeMessage(this.nome, "O MainGameController foi setado!");
+        Platform.runLater(() -> mainController.getGameController().setNome(this.nome));
     }
 
     public String getNome() {
@@ -94,10 +89,26 @@ public class Client{
         return space;
     }
 
-    public void writeMessage(String name, String message){
+    public void writeMessageToClient(String name, String message){
         try{
             Message msg = new Message();
             msg.type = "Mensagem";
+            msg.destino = "Cliente";
+            msg.name = name;
+            msg.content = message;
+            space.write(msg, null, 60 * 1000);
+            System.out.println("MENSAGEM ENVIADA: " + msg.content);
+                
+            
+        }
+        catch(Exception e){e.printStackTrace();}
+    }
+    
+    public void writeMessageToServer(String name, String message){
+        try{
+            Message msg = new Message();
+            msg.type = "Mensagem";
+            msg.destino = "Servidor";
             msg.name = name;
             msg.content = message;
             space.write(msg, null, 60 * 1000);
@@ -111,6 +122,7 @@ public class Client{
     public void writeChatSelect(String chatname, String name){
         try{
             Message msg = new Message();
+            msg.destino = "Cliente";
             msg.type = "ChatSelect";
             msg.chatname = chatname;
             msg.name = name;

@@ -48,7 +48,6 @@ public class Client{
                 System.out.println("O servico JavaSpace nao foi encontrado. Encerrando...");
                 System.exit(-1);
             }
-            
             System.out.println("O servico JavaSpace foi encontrado.");
         } catch (Exception e) {
             System.out.println("Não foi possível encontrar o espaço!");
@@ -74,6 +73,8 @@ public class Client{
         //this.clientForm.setMain(mainController);
         System.out.println("MAINGAMECONTROLLER set!");
         Platform.runLater(() -> mainController.getGameController().setNome(this.nome));
+        writeNewClient(this.nome);
+        writeNewClient(this.nome);
     }
 
     public String getNome() {
@@ -98,6 +99,20 @@ public class Client{
             msg.content = message;
             space.write(msg, null, 60 * 1000);
             System.out.println("MENSAGEM ENVIADA: " + msg.content);
+                
+            
+        }
+        catch(Exception e){e.printStackTrace();}
+    }
+    
+    public void writeNewClient(String name){
+        try{
+            Message msg = new Message();
+            msg.type = "NewClient";
+            msg.destino = "Servidor";
+            msg.name = name;
+            space.write(msg, null, 60 * 1000);
+            System.out.println("Mensagem de Novo Cliente enviada!");
                 
             
         }

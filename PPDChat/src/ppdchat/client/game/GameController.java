@@ -138,13 +138,13 @@ public class GameController{
     @FXML
     public void sendText(MouseEvent event){
         String texto = TF_MSG.getText() + "\n";
-        //TA_BOX.appendText("Você: " + texto);
+        TA_BOX.appendText("Você: " + texto);
         enviarTextoMensagem(texto);
     }
     
     public void enviarTextoMensagem(String texto){
         Platform.runLater(() -> main.getClient().writeMessageToServer(nome, texto));
-        Platform.runLater(() -> main.getClient().writeMessageToClient(nome, texto));
+        //Platform.runLater(() -> main.getClient().writeMessageToClient(nome, texto));
     }
 
     public void setNome(String nome) {

@@ -10,7 +10,8 @@ public class Message implements Entry {
     public String name;
     public String content;
     public Boolean servidorLeu = false;
-    public ArrayList<String> quemLeu = new ArrayList<>();
+    public Boolean destinatarioLeu = false;
+    //public ArrayList<String> quemLeu = new ArrayList<>();
     public Message() {
     }
 }

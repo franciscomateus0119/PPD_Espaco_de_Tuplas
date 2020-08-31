@@ -62,44 +62,43 @@ public class Server {
                 template.servidorLeu = false;
                 if (template == null) {
                     System.out.println("Template nulo!");
-                }            
+                }
                 Message msg = (Message) space.take(template, null, 300 * 1000);
+                if (!names.contains(msg.name)) {
+                    System.out.println("Novo cliente adicionado: " + msg.name);
+                    names.add(msg.name);
+                    System.out.println("Total de clientes: " + names.size());
+                }
                 if (msg != null) {
                     switch (msg.type) {
                         case "Mensagem":
-                            //Se o servidor ainda não leu a mensagem -> Confirma que leu a mensagem
-                            //if(msg.servidorLeu==false){
+                            System.out.println("Destino da Mensagem: " + msg.destino);
                             System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content);
                             msg.servidorLeu = true;
-                            writeMessage(msg.name + ": ", msg.content);
-                            //}
-                            
+                            int x = 0;
+                            //Envia uma mensagem única para cada nome registrado!
+                            while (x < names.size()) {
+                                if (!names.get(x).equals(msg.name)) {
+                                    writeMessage(msg.name + ": ", msg.content, names.get(x));
+                                }
+                                x = x + 1;
+                            }
                             break;
                         case "ChatSelect":
                             System.out.println("Usuário " + msg.name + " se conectou ao chat " + msg.chatname);
                             clientchat.put(msg.name, msg.chatname);
                             break;
+                        case "NewClient":
+                            if (!names.contains(msg.name)) {
+                                System.out.println("Novo cliente adicionado: " + msg.name);
+                                names.add(msg.name);
+                                System.out.println("Total de clientes: " + names.size());
+                            }
+                            break;
                         default:
                             break;
                     }
-                    /*
-                } else if (msg != null && msg.destino.equals("Cliente") && msg.destino != null) {
-                    //Se é a primeira vez que o Servidor recebe uma mensagem enderaçada para os Clientes -> Marca que já leu e a repassa
-                    if(msg.servidorLeu==false){
-                        System.out.println("Servidor Recebeu a mensagem: "+ msg.name + " - " + msg.content);
-                        msg.content = msg.content + " (Servidor)";
-                        msg.servidorLeu = true;
-                        space.write(msg, null, 60 * 1000);
-                    }
-                    //Se o servidor já leu esta mensagem, apenas a repassa
-                    else{
-                        System.out.println("O servidor já leu esta mensagem: "+ msg.name + " - " + msg.content);
-                        space.write(msg, null, 60 * 1000);
-                    }
-                    
-                    */
                 }
-                    
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -107,16 +106,17 @@ public class Server {
         }
     }
 
-    public void writeMessage(String name, String message) {
+    public void writeMessage(String name, String message, String destino) {
         try {
             Message msg = new Message();
             msg.type = "Mensagem";
-            msg.destino = "Cliente";
+            msg.destino = destino;
             msg.name = name;
             msg.content = message;
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);
+                    System.out.println("Mensagem enviada para: " + destino);
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (RemoteException ex) {

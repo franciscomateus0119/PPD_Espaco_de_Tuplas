@@ -17,6 +17,7 @@ import ppdchat.client.game.MainGameController;
  * @author Matheus
  */
 public class ReadMessageThread implements Runnable {
+
     String meuNome;
     JavaSpace space;
     MainGameController main;
@@ -25,7 +26,7 @@ public class ReadMessageThread implements Runnable {
         this.space = spaceNew;
         this.meuNome = nome;
         this.main = mainController;
-        
+
     }
 
     @Override
@@ -38,42 +39,59 @@ public class ReadMessageThread implements Runnable {
             }
             System.out.println("O servico JavaSpace foi encontrado.");
             System.out.println(space);
-            
+
             while (true) {
                 Message template = new Message();
-                template.destino = "Cliente";
+                template.destino = meuNome;
+                template.destinatarioLeu = false;
                 Message msg = (Message) space.take(template, null, 180 * 1000);
                 if (msg == null) {
                     System.out.println("Tempo de espera esgotado. Encerrando...");
                     System.exit(0);
-                }
-                if (msg != null) { //Se a Mensagem for Direcionada para Clientes e a Mensagem não é nula
+                } /*else if (!newMsg.quemLeu.contains(meuNome)) { //Se este Cliente ainda não leu a mensagem obtida, vai tirar a mensagem do Espaço
+                    template.name = newMsg.name;
+                    template.chatname = newMsg.chatname;
+                    template.content = newMsg.content;
+                    template.destino = newMsg.destino;
+                    template.quemLeu = newMsg.quemLeu;
+                    template.servidorLeu = newMsg.servidorLeu;
+                    template.type = newMsg.type;
+                 */ //Message msg = (Message) space.take(template, null, 180 * 1000);
+                else { //Se a Mensagem for Direcionada para Clientes e a Mensagem não é nula
                     switch (msg.type) {
                         case "Mensagem":
-                            //Se Quem enviou a mensagem fui eu e eu não li a mensagem ainda -> Lê a mensagem, mostra na GUI e a repassa
-                            if(msg.name.equals(meuNome) && !msg.quemLeu.contains(meuNome)){
-                                System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content + ". Eu enviei esta mensagem. Ainda não li esta mensagem");
-                                Platform.runLater(() -> {
-                                    main.getChatToolbarController().mostrarTextoMensagem(msg.name, msg.content);
-                                });
-                                msg.quemLeu.add(meuNome);
-                                space.write(msg, null, 60 * 1000);
-                                
-                            }
-                            //Se não fui eu que enviei a mensagem e ainda não li mensagem --> Lê a mensagem e a repassa =
-                            else if(!msg.name.equals(meuNome) && !msg.quemLeu.contains(meuNome)){
+                            //Se Quem enviou a mensagem fui eu-> Lê a mensagem, mostra na GUI e coloca de volta pro JavaSpace
+                            //if (msg.name.equals(meuNome)) {
+                            System.out.println("Eu já li isso? " + msg.destinatarioLeu);
+                            //System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content + ". Eu enviei esta mensagem. Ainda não li esta mensagem");
+                            System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content);
+                            Platform.runLater(() -> {
+                                main.getChatToolbarController().mostrarTextoMensagem(msg.name, msg.content);
+                            });
+                            msg.destinatarioLeu = true;
+                            System.out.println("Mandando a mensagem de volta pro Space!");
+                            space.write(msg, null, 60 * 1000);
+
+                            //} //Se não fui eu que enviei a mensagem  --> Lê a mensagem, mostra na Gui e coloca de volta pro JavaSpace
+                            /*
+                            else if (!msg.name.equals(meuNome)) {
+                                System.out.println("Eu já li isso? " + msg.quemLeu.contains(meuNome));
+                                System.out.println("Destino da Mensagem: " + msg.destino);
                                 System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content + ". Ainda não li esta mensagem");
                                 Platform.runLater(() -> {
                                     main.getChatToolbarController().mostrarTextoMensagem(msg.name, msg.content);
                                 });
                                 msg.quemLeu.add(meuNome);
+                                System.out.println("Mandando a mensagem de volta pro Space!");
                                 space.write(msg, null, 60 * 1000);
                             }
-                            //Se eu já li a mensagem --> Apenas repassa a Mensagem
-                            else if (msg.quemLeu.contains(meuNome)){
-                                System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content + ". Eu já li esta mensagem");
-                                space.write(msg, null, 60 * 1000);
-                            }
+                             */
+ /*//Se eu já li a mensagem --> Apenas repassa a Mensagem
+                                else if (msg.quemLeu.contains(meuNome)) {
+                                    System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content + ". Eu já li esta mensagem");
+                                    space.write(msg, null, 60 * 1000);
+                                }
+                             */
                             break;
                         case "ChatSelect":
                             System.out.println("Usuário " + msg.name + " se conectou ao chat " + msg.chatname);
@@ -82,13 +100,14 @@ public class ReadMessageThread implements Runnable {
                             break;
                     }
 
+                    //}
                 }
                 /*
                 else if(msg != null && msg.destino.equals("Servidor") && msg.servidorLeu==false){
                     System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content + ". Esta mensagem é para o Servidor e ele ainda não a leu!");
                     space.write(msg, null, 60 * 1000);
                 }
-                */
+                 */
             }
         } catch (Exception e) {
             e.printStackTrace();

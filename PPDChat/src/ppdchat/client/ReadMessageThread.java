@@ -41,7 +41,7 @@ public class ReadMessageThread implements Runnable {
 
             while (true) {
                 Message template = new Message();
-                Message msg = (Message) space.read(template, null, 60 * 1000);
+                Message msg = (Message) space.take(template, null, 60 * 1000);
                 if (msg == null) {
                     System.out.println("Tempo de espera esgotado. Encerrando...");
                     System.exit(0);

@@ -58,22 +58,21 @@ public class Server {
         while (true) {
             try {
                 Message template = new Message();
-
+                template.destino = "Servidor";
+                template.servidorLeu = false;
                 if (template == null) {
                     System.out.println("Template nulo!");
-                }
+                }            
                 Message msg = (Message) space.take(template, null, 300 * 1000);
-                if (msg != null && msg.destino.equals("Servidor") && msg.servidorLeu==false) {
-                    //System.out.println("Mensagem recebida com destino: " + msg.destino);
-                    
+                if (msg != null) {
                     switch (msg.type) {
                         case "Mensagem":
                             //Se o servidor ainda não leu a mensagem -> Confirma que leu a mensagem
-                            if(msg.servidorLeu==false){
-                                System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content);
-                                msg.servidorLeu = true;
-                                writeMessage(msg.name + ": ", msg.content);
-                            }
+                            //if(msg.servidorLeu==false){
+                            System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content);
+                            msg.servidorLeu = true;
+                            writeMessage(msg.name + ": ", msg.content);
+                            //}
                             
                             break;
                         case "ChatSelect":
@@ -83,6 +82,7 @@ public class Server {
                         default:
                             break;
                     }
+                    /*
                 } else if (msg != null && msg.destino.equals("Cliente") && msg.destino != null) {
                     //Se é a primeira vez que o Servidor recebe uma mensagem enderaçada para os Clientes -> Marca que já leu e a repassa
                     if(msg.servidorLeu==false){
@@ -97,8 +97,9 @@ public class Server {
                         space.write(msg, null, 60 * 1000);
                     }
                     
-
+                    */
                 }
+                    
 
             } catch (Exception e) {
                 e.printStackTrace();

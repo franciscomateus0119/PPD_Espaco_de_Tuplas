@@ -134,13 +134,12 @@ public class Client{
         catch(Exception e){e.printStackTrace();}
     }
     
-    public void writeChatSelect(String chatname, String name){
+    public void writeChatSelectToServer(String chatname){
         try{
             Message msg = new Message();
-            msg.destino = "Cliente";
+            msg.destino = "Servidor";
             msg.type = "ChatSelect";
             msg.chatname = chatname;
-            msg.name = name;
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);

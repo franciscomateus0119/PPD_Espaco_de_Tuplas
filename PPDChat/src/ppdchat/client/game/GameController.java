@@ -202,7 +202,6 @@ public class GameController {
             //HBOX_SALA.getChildren().addAll(textarea);
             items.add(textareaname);
             listviewSalas.setItems(items);
-
             System.out.println("Nova sala criada: " + textareaname);
         } else {
             TF_CRIAR_SALA.setPromptText("DIGITE UM NOME NÃO VAZIO");
@@ -226,8 +225,7 @@ public class GameController {
         //HBOX_SALA.getChildren().addAll(textarea);
         items.add(nomedasala);
         listviewSalas.setItems(items);
-
-        System.out.println("Nova sala criada: " + textareaname);
+        System.out.println("Nova sala disponível: " + nomedasala);
     }
 
     public void aceitarEnter() {

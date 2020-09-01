@@ -32,8 +32,10 @@ public class Server {
 
     //protected ArrayList<ClientForm> clients;
     //protected Map<String, ClientForm> clientbyname = new HashMap<>();
+    
     protected Map<String, String> clientchat = new HashMap<>();
     protected ArrayList<String> names;
+    protected ArrayList<String> chatnames;
     //public Map<Integer, String> names = new HashMap<>();
 
     Lookup finder;
@@ -85,8 +87,17 @@ public class Server {
                             }
                             break;
                         case "ChatSelect":
-                            System.out.println("Usuário " + msg.name + " se conectou ao chat " + msg.chatname);
-                            clientchat.put(msg.name, msg.chatname);
+                            System.out.println("Novo Chat criado: " + msg.chatname);
+                            chatnames.add(msg.chatname);
+                            msg.servidorLeu = true;
+                            x = 0;
+                            while (x < names.size()) {
+                                if (!names.get(x).equals(msg.name)) {
+                                    writeMessage(msg.name + ": ", msg.content, names.get(x));
+                                }
+                                x = x + 1;
+                            }
+                            //clientchat.put(msg.name, msg.chatname);
                             break;
                         case "NewClient":
                             if (!names.contains(msg.name)) {

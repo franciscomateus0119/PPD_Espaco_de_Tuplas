@@ -19,8 +19,10 @@ import ppdchat.client.game.MainGameController;
 public class ReadMessageThread implements Runnable {
 
     String meuNome;
+    String chatAtual;
     JavaSpace space;
     MainGameController main;
+    
 
     public ReadMessageThread(JavaSpace spaceNew, String nome, MainGameController mainController) {
         this.space = spaceNew;
@@ -95,6 +97,7 @@ public class ReadMessageThread implements Runnable {
                             break;
                         case "ChatSelect":
                             System.out.println("Usuário " + msg.name + " se conectou ao chat " + msg.chatname);
+                            chatAtual = msg.chatname;
                             break;
                         default:
                             break;

@@ -50,22 +50,13 @@ public class ReadMessageThread implements Runnable {
                 if (msg == null) {
                     System.out.println("Tempo de espera esgotado. Encerrando...");
                     System.exit(0);
-                } /*else if (!newMsg.quemLeu.contains(meuNome)) { //Se este Cliente ainda não leu a mensagem obtida, vai tirar a mensagem do Espaço
-                    template.name = newMsg.name;
-                    template.chatname = newMsg.chatname;
-                    template.content = newMsg.content;
-                    template.destino = newMsg.destino;
-                    template.quemLeu = newMsg.quemLeu;
-                    template.servidorLeu = newMsg.servidorLeu;
-                    template.type = newMsg.type;
-                 */ //Message msg = (Message) space.take(template, null, 180 * 1000);
+                }
                 else { //Se a Mensagem for Direcionada para Clientes e a Mensagem não é nula
                     switch (msg.type) {
                         case "Mensagem":
                             //Se Quem enviou a mensagem fui eu-> Lê a mensagem, mostra na GUI e coloca de volta pro JavaSpace
                             //if (msg.name.equals(meuNome)) {
                             System.out.println("Eu já li isso? " + msg.destinatarioLeu);
-                            //System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content + ". Eu enviei esta mensagem. Ainda não li esta mensagem");
                             System.out.println("Mensagem recebida de " + msg.name + "(" +msg.chatname+": " + msg.content);
                             Platform.runLater(() -> {
                                 main.getChatToolbarController().mostrarTextoMensagem(msg.name, msg.chatname, msg.content);
@@ -87,14 +78,7 @@ public class ReadMessageThread implements Runnable {
                             break;
                     }
 
-                    //}
                 }
-                /*
-                else if(msg != null && msg.destino.equals("Servidor") && msg.servidorLeu==false){
-                    System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content + ". Esta mensagem é para o Servidor e ele ainda não a leu!");
-                    space.write(msg, null, 60 * 1000);
-                }
-                 */
             }
         } catch (Exception e) {
             e.printStackTrace();

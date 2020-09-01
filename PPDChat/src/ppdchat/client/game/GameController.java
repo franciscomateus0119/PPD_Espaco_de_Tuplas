@@ -55,7 +55,6 @@ import net.jini.space.JavaSpace;
 public class GameController {
 
     private MainGameController main;
-    //private SpaceHandler spacehandler;
     Stage stage;
 
     String nome = "Anonimo";
@@ -150,7 +149,6 @@ public class GameController {
 
     public void init(MainGameController mainGameController) {
         main = mainGameController;
-        //initbuttons();
         stage = PPDChat.getStage();
         listviewSalas = new ListView<>();
         listviewSalas.setPrefWidth(200);
@@ -171,7 +169,6 @@ public class GameController {
     public void sendText(MouseEvent event) {
         if(chatAtual!=null && !chatAtual.equals("")){
             String texto = TF_MSG.getText() + "\n";
-            //TA_BOX.appendText("Você: " + texto);
             TF_MSG.clear();
             TF_MSG.setPromptText("Digite sua Mensagem");
             enviarTextoMensagem(texto);
@@ -185,7 +182,6 @@ public class GameController {
 
     public void enviarTextoMensagem(String texto) {
         Platform.runLater(() -> main.getClient().writeMessageToServer(nome, chatAtual, texto));
-        //Platform.runLater(() -> main.getClient().writeMessageToClient(nome, texto));
     }
 
     public void setNome(String nome) {
@@ -232,23 +228,12 @@ public class GameController {
 
     }
     
-    //Mostra uma nova sala disponível para entrar
     public void adicionarSala(String nomedasala) {
         String textareaname = nomedasala;
         TextArea textarea = new TextArea();
-        /*
-        textarea.setLayoutX(13);
-        textarea.setLayoutY(14);
-        textarea.setWrapText(true);
-        textarea.setPrefWidth(350);
-        textarea.setPrefHeight(325);
-        textarea.setVisible(true);
-        textarea.toFront();
-        */
         chatnames.add(textareaname);
         chats.put(textareaname, textarea);
         textareas.add(textarea);
-        //HBOX_SALA.getChildren().addAll(textarea);
         items.add(textareaname);
         listviewSalas.setItems(items);
         System.out.println("Nova sala disponível: " + textareaname);
@@ -279,28 +264,7 @@ public class GameController {
     public void listViewListener() {
         listviewSalas.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> ov, String old_val, String new_val) -> {
             String selectedItem = listviewSalas.getSelectionModel().getSelectedItem();
-            int index = listviewSalas.getSelectionModel().getSelectedIndex();
-            //Deixa invisível todas as salas
-            //
-            /*
-            for (Map.Entry<String, TextArea> entry : chats.entrySet()) {
-                
-                String key = entry.getKey();
-                TextArea value = entry.getValue();
-                
-                TextArea textarea = entry.getValue();
-                textarea.setVisible(false);
-                textarea.setDisable(true);
-                textarea.toBack();
-                // ...
-            }
-                
-            chats.get(selectedItem).setVisible(true);
-            chats.get(selectedItem).setDisable(false);
-            chats.get(selectedItem).toFront();
-            */
-            //HBOX_SALA.getChildren().setAll(chats.get(selectedItem));
-            
+            int index = listviewSalas.getSelectionModel().getSelectedIndex();            
             LABEL_SELECTED_CHAT.setText("Selected Chat: " + selectedItem + " - Index : " + index);
             chatAtual = selectedItem;
             System.out.println("Entrou na sala: " + selectedItem);

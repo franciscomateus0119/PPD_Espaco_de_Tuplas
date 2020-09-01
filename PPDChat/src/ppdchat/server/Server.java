@@ -29,7 +29,6 @@ public class Server {
     private int clientesConectados = 0;
     private int reiniciarpartida = 0;
     int x = 0;
-    //private SpaceHandler spacehandler = SpaceHandler.getInstance();
 
     //protected ArrayList<ClientForm> clients;
     //protected Map<String, ClientForm> clientbyname = new HashMap<>();
@@ -84,16 +83,6 @@ public class Server {
                                 writeMessage(msg.name + ": ", msg.chatname, msg.content, names.get(x));
                                 x = x + 1;
                             }
-                            
-                            //Envia uma mensagem única para cada nome registrado!
-                            /*
-                            while (x < names.size()) {
-                                if (!names.get(x).equals(msg.name)) {
-                                    writeMessage(msg.name + ": ", msg.content, names.get(x));
-                                }
-                                x = x + 1;
-                            }
-                            */
                             break;
                         case "NewChat":
                             if(!chatnames.contains(msg.chatname)){
@@ -101,14 +90,6 @@ public class Server {
                                 chatnames.add(msg.chatname);
                                 msg.servidorLeu = true;
                                 x = 0;
-                                /*
-                                while (x < names.size()) {
-                                    if (!names.get(x).equals(msg.name)) {
-                                        writeNewChat(msg.name, msg.chatname, names.get(x));
-                                    }
-                                    x = x + 1;
-                                }
-                                */
                                 while (x < names.size()) {
                                     writeNewChat(msg.name, msg.chatname, names.get(x));
 
@@ -116,7 +97,6 @@ public class Server {
                                 }
                             }
                             
-                            //clientchat.put(msg.name, msg.chatname);
                             break;
                         case "NewClient":
                             if (!names.contains(msg.name)) {

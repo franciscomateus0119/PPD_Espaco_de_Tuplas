@@ -74,7 +74,7 @@ public class MainGameController {
         gameController.init(this);
         System.out.println("GAMECONTROLLER set!");
         //client.writeUserListServer();
-        client.readUserList(numero, rand);
+        //client.readUserList(numero, rand);
         client.setGameController(this);
         Platform.runLater(() -> {
             client.startThread();

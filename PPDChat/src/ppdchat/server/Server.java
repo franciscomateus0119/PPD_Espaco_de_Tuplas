@@ -58,6 +58,7 @@ public class Server {
 
     public void messageHandler() {
         System.out.println("A função messageHandler() foi iniciada!");
+        writeUserList(names);
         while (true) {
             try {
                 Message template = new Message();

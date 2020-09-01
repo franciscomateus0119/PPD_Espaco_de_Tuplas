@@ -40,12 +40,16 @@ public class Client{
     Runnable runnable;
     Thread thread;
 
-    public Client(String nome) {
+    public Client(String nome, JavaSpace space) {
         this.nome = nome;
+        this.space = space;
+        /*
         try {
             System.out.println("Procurando pelo servico JavaSpace...");
+            
             finder = new Lookup(JavaSpace.class);
             space = (JavaSpace) finder.getService();
+            
             
             if (space == null) {
                 System.out.println("O servico JavaSpace nao foi encontrado. Encerrando...");
@@ -58,6 +62,7 @@ public class Client{
             e.printStackTrace();
             System.exit(-1);
         }
+        */
     }
 
     public void startThread(){
@@ -185,7 +190,7 @@ public class Client{
             Message temp = new Message();
             temp.destino = "Espaco";
             temp.type = "ListaUsuarios";
-            Message mensagem = (Message) space.read(temp, null, 0 * 1000);
+            Message mensagem = (Message) space.read(temp, null, 30 * 1000);
             if(mensagem!=null){
                 System.out.println("UserList Encontrada!");
                 if(mensagem.namesList.contains(nome)){

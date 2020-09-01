@@ -103,6 +103,11 @@ public class Server {
                                 System.out.println("Novo cliente adicionado: " + msg.name);
                                 names.add(msg.name);
                                 System.out.println("Total de clientes: " + names.size());
+                                Message template2 = new Message();
+                                template2.destino = "JavaSpace";
+                                template2.type = "UserList";
+                                space.take(template2, null, 10 * 1000);
+                                writeUserList(names, "JavaSpace"); 
                             }
                             break;
                         default:
@@ -147,6 +152,27 @@ public class Server {
             msg.destino = destino;
             msg.name = name;
             msg.chatname = chatname;
+            Platform.runLater(() -> {
+                try {
+                    space.write(msg, null, 60 * 1000);
+                    System.out.println("CHAT enviado para: " + destino);
+                } catch (TransactionException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void writeUserList(ArrayList<String> userList, String destino){
+        try {
+            Message msg = new Message();
+            msg.type = "UserList";
+            msg.destino = destino;
+            msg.userList = userList;
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);

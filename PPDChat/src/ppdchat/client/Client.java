@@ -41,7 +41,7 @@ public class Client{
     Thread thread;
 
     public Client(String nome) {
-        //this.nome = nome;
+        this.nome = nome;
         try {
             System.out.println("Procurando pelo servico JavaSpace...");
             finder = new Lookup(JavaSpace.class);
@@ -52,7 +52,11 @@ public class Client{
                 System.out.println("O servico JavaSpace nao foi encontrado. Encerrando...");
                 System.exit(-1);
             }
+            
             System.out.println("O servico JavaSpace foi encontrado.");
+            /*
+            writeTeste();
+            writeSendUserList();
             Message template = new Message();
             template.destino = "ESPACO";
             template.type = "UserList";
@@ -72,7 +76,7 @@ public class Client{
                     this.nome = nomealternativo;
                 }
             }
-            
+            */
         } catch (Exception e) {
             System.out.println("Não foi possível encontrar o espaço!");
             e.printStackTrace();
@@ -97,6 +101,7 @@ public class Client{
         //this.clientForm.setMain(mainController);
         System.out.println("MAINGAMECONTROLLER set!");
         Platform.runLater(() -> mainController.getGameController().setNome(this.nome));
+        while(this.nome==null);
         writeNewClient(this.nome);
         writeNewClient(this.nome);
     }
@@ -180,6 +185,44 @@ public class Client{
         catch(Exception e){e.printStackTrace();}
     }
     
+    public void writeTeste(){
+        try{
+            Message msg = new Message();
+            msg.destino = "Servidor";
+            msg.type = "Test";
+            Platform.runLater(() -> {
+                try {
+                    space.write(msg, null, 60 * 1000);
+                } catch (TransactionException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+            
+        }
+        catch(Exception e){e.printStackTrace();}
+    }
+    
+    public void writeSendUserList(){
+        try {
+            Message msg = new Message();
+            msg.destino = "Servidor";
+            msg.type = "SendUserList";
+            Platform.runLater(() -> {
+                try {
+                    space.write(msg, null, 60 * 1000);
+                } catch (TransactionException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
   
     

@@ -99,26 +99,29 @@ public class Server {
                             
                             break;
                         case "NewClient":
-                            if (!names.contains(msg.name)) {
+                            if (!names.contains(msg.name) && msg.name != null) {
                                 System.out.println("Novo cliente adicionado: " + msg.name);
                                 names.add(msg.name);
                                 System.out.println("Total de clientes: " + names.size());
-                                System.out.println("iniciando envio da UserList");
-                                Message template2 = new Message();
-                                template2.destino = "ESPACO";
-                                template2.type = "UserList";
-                                Message mensagem = (Message) space.take(template2, null, 10 * 1000);
-                                if(mensagem == null){
-                                    writeUserList(names, "ESPACO"); 
-                                    writeUserList(names, "ESPACO"); 
-                                }
-                                else{
-                                    writeUserList(names, "ESPACO"); 
-                                }
-                                
-                                
+                            }
+                        case "Test":
+                            System.out.println("TESTE");
+                            System.out.println("Testinha");
+                            break;
+                        case "SendUserList":
+                            Message template2 = new Message();
+                            template2.destino = "ESPACO";
+                            template2.type = "UserList";
+                            Message mensagem = (Message) space.take(template2, null, 10 * 1000);
+                            if (mensagem == null) {
+                                writeUserList(names, "ESPACO");
+                                writeUserList(names, "ESPACO");
+                                System.out.println("Sent Userlist");
+                            } else {
+                                writeUserList(names, "ESPACO");
                                 System.out.println("Sent Userlist");
                             }
+                            
                             break;
                         default:
                             break;
@@ -198,6 +201,7 @@ public class Server {
             e.printStackTrace();
         }
     }
+    
     
     // <editor-fold defaultstate="collapsed" desc="Old Project">
 

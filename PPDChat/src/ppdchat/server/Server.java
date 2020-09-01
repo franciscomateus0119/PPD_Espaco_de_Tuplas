@@ -80,13 +80,20 @@ public class Server {
                             System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content);
                             msg.servidorLeu = true;
                             x = 0;
+                            while (x < names.size()) {
+                                writeMessage(msg.name + ": ", msg.chatname, msg.content, names.get(x));
+                                x = x + 1;
+                            }
+                            
                             //Envia uma mensagem única para cada nome registrado!
+                            /*
                             while (x < names.size()) {
                                 if (!names.get(x).equals(msg.name)) {
                                     writeMessage(msg.name + ": ", msg.content, names.get(x));
                                 }
                                 x = x + 1;
                             }
+                            */
                             break;
                         case "NewChat":
                             if(!chatnames.contains(msg.chatname)){
@@ -129,7 +136,7 @@ public class Server {
         }
     }
 
-    public void writeMessage(String name, String message, String destino) {
+    public void writeMessage(String name, String chatname, String message, String destino) {
         try {
             Message msg = new Message();
             msg.type = "Mensagem";
@@ -162,7 +169,7 @@ public class Server {
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);
-                    System.out.println("Mensagem enviada para: " + destino);
+                    System.out.println("CHAT enviado para: " + destino);
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (RemoteException ex) {

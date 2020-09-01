@@ -68,32 +68,12 @@ public class ReadMessageThread implements Runnable {
                             //System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content + ". Eu enviei esta mensagem. Ainda não li esta mensagem");
                             System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content);
                             Platform.runLater(() -> {
-                                main.getChatToolbarController().mostrarTextoMensagem(msg.name, msg.content);
+                                main.getChatToolbarController().mostrarTextoMensagem(msg.name, msg.chatname, msg.content);
                             });
                             msg.destinatarioLeu = true;
                             System.out.println("Mandando a mensagem de volta pro Space!");
                             space.write(msg, null, 60 * 1000);
 
-                            //} //Se não fui eu que enviei a mensagem  --> Lê a mensagem, mostra na Gui e coloca de volta pro JavaSpace
-                            /*
-                            else if (!msg.name.equals(meuNome)) {
-                                System.out.println("Eu já li isso? " + msg.quemLeu.contains(meuNome));
-                                System.out.println("Destino da Mensagem: " + msg.destino);
-                                System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content + ". Ainda não li esta mensagem");
-                                Platform.runLater(() -> {
-                                    main.getChatToolbarController().mostrarTextoMensagem(msg.name, msg.content);
-                                });
-                                msg.quemLeu.add(meuNome);
-                                System.out.println("Mandando a mensagem de volta pro Space!");
-                                space.write(msg, null, 60 * 1000);
-                            }
-                             */
- /*//Se eu já li a mensagem --> Apenas repassa a Mensagem
-                                else if (msg.quemLeu.contains(meuNome)) {
-                                    System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content + ". Eu já li esta mensagem");
-                                    space.write(msg, null, 60 * 1000);
-                                }
-                             */
                             break;
                         case "NewChat":
                             System.out.println(msg.name + "Criou uma nova sala: " + msg.chatname);

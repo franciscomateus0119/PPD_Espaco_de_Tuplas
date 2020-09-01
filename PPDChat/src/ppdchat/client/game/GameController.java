@@ -60,10 +60,10 @@ public class GameController {
 
     String nome = "Anonimo";
     String nChat;
-    String chatAtual;
+    String chatAtual = "";
     public ArrayList<String> chatnames = new ArrayList<>();
     Map<String, TextArea> chats = new HashMap<>();
-
+    TextArea textareateste;
     ListView<String> listviewSalas;
     ObservableList<String> items;
 
@@ -159,6 +159,7 @@ public class GameController {
         listviewSalas.setVisible(true);
         listviewSalas.toFront();
         HBOX_LISTVIEW.getChildren().addAll(listviewSalas);
+        textareateste = new TextArea();
         
         items = FXCollections.observableArrayList();
         aceitarEnter();
@@ -167,14 +168,22 @@ public class GameController {
 
     @FXML
     public void sendText(MouseEvent event) {
-        String texto = TF_MSG.getText() + "\n";
-        TA_BOX.appendText("Você: " + texto);
-        TF_MSG.clear();
-        enviarTextoMensagem(texto);
+        if(chatAtual!=null && !chatAtual.equals("")){
+            String texto = TF_MSG.getText() + "\n";
+            //TA_BOX.appendText("Você: " + texto);
+            TF_MSG.clear();
+            TF_MSG.setPromptText("Digite sua Mensagem");
+            enviarTextoMensagem(texto);
+        }
+        else{
+            TF_MSG.clear();
+            TF_MSG.setPromptText("Selecione uma sala antes de enviar!");
+        }
+        
     }
 
     public void enviarTextoMensagem(String texto) {
-        Platform.runLater(() -> main.getClient().writeMessageToServer(nome, texto));
+        Platform.runLater(() -> main.getClient().writeMessageToServer(nome, chatAtual, texto));
         //Platform.runLater(() -> main.getClient().writeMessageToClient(nome, texto));
     }
 
@@ -210,6 +219,7 @@ public class GameController {
             listviewSalas.setItems(items);
             */
             Platform.runLater(() -> {
+                main.getClient().writeNewChatToServer(nome, textareaname);
                 main.getClient().writeNewChatToServer(nome, textareaname);
                 main.getClient().writeNewChatToServer(nome, textareaname);
             });
@@ -275,10 +285,12 @@ public class GameController {
                 TextArea textarea = entry.getValue();
                 textarea.setVisible(false);
                 textarea.setDisable(true);
+                textarea.toBack();
                 // ...
             }
             chats.get(selectedItem).setVisible(true);
             chats.get(selectedItem).setDisable(false);
+            chats.get(selectedItem).toFront();
             HBOX_SALA.getChildren().setAll(chats.get(selectedItem));
             LABEL_SELECTED_CHAT.setText("Selected Chat: " + selectedItem + " - Index : " + index);
             chatAtual = selectedItem;

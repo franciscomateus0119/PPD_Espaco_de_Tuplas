@@ -119,12 +119,13 @@ public class Client{
         catch(Exception e){e.printStackTrace();}
     }
     
-    public void writeMessageToServer(String name, String message){
+    public void writeMessageToServer(String name,String chatname, String message){
         try{
             Message msg = new Message();
             msg.type = "Mensagem";
             msg.destino = "Servidor";
             msg.name = name;
+            msg.chatname = chatname;
             msg.content = message;
             space.write(msg, null, 60 * 1000);
             System.out.println("MENSAGEM ENVIADA: " + msg.content);

@@ -17,8 +17,8 @@
     </stylesheets>
    <children>
       <TextArea fx:id="TA_BOX" focusTraversable="false" layoutX="13.0" layoutY="14.0" prefHeight="325.0" prefWidth="350.0" visible="false" />
-      <TextField fx:id="TF_MSG" alignment="CENTER" layoutX="42.0" layoutY="351.0" prefHeight="25.0" prefWidth="208.0" promptText="Digite sua Mensagem" />
-      <Button fx:id="BUTTON_SEND" layoutX="265.0" layoutY="351.0" mnemonicParsing="false" onMouseClicked="#sendText" text="Enviar" />
+      <TextField fx:id="TF_MSG" alignment="CENTER" disable="true" layoutX="42.0" layoutY="351.0" prefHeight="25.0" prefWidth="208.0" promptText="Digite sua Mensagem" visible="false" />
+      <Button fx:id="BUTTON_SEND" disable="true" layoutX="265.0" layoutY="351.0" mnemonicParsing="false" onMouseClicked="#sendText" text="Enviar" visible="false" />
       <Button fx:id="BUTTON_CRIAR" layoutX="538.0" layoutY="53.0" mnemonicParsing="false" onMouseClicked="#criarSala" text="Criar" />
       <TextField fx:id="TF_CRIAR_SALA" layoutX="375.0" layoutY="53.0" promptText="Digite o nome da sala" />
       <Label layoutX="421.0" layoutY="27.0" text="Criar uma sala">
@@ -31,8 +31,8 @@
             <Font name="Arial Bold" size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="TF_ENTRAR_SALA" disable="true" layoutX="376.0" layoutY="113.0" promptText="Digite o nome da sala" />
-      <Button fx:id="BUTTON_ENTRAR" disable="true" layoutX="534.0" layoutY="113.0" mnemonicParsing="false" text="Entrar" />
+      <TextField fx:id="TF_ENTRAR_SALA" layoutX="376.0" layoutY="113.0" promptText="Digite o nome da sala" />
+      <Button fx:id="BUTTON_ENTRAR" layoutX="534.0" layoutY="113.0" mnemonicParsing="false" onMouseClicked="#entrarSalaRequest" text="Entrar" />
       <Label layoutX="66.0" layoutY="150.0" text="CRIE OU ENTRE EM UM SALA">
          <font>
             <Font size="18.0" />

@@ -13,6 +13,8 @@ public class Message implements Entry {
     public Boolean destinatarioLeu = false;
     //public ArrayList<String> quemLeu = new ArrayList<>();
     public ArrayList<String> namesList;
+    public ArrayList<String> chatList;
+    public ArrayList<String> userInChatList;
     public Message() {
     }
 }

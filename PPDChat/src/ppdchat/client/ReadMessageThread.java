@@ -74,6 +74,20 @@ public class ReadMessageThread implements Runnable {
                                 
                             });
                             break;
+                        case "EnterRequestResult":
+                            if(msg.content.equals("Sucesso")){
+                                System.out.println("Sala " + msg.chatname+" encontrada!");
+                                Platform.runLater(() ->{
+                                    main.getGameController().entrarSala(msg.chatname);
+                                });
+                            }
+                            else{
+                                System.out.println("Sala " + msg.chatname+" não existe mais!");
+                                Platform.runLater(() ->{
+                                    main.getGameController().removerSala(msg.chatname);
+                                });
+                            }
+                            break;
                         default:
                             break;
                     }

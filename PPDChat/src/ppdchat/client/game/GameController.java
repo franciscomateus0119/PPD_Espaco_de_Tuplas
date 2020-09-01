@@ -139,9 +139,13 @@ public class GameController {
     @FXML
     TextField TF_CRIAR_SALA;
     @FXML
+    TextField TF_ENTRAR_SALA;
+    @FXML
     Button BUTTON_SEND;
     @FXML
     Button BUTTON_CRIAR;
+    @FXML
+    Button BUTTON_ENTRAR;
     @FXML Label LABEL_SELECTED_CHAT;
     @FXML HBox HBOX_LISTVIEW;
     @FXML HBox HBOX_SALA;
@@ -200,21 +204,6 @@ public class GameController {
         }
         else if (!TF_CRIAR_SALA.getText().equals("") || TF_CRIAR_SALA.getText() != null) {
             String textareaname = TF_CRIAR_SALA.getText();
-            /*
-            TextArea textarea = new TextArea();
-            textarea.setLayoutX(13);
-            textarea.setLayoutY(14);
-            textarea.setWrapText(true);
-            textarea.setPrefWidth(350);
-            textarea.setPrefHeight(325);
-            textarea.setVisible(true);
-            textarea.toFront();
-            chatnames.add(textareaname);
-            chats.put(textareaname, textarea);
-            //HBOX_SALA.getChildren().addAll(textarea);
-            items.add(textareaname);
-            listviewSalas.setItems(items);
-            */
             Platform.runLater(() -> {
                 main.getClient().writeNewChatToServer(nome, textareaname);
                 main.getClient().writeNewChatToServer(nome, textareaname);
@@ -223,6 +212,7 @@ public class GameController {
             System.out.println("Nova sala criada: " + textareaname);
             TF_CRIAR_SALA.clear();
         } else {
+            TF_CRIAR_SALA.clear();
             TF_CRIAR_SALA.setPromptText("DIGITE UM NOME NÃO VAZIO");
         }
 
@@ -237,6 +227,40 @@ public class GameController {
         items.add(textareaname);
         listviewSalas.setItems(items);
         System.out.println("Nova sala disponível: " + textareaname);
+    }
+    
+    @FXML
+    public void entrarSalaRequest(MouseEvent event){
+        if(TF_ENTRAR_SALA.getText()!=null && !TF_ENTRAR_SALA.getText().equals("")){
+            System.out.println("Feito pedido para sair de " + chatAtual + " para " + TF_ENTRAR_SALA.getText());
+            String chatnome = TF_ENTRAR_SALA.getText();
+            TF_ENTRAR_SALA.clear();
+            Platform.runLater(() -> {
+                main.getClient().writeEntrarSalaRequest(nome, chatnome, chatAtual);
+            });
+        }
+    }
+    
+    public void entrarSala(String sala){
+        chatAtual = sala;
+        if(TF_MSG.isDisabled() || !TF_MSG.isVisible()){
+            TF_MSG.setDisable(false);
+            TF_MSG.setVisible(true);
+        }
+        if(BUTTON_SEND.isDisabled() || !BUTTON_SEND.isVisible()){
+            BUTTON_SEND.setDisable(false);
+            BUTTON_SEND.setVisible(true);
+        }
+        if(TA_BOX.isDisabled() || !TA_BOX.isVisible()){
+            TA_BOX.setDisable(false);
+            TA_BOX.setVisible(true);
+        }
+    }
+    
+    public void removerSala(String sala){
+        int index = listviewSalas.getItems().indexOf(sala);
+        System.out.println("Removendo sala: " + listviewSalas.getItems().get(index));
+        listviewSalas.getItems().remove(index);
     }
 
     public void aceitarEnter() {
@@ -265,12 +289,15 @@ public class GameController {
         listviewSalas.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> ov, String old_val, String new_val) -> {
             String selectedItem = listviewSalas.getSelectionModel().getSelectedItem();
             int index = listviewSalas.getSelectionModel().getSelectedIndex();
+            /*
             if(!TA_BOX.isVisible()){
                 TA_BOX.setVisible(true);
             }
+            */
             LABEL_SELECTED_CHAT.setText("Selected Chat: " + selectedItem + " - Index : " + index);
-            chatAtual = selectedItem;
-            System.out.println("Entrou na sala: " + selectedItem);
+            TF_ENTRAR_SALA.setText(selectedItem);
+            //chatAtual = selectedItem;
+            System.out.println("Sala selecionada: " + selectedItem);
         });
     }
 

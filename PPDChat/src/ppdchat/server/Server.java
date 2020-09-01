@@ -34,6 +34,7 @@ public class Server {
     //protected Map<String, ClientForm> clientbyname = new HashMap<>();
     
     protected Map<String, String> clientchat = new HashMap<>();
+    protected Map<String, ArrayList<String>> usersinchat = new HashMap<>();
     protected ArrayList<String> names;
     protected ArrayList<String> chatnames;
     //public Map<Integer, String> names = new HashMap<>();
@@ -84,11 +85,11 @@ public class Server {
                             if(!chatnames.contains(msg.chatname)){
                                 System.out.println("Novo Chat criado: " + msg.chatname);
                                 chatnames.add(msg.chatname);
+                                writeChat(msg.chatname,"Espaco");
                                 msg.servidorLeu = true;
                                 x = 0;
                                 while (x < names.size()) {
                                     writeNewChat(msg.name, msg.chatname, names.get(x));
-
                                     x = x + 1;
                                 }
                             }
@@ -106,11 +107,61 @@ public class Server {
                                 temp.destino = "Espaco";
                                 temp.type = "ListaUsuarios";
                                 space.take(temp, null, 15 * 1000);
-                                writeUserList(names);
-                                
-                                
-                                
+                                writeUserList(names);    
                             }
+                            break;
+                        case "EntrarRequest":
+                            System.out.println("Pedido de " + msg.name + " para sair de " + msg.content + " para " + msg.chatname);
+                            if (msg.content != null && !msg.content.equals("")) {
+                                Message templ = new Message();
+                                templ.destino = "Espaco";
+                                templ.type = "Chat";
+                                templ.chatname = msg.content;
+                                Message sairchat = (Message) space.take(templ, null, 10 * 1000);
+                                //Se a sala existir, remover o usuário da sua lista de usuários presentes
+                                if (sairchat != null) {
+                                    if(sairchat.userInChatList != null){
+                                        ArrayList<String> newlist = sairchat.userInChatList;
+                                        newlist.remove(msg.name);
+                                        sairchat.userInChatList = newlist;
+                                        System.out.println("Saiu de" + msg.content);
+                                        space.write(sairchat, null, 180 * 1000);
+                                    }
+                                    
+                                }
+
+                            }
+
+                            //Procurar a Sala que se deseja entrar no Espaço
+                            Message temp = new Message();
+                            temp.destino = "Espaco";
+                            temp.type = "Chat";
+                            temp.chatname = msg.chatname;
+                            Message chatmsg = (Message) space.take(temp, null, 10 * 1000);
+                            if (chatmsg == null) {
+                                System.out.println("A sala" + msg.chatname + " NÃO foi encontrada!");
+                                writeEnterRequestResult(msg.name, msg.chatname, "Falhou");
+                            } else {
+                                System.out.println("A sala" + msg.chatname + " FOI encontrada!");
+                                if(chatmsg.userInChatList==null){
+                                    ArrayList<String> novalista = new ArrayList<>();
+                                    novalista.add(msg.name);
+                                    chatmsg.userInChatList = novalista;//Adiciona o usuário na lista de usuários da sala.
+                                }
+                                else{
+                                    ArrayList<String> novalista = chatmsg.userInChatList;
+                                    novalista.add(msg.name);
+                                    chatmsg.userInChatList = novalista;//Adiciona o usuário na lista de usuários da sala.
+                                }
+                                
+                                try {
+                                    space.write(chatmsg, null, 180 * 1000);
+                                    writeEnterRequestResult(msg.name, msg.chatname, "Sucesso");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
                             break;
                         case "Lista":
                             msg.servidorLeu = true;
@@ -175,6 +226,28 @@ public class Server {
         }
     }
     
+    public void writeChat(String chatname, String destino){
+        try {
+            Message msg = new Message();
+            msg.type = "Chat";
+            msg.destino = destino;
+            msg.chatname = chatname;
+            Platform.runLater(() -> {
+                try {
+                    space.write(msg, null, 180 * 1000);
+                    System.out.println("CHAT enviado para: " + destino);
+                } catch (TransactionException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void writeUserList(ArrayList<String> listanomes){
         try {
             Message msg = new Message();
@@ -185,6 +258,29 @@ public class Server {
                 try {
                     space.write(msg, null, 60 * 1000);
                     System.out.println("Lista de Usuários enviada para o JavaSpace");
+                } catch (TransactionException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void writeEnterRequestResult(String name, String chatname, String result){
+        try {
+            Message msg = new Message();
+            msg.type = "EnterRequestResult";
+            msg.destino = name;
+            msg.chatname = chatname;
+            msg.content = result;
+            Platform.runLater(() -> {
+                try {
+                    space.write(msg, null, 60 * 1000);
+                    System.out.println("Lista de Usuários da Sala enviada para o JavaSpace");
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (RemoteException ex) {

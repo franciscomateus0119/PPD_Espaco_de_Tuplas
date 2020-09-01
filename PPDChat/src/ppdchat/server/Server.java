@@ -89,7 +89,7 @@ public class Server {
                                 msg.servidorLeu = true;
                                 x = 0;
                                 while (x < names.size()) {
-                                    writeNewChat(msg.name, msg.chatname,chatnames, names.get(x));
+                                    writeNewChat(msg.name, chatnames, names.get(x));
                                     x = x + 1;
                                 }
                             }
@@ -163,6 +163,9 @@ public class Server {
                             }
 
                             break;
+                        case "AtualizarListaSala":
+                            writeAtualizarListaSala(msg.name,chatnames);
+                            break;
                         case "Lista":
                             msg.servidorLeu = true;
                             System.out.println("Lista Enviada");
@@ -203,13 +206,12 @@ public class Server {
         }
     }
 
-    public void writeNewChat(String name,String chatname, ArrayList<String> listasalas, String destino){
+    public void writeNewChat(String name, ArrayList<String> listasalas, String destino){
         try {
             Message msg = new Message();
             msg.type = "NewChat";
             msg.destino = destino;
             msg.name = name;
-            msg.chatname = chatname;
             msg.chatList = listasalas;
             Platform.runLater(() -> {
                 try {
@@ -292,6 +294,29 @@ public class Server {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    public void writeAtualizarListaSala(String name,ArrayList<String> nomedassalas){
+        try {
+            Message msg = new Message();
+            msg.type = "AtualizarListaSala";
+            msg.destino = name;
+            msg.chatList = nomedassalas;
+            Platform.runLater(() -> {
+                try {
+                    space.write(msg, null, 60 * 1000);
+                    System.out.println("Lista de Usuários da Sala enviada para o JavaSpace");
+                } catch (TransactionException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
     
     // <editor-fold defaultstate="collapsed" desc="Old Project">

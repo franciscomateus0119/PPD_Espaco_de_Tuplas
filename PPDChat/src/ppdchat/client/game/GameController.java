@@ -199,7 +199,7 @@ public class GameController {
     
     @FXML
     public void atualizarListaSalas(MouseEvent event){
-    
+        main.getClient().writeAtualizarListaSala(nome);
     }
 
     @FXML
@@ -225,7 +225,7 @@ public class GameController {
 
     }
     
-    public void adicionarSala(String nomedasala,ArrayList<String> nomedassalas) {
+    public void adicionarSala(ArrayList<String> nomedassalas) {
         //String textareaname = nomedasala;
         
         int tamanho = nomedassalas.size();

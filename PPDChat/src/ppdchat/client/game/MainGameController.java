@@ -69,7 +69,7 @@ public class MainGameController {
         
         gameController.init(this);
         System.out.println("GAMECONTROLLER set!");
-
+        client.writeUserListServer();
         client.setGameController(this);
         Platform.runLater(() -> {
             client.startThread();

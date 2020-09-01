@@ -49,6 +49,7 @@ public class Client{
                 System.exit(-1);
             }
             System.out.println("O servico JavaSpace foi encontrado.");
+            //writeUserListServer();
         } catch (Exception e) {
             System.out.println("Não foi possível encontrar o espaço!");
             e.printStackTrace();
@@ -142,6 +143,25 @@ public class Client{
             msg.type = "NewChat";
             msg.chatname = chatname;
             msg.name = name;
+            Platform.runLater(() -> {
+                try {
+                    space.write(msg, null, 60 * 1000);
+                } catch (TransactionException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+            
+        }
+        catch(Exception e){e.printStackTrace();}
+    }
+    
+    public void writeUserListServer(){
+        try{
+            Message msg = new Message();
+            msg.destino = "Servidor";
+            msg.type = "Lista";
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);

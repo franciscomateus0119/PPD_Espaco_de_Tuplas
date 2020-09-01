@@ -67,11 +67,6 @@ public class Server {
                     System.out.println("Template nulo!");
                 }
                 Message msg = (Message) space.take(template, null, 300 * 1000);
-                if (!names.contains(msg.name)) {
-                    System.out.println("Novo cliente adicionado: " + msg.name);
-                    names.add(msg.name);
-                    System.out.println("Total de clientes: " + names.size());
-                }
                 if (msg != null) {
                     switch (msg.type) {
                         case "Mensagem":
@@ -99,11 +94,20 @@ public class Server {
                             
                             break;
                         case "NewClient":
-                            if (!names.contains(msg.name)) {
+                            if(msg.name == null){
+                                System.out.println("O NOME É NULOOOOOOOOOO");
+                            }
+                            if (!names.contains(msg.name) && msg.name != null && !msg.name.equals("")) {
                                 System.out.println("Novo cliente adicionado: " + msg.name);
                                 names.add(msg.name);
                                 System.out.println("Total de clientes: " + names.size());
+                                
                             }
+                            break;
+                        case "Lista":
+                            msg.servidorLeu = true;
+                            System.out.println("Lista Enviada");
+                            
                             break;
                         default:
                             break;

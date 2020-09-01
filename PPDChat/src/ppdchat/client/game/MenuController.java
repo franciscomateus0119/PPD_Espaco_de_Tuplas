@@ -18,6 +18,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -52,6 +53,7 @@ public class MenuController {
     String nome;
     public Random random;
     public int numero;
+    public ArrayList<String> getnames = new ArrayList<>();
     
     @FXML TextField TF_NOME;
     
@@ -109,9 +111,23 @@ public class MenuController {
         try {
             if (TF_NOME.getText() != null && !TF_NOME.getText().equals("")) {
                 nome = TF_NOME.getText();
-                TF_NOME.clear();
+                //TF_NOME.clear();
                 if (mensagem != null) {
-                    System.out.println("Lista de nomes encontrada!");
+                    System.out.println("Lista de nomes encontrada! Tamanho:  " + mensagem.namesList.size());
+                    getnames = mensagem.namesList;
+                    System.out.println("Tamanho de getname: " + getnames.size());
+                    if(mensagem.namesList.size()>=1){
+                        for(int y=0;y<mensagem.namesList.size();y++){
+                            System.out.println("(Space)Nome " + y + " : " + mensagem.namesList.get(y));
+                            System.out.println("(Space)Contém nome? " + mensagem.namesList.get(y).equals(TF_NOME.getText()));
+                        }
+                        for(int y=0;y<getnames.size();y++){
+                            System.out.println("(Get)Nome " + y + " : " + mensagem.namesList.get(y));
+                            System.out.println("(Get)Contém nome? " + getnames.get(y).equals(TF_NOME.getText()));
+                        }
+                    }
+                    System.out.println("(Space)Contém nome? " + mensagem.namesList.contains(TF_NOME.getText()));
+                    System.out.println("(Get)Contém nome? " + getnames.contains(TF_NOME.getText()));
                     if (mensagem.namesList.contains(TF_NOME.getText())) {
                         TF_NOME.setPromptText("Nome já existe!");
                         System.out.println("Nome já existe!");

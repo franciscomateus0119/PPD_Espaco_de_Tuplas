@@ -13,6 +13,7 @@ import ppdchat.utils.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -33,22 +34,45 @@ public class Client{
     private Lookup finder;
     private String nome;
     private int nameCounter = 0;
+    Random rand;
+    int n;
     
     Runnable runnable;
     Thread thread;
 
     public Client(String nome) {
-        this.nome = nome;
+        //this.nome = nome;
         try {
             System.out.println("Procurando pelo servico JavaSpace...");
             finder = new Lookup(JavaSpace.class);
             space = (JavaSpace) finder.getService();
+            
             
             if (space == null) {
                 System.out.println("O servico JavaSpace nao foi encontrado. Encerrando...");
                 System.exit(-1);
             }
             System.out.println("O servico JavaSpace foi encontrado.");
+            Message template = new Message();
+            template.destino = "ESPACO";
+            template.type = "UserList";
+            Message msg = (Message) space.read(template, null, 10 * 1000);
+            if(msg==null){
+                System.out.println("Sem Userlist!");
+                this.nome = nome;
+            }else{
+                System.out.println("Userlist Encontrada!");
+                if(msg.userList.contains(nome)){
+                    rand = new Random();
+                    int n = rand.nextInt(10001);
+                    String nomealternativo = "Anonimo" + n;
+                    while(msg.userList.contains(nomealternativo)){
+                        nomealternativo = "Anonimo" + n;
+                    }
+                    this.nome = nomealternativo;
+                }
+            }
+            
         } catch (Exception e) {
             System.out.println("Não foi possível encontrar o espaço!");
             e.printStackTrace();

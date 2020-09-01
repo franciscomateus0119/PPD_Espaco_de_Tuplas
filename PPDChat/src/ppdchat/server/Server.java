@@ -103,11 +103,21 @@ public class Server {
                                 System.out.println("Novo cliente adicionado: " + msg.name);
                                 names.add(msg.name);
                                 System.out.println("Total de clientes: " + names.size());
+                                System.out.println("iniciando envio da UserList");
                                 Message template2 = new Message();
-                                template2.destino = "JavaSpace";
+                                template2.destino = "ESPACO";
                                 template2.type = "UserList";
-                                space.take(template2, null, 10 * 1000);
-                                writeUserList(names, "JavaSpace"); 
+                                Message mensagem = (Message) space.take(template2, null, 10 * 1000);
+                                if(mensagem == null){
+                                    writeUserList(names, "ESPACO"); 
+                                    writeUserList(names, "ESPACO"); 
+                                }
+                                else{
+                                    writeUserList(names, "ESPACO"); 
+                                }
+                                
+                                
+                                System.out.println("Sent Userlist");
                             }
                             break;
                         default:
@@ -176,7 +186,7 @@ public class Server {
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);
-                    System.out.println("CHAT enviado para: " + destino);
+                    System.out.println("Userlist enviada para: " + destino);
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (RemoteException ex) {

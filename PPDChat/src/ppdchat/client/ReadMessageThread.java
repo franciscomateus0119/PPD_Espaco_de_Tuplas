@@ -90,12 +90,14 @@ public class ReadMessageThread implements Runnable {
                             break;
                         case "EnviarLista":
                             if(msg.content.equals("Sucesso")){
+                                System.out.println("Atualizando lista!");
                                 Platform.runLater(() ->{
-                                    
+                                    main.getGameController().atualizarSalas(msg.chatList);
                                 });
                                 
                             }
                             else if(msg.content.equals("Falha"))
+                                System.out.println("Não foi possível encontrar a lista de salas. Não atualizando!");
                             break;
                         default:
                             break;

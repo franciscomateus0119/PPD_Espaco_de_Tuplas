@@ -86,26 +86,28 @@ public class Server {
                                 System.out.println("Novo Chat criado: " + msg.chatname);
                                 chatnames.add(msg.chatname);
                                 writeChat(msg.chatname,"Espaco");
-                                
-                                Message temp = new Message();
-                                temp.destino = "Espaco";
-                                temp.type = "ListaChat";
-                                Message newMsg = (Message) space.take(temp, null, 15 * 1000);
-                                //Se não tiver uma lista de salas no espaço
+                                //Verifica se há uma lista de salas no espaço
+                                Message temp5 = new Message();
+                                temp5.destino = "Espaco";
+                                temp5.type = "ListaChat";
+                                Message newMsg = (Message) space.take(temp5, null, 15 * 1000);
+                                //Se não tiver uma lista de salas no espaço --> Crie uma
                                 if(newMsg==null){
+                                    System.out.print("(NewChat) Não há uma lista de salas no espaço. Criando uma!");
                                     ArrayList<String> chatNomes = new ArrayList<>();
                                     chatNomes.add(msg.chatname);
+                                    System.out.print("(NewChat) Tamanho da lista: " + chatNomes.size());
                                     writeListaChats(chatNomes,"Espaco");
                                 }
-                                //Se a lista existir
+                                //Se a lista existir --> atualizea
                                 else{
+                                    System.out.println("(NewChat) Lista de Salas Encontrada! Tamanho" + newMsg.chatList.size());
                                     ArrayList<String> chatNomes =  newMsg.chatList;
                                     chatNomes.add(msg.chatname);
                                     newMsg.chatList = chatNomes;
+                                    System.out.println("(NewChat) Novo tamanho da lista de salas:" + newMsg.chatList.size());
                                     space.write(newMsg, null, 180 * 1000);
                                 }
-                                
-                                
                                 msg.servidorLeu = true;
                                 x = 0;
                                 while (x < names.size()) {
@@ -132,6 +134,7 @@ public class Server {
                             break;
                         case "EntrarRequest":
                             System.out.println("Pedido de " + msg.name + " para sair de " + msg.content + " para " + msg.chatname);
+                            //Se o nome da sala origem for vazio ou nulo
                             if (msg.content != null && !msg.content.equals("")) {
                                 Message templ = new Message();
                                 templ.destino = "Espaco";
@@ -140,26 +143,28 @@ public class Server {
                                 Message sairchat = (Message) space.take(templ, null, 10 * 1000);
                                 //Se a sala existir, remover o usuário da sua lista de usuários presentes
                                 if (sairchat != null) {
+                                    System.out.println("(EntrarRequest) Lista de salas encontrada!");
                                     if(sairchat.userInChatList != null){
+                                        System.out.println("(EntrarRequest)Removendo usuário "+msg.name + " da sala" + msg.content);
                                         ArrayList<String> newlist = sairchat.userInChatList;
-                                        newlist.remove(msg.name);
-                                        sairchat.userInChatList = newlist;
-                                        System.out.println("Saiu de" + msg.content);
-                                        space.write(sairchat, null, 180 * 1000);
+                                        if(newlist.contains(msg.content)){
+                                            newlist.remove(msg.content);
+                                            sairchat.userInChatList = newlist;
+                                            System.out.println("Saiu de" + msg.content);
+                                            space.write(sairchat, null, 180 * 1000);
+                                        }
                                     }
-                                    
                                 }
-
                             }
-
                             //Procurar a Sala que se deseja entrar no Espaço
                             Message temp = new Message();
                             temp.destino = "Espaco";
                             temp.type = "Chat";
                             temp.chatname = msg.chatname;
                             Message chatmsg = (Message) space.take(temp, null, 10 * 1000);
+                            //Se a sala não for encontrada
                             if (chatmsg == null) {
-                                System.out.println("A sala" + msg.chatname + " NÃO foi encontrada!");
+                                System.out.println("(EntrarRequest) A sala" + msg.chatname + " NÃO foi encontrada!");
                                 writeEnterRequestResult(msg.name, msg.chatname, "Falhou");
                                 //Verificar se o nome não encontrado existe na lista de salas (Sala não existe mais, porém está na lista)
                                 Message temp2 = new Message();
@@ -168,30 +173,45 @@ public class Server {
                                 Message newMensagem = (Message) space.take(temp2, null, 15 * 1000);
                                 //Se existir uma lista de Salas
                                 if(newMensagem!=null){
+                                    System.out.println("(EntrarRequest) Lista de Salas encontradas");
                                     ArrayList<String> chatNomes = newMensagem.chatList;
                                     //Se a sala ainda estiver na lista de salas disponíveis, remove-la
+                                    System.out.println("(EntrarRequest) " + msg.chatname + "está na lista de salas? " + chatNomes.contains(msg.chatname));
                                     if(chatNomes.contains(msg.chatname)){
+                                        System.out.println("(EntrarRequest) Removendo " + msg.chatname + " da lista de salas!");
                                         chatNomes.remove(msg.chatname);
                                         newMensagem.chatList = chatNomes;
                                         space.write(newMensagem, null, 180 * 1000);
                                     }
+                                    //Se não existir, devolva a lista de Salas pro espaço
+                                    else{
+                                        System.out.println("(EntrarRequest) " + msg.chatname + "não está na lista de salas! ");
+                                        space.write(newMensagem, null, 180 * 1000);
+                                    }
                                 }
-                                
+                              //Se a sala for encontrada/existir  
                             } else {
-                                System.out.println("A sala" + msg.chatname + " FOI encontrada!");
+                                System.out.println("(EntrarRequest) A sala" + msg.chatname + " FOI encontrada!");
+                                //Se a lista de salas que está no espaço for Nula, crie uma
                                 if(chatmsg.userInChatList==null){
                                     ArrayList<String> novalista = new ArrayList<>();
                                     novalista.add(msg.name);
                                     chatmsg.userInChatList = novalista;//Adiciona o usuário na lista de usuários da sala.
                                 }
+                                //Se a lista de salas existente não for nula, adicione a sala destino na lista
                                 else{
+                                    System.out.println("(EntrarRequest) Lista de Salas não nula! Adicionando sala destino na lista...");
                                     ArrayList<String> novalista = chatmsg.userInChatList;
                                     novalista.add(msg.name);
                                     chatmsg.userInChatList = novalista;//Adiciona o usuário na lista de usuários da sala.
                                 }
                                 
                                 try {
+                                    //Devolva a lista para o Espaço
+                                    
                                     space.write(chatmsg, null, 180 * 1000);
+                                    System.out.println("(EntrarRequest) Lista devolvida para o espaço");
+                                    //Avise que o processo de entrar na sala foi um sucesso!
                                     writeEnterRequestResult(msg.name, msg.chatname, "Sucesso");
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -208,12 +228,17 @@ public class Server {
                             //Se não tiver uma lista de salas no espaço
                             //Se a lista de Salas Existir
                             if (newMsg != null) {
+                                System.out.println("(AtualizarListaSalas) Lista de salas encontrada! Tamanho: " + newMsg.chatList.size());
                                 ArrayList<String> chatNomes = new ArrayList<>();
                                 chatNomes = newMsg.chatList;
+                                //Envie a lista para o usuário que pediu
                                 writeEnviarLista(msg.name,chatNomes, "Sucesso");
+                                System.out.println("(AtualizarListaSalas) Lista de salas devolvida para o espaço!" );
                             }
                             //Se a lista de Salas não existir
                             else{
+                                System.out.println("(AtualizarListaSalas) Lista de salas não existe! FALHA");
+                                //devolva a lista nula!
                                 writeEnviarLista(msg.name,null,"Falha");
                             }
                             break;
@@ -267,7 +292,7 @@ public class Server {
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);
-                    System.out.println("CHAT enviado para: " + destino);
+                    System.out.println("NewCHAT enviado para: " + destino);
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (RemoteException ex) {
@@ -289,7 +314,7 @@ public class Server {
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 180 * 1000);
-                    System.out.println("CHAT enviado para: " + destino);
+                    System.out.println("Lista Chats enviada para: " + destino);
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (RemoteException ex) {
@@ -311,7 +336,7 @@ public class Server {
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 180 * 1000);
-                    System.out.println("CHAT enviado para: " + destino);
+                    System.out.println("CHAT " +chatname +" enviado para: " + destino);
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (RemoteException ex) {

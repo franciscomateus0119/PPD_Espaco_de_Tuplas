@@ -259,9 +259,12 @@ public class GameController {
     }
     
     public void removerSala(String sala){
-        int index = listviewSalas.getItems().indexOf(sala);
-        System.out.println("Removendo sala: " + listviewSalas.getItems().get(index));
-        listviewSalas.getItems().remove(index);
+        if(listviewSalas.getItems().size()>0){
+            int index = listviewSalas.getItems().indexOf(sala);
+            System.out.println("Removendo sala: " + listviewSalas.getItems().get(index));
+            listviewSalas.getItems().remove(index);
+        }
+        
     }
 
     public void aceitarEnter() {

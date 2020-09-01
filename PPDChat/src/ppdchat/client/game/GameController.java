@@ -146,6 +146,7 @@ public class GameController {
     Button BUTTON_CRIAR;
     @FXML
     Button BUTTON_ENTRAR;
+    @FXML Button BUTTON_ATUALIZAR_SALAS;
     @FXML Label LABEL_SELECTED_CHAT;
     @FXML HBox HBOX_LISTVIEW;
     @FXML HBox HBOX_SALA;
@@ -283,6 +284,20 @@ public class GameController {
                 }
             }
         });
+    }
+    
+    @FXML
+    public void atualizarListaSalas(MouseEvent event){
+        main.getClient().writeAtualizarListaSalas(nome);
+    }
+    
+    public void atualizarSalas(ArrayList<String> listaSalas){
+       ObservableList<String> salasEncontradas = FXCollections.observableArrayList();
+       for(int g=0;g<listaSalas.size();g++){
+           salasEncontradas.add(listaSalas.get(g));
+       }
+       listviewSalas.setItems(salasEncontradas);
+       
     }
 
     public void listViewListener() {

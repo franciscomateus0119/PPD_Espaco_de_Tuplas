@@ -88,6 +88,15 @@ public class ReadMessageThread implements Runnable {
                                 });
                             }
                             break;
+                        case "EnviarLista":
+                            if(msg.content.equals("Sucesso")){
+                                Platform.runLater(() ->{
+                                    
+                                });
+                                
+                            }
+                            else if(msg.content.equals("Falha"))
+                            break;
                         default:
                             break;
                     }

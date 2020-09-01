@@ -15,6 +15,10 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -22,6 +26,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -34,6 +39,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -41,21 +47,26 @@ import javafx.stage.Stage;
 
 import net.jini.space.JavaSpace;
 
-
 /**
  * FXML Controller class
  *
  * @author Matheus
  */
-public class GameController{
+public class GameController {
+
     private MainGameController main;
     //private SpaceHandler spacehandler;
     Stage stage;
-    
+
     String nome = "Anonimo";
     String nChat;
-    Map<Integer, String> chats = new HashMap<>();
-    
+    String chatAtual;
+    public ArrayList<String> chatnames = new ArrayList<>();
+    Map<String, TextArea> chats = new HashMap<>();
+
+    ListView<String> listviewSalas;
+    ObservableList<String> items;
+
     // <editor-fold defaultstate="collapsed" desc="Old Project">
     /*
     Boolean circle_a_on = true;
@@ -119,43 +130,106 @@ public class GameController{
     @FXML TextField TF_GAME;
     
     @FXML ImageView IMAGE_SEND;
-    */
+     */
     //</editor-fold>
-    
-    @FXML TextArea TA_BOX;
-    @FXML TextField TF_MSG;
-    @FXML Button BUTTON_SEND;
-    
+    @FXML
+    TextArea TA_BOX;
+    @FXML
+    TextField TF_MSG;
+    @FXML
+    TextField TF_CRIAR_SALA;
+    @FXML
+    Button BUTTON_SEND;
+    @FXML
+    Button BUTTON_CRIAR;
+    @FXML Label LABEL_SELECTED_CHAT;
+    @FXML HBox HBOX_LISTVIEW;
+    @FXML HBox HBOX_SALA;
+    //@FXML ListView LISTVIEW_SALAS_DISPONIVEIS;
 
-    
-    public void init(MainGameController mainGameController){
+    public void init(MainGameController mainGameController) {
         main = mainGameController;
         //initbuttons();
-        stage = PPDChat.getStage();   
+        stage = PPDChat.getStage();
+        listviewSalas = new ListView<>();
+        listviewSalas.setPrefWidth(200);
+        listviewSalas.setPrefHeight(200);
+        listviewSalas.setLayoutX(376);
+        listviewSalas.setLayoutY(192);
+        listviewSalas.setVisible(true);
+        listviewSalas.toFront();
+        HBOX_LISTVIEW.getChildren().addAll(listviewSalas);
+        
+        items = FXCollections.observableArrayList();
         aceitarEnter();
+        listViewListener();
     }
-     
+
     @FXML
-    public void sendText(MouseEvent event){
+    public void sendText(MouseEvent event) {
         String texto = TF_MSG.getText() + "\n";
         TA_BOX.appendText("Você: " + texto);
         enviarTextoMensagem(texto);
     }
-    
-    public void enviarTextoMensagem(String texto){
+
+    public void enviarTextoMensagem(String texto) {
         Platform.runLater(() -> main.getClient().writeMessageToServer(nome, texto));
         //Platform.runLater(() -> main.getClient().writeMessageToClient(nome, texto));
     }
 
     public void setNome(String nome) {
-        if(!nome.equals("") && !(nome == null)){
+        if (!nome.equals("") && !(nome == null)) {
             this.nome = nome;
         }
-        
+
+    }
+
+    @FXML
+    public void criarSala(MouseEvent event) {
+        //Se o nome da Sala não for vazio nem nulo, crie a sala
+        if (!TF_CRIAR_SALA.getText().equals("") || TF_CRIAR_SALA.getText() != null) {
+            String textareaname = TF_CRIAR_SALA.getText();
+            TextArea textarea = new TextArea();
+            textarea.setLayoutX(13);
+            textarea.setLayoutY(14);
+            textarea.setWrapText(true);
+            textarea.setPrefWidth(350);
+            textarea.setPrefHeight(325);
+            textarea.setVisible(true);
+            textarea.toFront();
+            chatnames.add(textareaname);
+            chats.put(textareaname, textarea);
+            //HBOX_SALA.getChildren().addAll(textarea);
+            items.add(textareaname);
+            listviewSalas.setItems(items);
+
+            System.out.println("Nova sala criada: " + textareaname);
+        } else {
+            TF_CRIAR_SALA.setPromptText("DIGITE UM NOME NÃO VAZIO");
+        }
+
     }
     
-    
-    
+    //Mostra uma nova sala disponível para entrar
+    public void adicionarSala(String nomedasala) {
+        String textareaname = nomedasala;
+        TextArea textarea = new TextArea();
+        textarea.setLayoutX(13);
+        textarea.setLayoutY(14);
+        textarea.setWrapText(true);
+        textarea.setPrefWidth(350);
+        textarea.setPrefHeight(325);
+        textarea.setVisible(true);
+        textarea.toFront();
+        chatnames.add(nomedasala);
+        chats.put(nomedasala, textarea);
+        //HBOX_SALA.getChildren().addAll(textarea);
+        items.add(nomedasala);
+        listviewSalas.setItems(items);
+
+        System.out.println("Nova sala criada: " + textareaname);
+    }
+
     public void aceitarEnter() {
         TF_MSG.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
@@ -169,22 +243,41 @@ public class GameController{
                 } else {
                     if (event.getCode() == KeyCode.ENTER) {
                         String texto = TF_MSG.getText();
-                        event.consume(); 
+                        event.consume();
                         System.out.println("Mensagem Enviada");
                         TF_MSG.clear();
                     }
                 }
             }
-        });     
+        });
     }
-    /*
-    public void setSpacehandler(SpaceHandler spacehandler) {
-        this.spacehandler = spacehandler;
+
+    public void listViewListener() {
+        listviewSalas.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> ov, String old_val, String new_val) -> {
+            String selectedItem = listviewSalas.getSelectionModel().getSelectedItem();
+            int index = listviewSalas.getSelectionModel().getSelectedIndex();
+            //Deixa invisível todas as salas
+            for (Map.Entry<String, TextArea> entry : chats.entrySet()) {
+                /*
+                String key = entry.getKey();
+                TextArea value = entry.getValue();
+                */
+                TextArea textarea = entry.getValue();
+                textarea.setVisible(false);
+                textarea.setDisable(true);
+                // ...
+            }
+            chats.get(selectedItem).setVisible(true);
+            chats.get(selectedItem).setDisable(false);
+            HBOX_SALA.getChildren().setAll(chats.get(selectedItem));
+            LABEL_SELECTED_CHAT.setText("Selected Chat: " + selectedItem + " - Index : " + index);
+            chatAtual = selectedItem;
+            System.out.println("Entrou na sala: " + selectedItem);
+        });
     }
-    */
-    
-    // <editor-fold defaultstate="collapsed" desc="Old Project">
-    /*
+
+        // <editor-fold defaultstate="collapsed" desc="Old Project">
+        /*
     @FXML
     void toggle(MouseEvent event) throws RemoteException{
        Button button = (Button) event.getSource();
@@ -698,10 +791,6 @@ public class GameController{
             }
         });     
     }
-        */
-            //</editor-fold>
-
-    
-
-    
-}
+         */
+        //</editor-fold>
+    }

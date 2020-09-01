@@ -11,13 +11,40 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="413.0" prefWidth="376.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ppdchat.client.game.GameController">
+<AnchorPane id="AnchorPane" prefHeight="413.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ppdchat.client.game.GameController">
     <stylesheets>
         <URL value="@gamecontroller.css" />
     </stylesheets>
    <children>
-      <TextArea fx:id="TA_BOX" layoutX="13.0" layoutY="14.0" prefHeight="325.0" prefWidth="350.0" />
-      <TextField fx:id="TF_MSG" alignment="CENTER" layoutX="78.0" layoutY="351.0" promptText="Digite sua Mensagem" />
-      <Button fx:id="BUTTON_SEND" layoutX="263.0" layoutY="351.0" mnemonicParsing="false" onMouseClicked="#sendText" text="Enviar" />
+      <TextArea fx:id="TA_BOX" disable="true" focusTraversable="false" layoutX="13.0" layoutY="14.0" prefHeight="325.0" prefWidth="350.0" visible="false" />
+      <TextField fx:id="TF_MSG" alignment="CENTER" layoutX="42.0" layoutY="351.0" prefHeight="25.0" prefWidth="208.0" promptText="Digite sua Mensagem" />
+      <Button fx:id="BUTTON_SEND" layoutX="265.0" layoutY="351.0" mnemonicParsing="false" onMouseClicked="#sendText" text="Enviar" />
+      <Button fx:id="BUTTON_CRIAR" layoutX="538.0" layoutY="53.0" mnemonicParsing="false" onMouseClicked="#criarSala" text="Criar" />
+      <TextField fx:id="TF_CRIAR_SALA" layoutX="375.0" layoutY="53.0" promptText="Digite o nome da sala" />
+      <Label layoutX="421.0" layoutY="27.0" text="Criar uma sala">
+         <font>
+            <Font name="Arial Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="402.0" layoutY="86.0" text="Entrar em uma sala">
+         <font>
+            <Font name="Arial Bold" size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="TF_ENTRAR_SALA" disable="true" layoutX="376.0" layoutY="113.0" promptText="Digite o nome da sala" />
+      <Button fx:id="BUTTON_ENTRAR" disable="true" layoutX="534.0" layoutY="113.0" mnemonicParsing="false" text="Entrar" />
+      <Label layoutX="66.0" layoutY="150.0" text="CRIE OU ENTRE EM UM SALA">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="413.0" layoutY="167.0" text="Salas Disponíveis">
+         <font>
+            <Font name="Arial Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="LABEL_SELECTED_CHAT" layoutX="42.0" layoutY="382.0" prefHeight="17.0" prefWidth="208.0" text="Selected Chat: None" />
+      <HBox fx:id="HBOX_LISTVIEW" layoutX="376.0" layoutY="192.0" prefHeight="200.0" prefWidth="200.0" />
+      <HBox fx:id="HBOX_SALA" layoutX="13.0" layoutY="14.0" prefHeight="325.0" prefWidth="350.0" />
    </children>
 </AnchorPane>

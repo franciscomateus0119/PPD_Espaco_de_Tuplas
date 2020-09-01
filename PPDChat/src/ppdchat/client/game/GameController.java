@@ -264,7 +264,10 @@ public class GameController {
     public void listViewListener() {
         listviewSalas.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> ov, String old_val, String new_val) -> {
             String selectedItem = listviewSalas.getSelectionModel().getSelectedItem();
-            int index = listviewSalas.getSelectionModel().getSelectedIndex();            
+            int index = listviewSalas.getSelectionModel().getSelectedIndex();
+            if(!TA_BOX.isVisible()){
+                TA_BOX.setVisible(true);
+            }
             LABEL_SELECTED_CHAT.setText("Selected Chat: " + selectedItem + " - Index : " + index);
             chatAtual = selectedItem;
             System.out.println("Entrou na sala: " + selectedItem);

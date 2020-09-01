@@ -169,6 +169,7 @@ public class GameController {
     public void sendText(MouseEvent event) {
         String texto = TF_MSG.getText() + "\n";
         TA_BOX.appendText("Você: " + texto);
+        TF_MSG.clear();
         enviarTextoMensagem(texto);
     }
 
@@ -187,8 +188,13 @@ public class GameController {
     @FXML
     public void criarSala(MouseEvent event) {
         //Se o nome da Sala não for vazio nem nulo, crie a sala
-        if (!TF_CRIAR_SALA.getText().equals("") || TF_CRIAR_SALA.getText() != null) {
+        if(chatnames.contains(TF_CRIAR_SALA) && (!TF_CRIAR_SALA.getText().equals("") || TF_CRIAR_SALA.getText() != null)){
+            TF_CRIAR_SALA.clear();
+            TF_CRIAR_SALA.setPromptText("Esta sala ja existe!");
+        }
+        else if (!TF_CRIAR_SALA.getText().equals("") || TF_CRIAR_SALA.getText() != null) {
             String textareaname = TF_CRIAR_SALA.getText();
+            /*
             TextArea textarea = new TextArea();
             textarea.setLayoutX(13);
             textarea.setLayoutY(14);
@@ -202,7 +208,13 @@ public class GameController {
             //HBOX_SALA.getChildren().addAll(textarea);
             items.add(textareaname);
             listviewSalas.setItems(items);
+            */
+            Platform.runLater(() -> {
+                main.getClient().writeNewChatToServer(nome, textareaname);
+                main.getClient().writeNewChatToServer(nome, textareaname);
+            });
             System.out.println("Nova sala criada: " + textareaname);
+            TF_CRIAR_SALA.clear();
         } else {
             TF_CRIAR_SALA.setPromptText("DIGITE UM NOME NÃO VAZIO");
         }
@@ -220,12 +232,12 @@ public class GameController {
         textarea.setPrefHeight(325);
         textarea.setVisible(true);
         textarea.toFront();
-        chatnames.add(nomedasala);
-        chats.put(nomedasala, textarea);
+        chatnames.add(textareaname);
+        chats.put(textareaname, textarea);
         //HBOX_SALA.getChildren().addAll(textarea);
-        items.add(nomedasala);
+        items.add(textareaname);
         listviewSalas.setItems(items);
-        System.out.println("Nova sala disponível: " + nomedasala);
+        System.out.println("Nova sala disponível: " + textareaname);
     }
 
     public void aceitarEnter() {

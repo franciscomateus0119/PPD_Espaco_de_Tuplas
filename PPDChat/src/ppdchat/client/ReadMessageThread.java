@@ -95,9 +95,13 @@ public class ReadMessageThread implements Runnable {
                                 }
                              */
                             break;
-                        case "ChatSelect":
-                            System.out.println("Usuário " + msg.name + " se conectou ao chat " + msg.chatname);
+                        case "NewChat":
+                            System.out.println(msg.name + "Criou uma nova sala: " + msg.chatname);
                             chatAtual = msg.chatname;
+                            Platform.runLater(() -> {
+                                main.getGameController().adicionarSala(msg.chatname);
+                                
+                            });
                             break;
                         default:
                             break;

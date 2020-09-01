@@ -28,6 +28,7 @@ public class Server {
 
     private int clientesConectados = 0;
     private int reiniciarpartida = 0;
+    int x = 0;
     //private SpaceHandler spacehandler = SpaceHandler.getInstance();
 
     //protected ArrayList<ClientForm> clients;
@@ -44,6 +45,7 @@ public class Server {
     public Server() throws RemoteException {
         //clients = new ArrayList<>();
         names = new ArrayList<>();
+        chatnames = new ArrayList<>();
         this.finder = new Lookup(JavaSpace.class);
         this.space = (JavaSpace) finder.getService();
         if (space == null) {
@@ -77,7 +79,7 @@ public class Server {
                             System.out.println("Destino da Mensagem: " + msg.destino);
                             System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content);
                             msg.servidorLeu = true;
-                            int x = 0;
+                            x = 0;
                             //Envia uma mensagem única para cada nome registrado!
                             while (x < names.size()) {
                                 if (!names.get(x).equals(msg.name)) {
@@ -86,17 +88,27 @@ public class Server {
                                 x = x + 1;
                             }
                             break;
-                        case "ChatSelect":
-                            System.out.println("Novo Chat criado: " + msg.chatname);
-                            chatnames.add(msg.chatname);
-                            msg.servidorLeu = true;
-                            x = 0;
-                            while (x < names.size()) {
-                                if (!names.get(x).equals(msg.name)) {
-                                    writeMessage(msg.name + ": ", msg.content, names.get(x));
+                        case "NewChat":
+                            if(!chatnames.contains(msg.chatname)){
+                                System.out.println("Novo Chat criado: " + msg.chatname);
+                                chatnames.add(msg.chatname);
+                                msg.servidorLeu = true;
+                                x = 0;
+                                /*
+                                while (x < names.size()) {
+                                    if (!names.get(x).equals(msg.name)) {
+                                        writeNewChat(msg.name, msg.chatname, names.get(x));
+                                    }
+                                    x = x + 1;
                                 }
-                                x = x + 1;
+                                */
+                                while (x < names.size()) {
+                                    writeNewChat(msg.name, msg.chatname, names.get(x));
+
+                                    x = x + 1;
+                                }
                             }
+                            
                             //clientchat.put(msg.name, msg.chatname);
                             break;
                         case "NewClient":
@@ -140,6 +152,29 @@ public class Server {
         }
     }
 
+    public void writeNewChat(String name, String chatname, String destino){
+        try {
+            Message msg = new Message();
+            msg.type = "NewChat";
+            msg.destino = destino;
+            msg.name = name;
+            msg.chatname = chatname;
+            Platform.runLater(() -> {
+                try {
+                    space.write(msg, null, 60 * 1000);
+                    System.out.println("Mensagem enviada para: " + destino);
+                } catch (TransactionException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="Old Project">
 
     /*

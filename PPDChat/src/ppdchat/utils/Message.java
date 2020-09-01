@@ -12,6 +12,7 @@ public class Message implements Entry {
     public Boolean servidorLeu = false;
     public Boolean destinatarioLeu = false;
     //public ArrayList<String> quemLeu = new ArrayList<>();
+    public ArrayList<String> namesList;
     public Message() {
     }
 }

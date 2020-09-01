@@ -13,6 +13,7 @@ import ppdchat.utils.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -33,6 +34,8 @@ public class Client{
     private Lookup finder;
     private String nome;
     private int nameCounter = 0;
+    Random rand;
+    int n;
     
     Runnable runnable;
     Thread thread;
@@ -174,6 +177,34 @@ public class Client{
             
         }
         catch(Exception e){e.printStackTrace();}
+    }
+    
+    public void readUserList(int numero, Random rand){
+        numero = 3;
+        try{
+            Message temp = new Message();
+            temp.destino = "Espaco";
+            temp.type = "ListaUsuarios";
+            Message mensagem = (Message) space.read(temp, null, 0 * 1000);
+            if(mensagem!=null){
+                System.out.println("UserList Encontrada!");
+                if(mensagem.namesList.contains(nome)){
+                    //numero = rand.nextInt(10001);
+                    System.out.println("Valor de numero: " + numero);
+                    String newNome = "Anonimo" + numero;
+                    while(mensagem.namesList.contains(newNome)){
+                        this.n = rand.nextInt(10001);
+                        newNome = "Anonimo" + numero;
+                    }
+                    nome = newNome;
+                }
+            }
+            else{
+                System.out.println("Mission Failed");
+            }
+        }catch(Exception e){e.printStackTrace();}
+        
+        
     }
     
 

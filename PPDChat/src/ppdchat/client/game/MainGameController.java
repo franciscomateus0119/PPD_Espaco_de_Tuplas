@@ -11,6 +11,7 @@ import ppdchat.client.Client;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,6 +37,9 @@ public class MainGameController {
     private Stage mainStage;
     //private Client clientInstance
     //private SpaceHandler spacehandler;
+    
+    int numero = 0;
+    Random rand;
     
     @FXML
     public void initialize() {
@@ -69,7 +73,8 @@ public class MainGameController {
         
         gameController.init(this);
         System.out.println("GAMECONTROLLER set!");
-        client.writeUserListServer();
+        //client.writeUserListServer();
+        client.readUserList(numero, rand);
         client.setGameController(this);
         Platform.runLater(() -> {
             client.startThread();

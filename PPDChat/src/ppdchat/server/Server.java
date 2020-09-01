@@ -101,6 +101,13 @@ public class Server {
                                 System.out.println("Novo cliente adicionado: " + msg.name);
                                 names.add(msg.name);
                                 System.out.println("Total de clientes: " + names.size());
+                                Message temp = new Message();
+                                temp.destino = "Espaco";
+                                temp.type = "ListaUsuarios";
+                                space.take(temp, null, 15 * 1000);
+                                writeUserList(names);
+                                
+                                
                                 
                             }
                             break;
@@ -155,6 +162,28 @@ public class Server {
                 try {
                     space.write(msg, null, 60 * 1000);
                     System.out.println("CHAT enviado para: " + destino);
+                } catch (TransactionException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void writeUserList(ArrayList<String> listanomes){
+        try {
+            Message msg = new Message();
+            msg.type = "ListaUsuarios";
+            msg.destino = "Espaco";
+            msg.namesList = listanomes;
+            Platform.runLater(() -> {
+                try {
+                    space.write(msg, null, 60 * 1000);
+                    System.out.println("Lista de Usuários enviada para o JavaSpace");
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (RemoteException ex) {

@@ -146,6 +146,8 @@ public class GameController {
     Button BUTTON_CRIAR;
     @FXML
     Button BUTTON_ENTRAR;
+    @FXML
+    Button BUTTON_ATUALIZAR;
     @FXML Label LABEL_SELECTED_CHAT;
     @FXML HBox HBOX_LISTVIEW;
     @FXML HBox HBOX_SALA;
@@ -194,6 +196,11 @@ public class GameController {
         }
 
     }
+    
+    @FXML
+    public void atualizarListaSalas(MouseEvent event){
+    
+    }
 
     @FXML
     public void criarSala(MouseEvent event) {
@@ -218,15 +225,23 @@ public class GameController {
 
     }
     
-    public void adicionarSala(String nomedasala) {
-        String textareaname = nomedasala;
-        TextArea textarea = new TextArea();
-        chatnames.add(textareaname);
-        chats.put(textareaname, textarea);
-        textareas.add(textarea);
-        items.add(textareaname);
-        listviewSalas.setItems(items);
-        System.out.println("Nova sala disponível: " + textareaname);
+    public void adicionarSala(String nomedasala,ArrayList<String> nomedassalas) {
+        //String textareaname = nomedasala;
+        
+        int tamanho = nomedassalas.size();
+        //items.clear();
+        for(int h = 0;h<tamanho;h++){
+            if(!chatnames.contains(nomedassalas.get(h))){
+                TextArea textarea = new TextArea();
+                chatnames.add(nomedassalas.get(h));
+                chats.put(nomedassalas.get(h), textarea);
+                textareas.add(textarea);
+                items.add(nomedassalas.get(h));
+                listviewSalas.setItems(items);
+                System.out.println("Nova sala disponível: " + nomedassalas.get(h));
+            }
+  
+        }  
     }
     
     @FXML

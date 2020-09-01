@@ -89,7 +89,7 @@ public class Server {
                                 msg.servidorLeu = true;
                                 x = 0;
                                 while (x < names.size()) {
-                                    writeNewChat(msg.name, msg.chatname, names.get(x));
+                                    writeNewChat(msg.name, msg.chatname,chatnames, names.get(x));
                                     x = x + 1;
                                 }
                             }
@@ -203,13 +203,14 @@ public class Server {
         }
     }
 
-    public void writeNewChat(String name, String chatname, String destino){
+    public void writeNewChat(String name,String chatname, ArrayList<String> listasalas, String destino){
         try {
             Message msg = new Message();
             msg.type = "NewChat";
             msg.destino = destino;
             msg.name = name;
             msg.chatname = chatname;
+            msg.chatList = listasalas;
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);

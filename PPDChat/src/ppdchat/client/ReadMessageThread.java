@@ -70,7 +70,7 @@ public class ReadMessageThread implements Runnable {
                             System.out.println(msg.name + "Criou uma nova sala: " + msg.chatname);
                             chatAtual = msg.chatname;
                             Platform.runLater(() -> {
-                                main.getGameController().adicionarSala(msg.chatname);
+                                main.getGameController().adicionarSala(msg.chatname,msg.chatList);
                                 
                             });
                             break;

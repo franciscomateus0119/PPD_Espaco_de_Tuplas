@@ -19,10 +19,10 @@ import ppdchat.client.game.MainGameController;
 public class ReadMessageThread implements Runnable {
 
     String meuNome;
+    String nomeagora = "Anonimo";
     String chatAtual;
     JavaSpace space;
     MainGameController main;
-    
 
     public ReadMessageThread(JavaSpace spaceNew, String nome, MainGameController mainController) {
         this.space = spaceNew;
@@ -50,14 +50,13 @@ public class ReadMessageThread implements Runnable {
                 if (msg == null) {
                     System.out.println("Tempo de espera esgotado. Encerrando...");
                     System.exit(0);
-                }
-                else { //Se a Mensagem for Direcionada para Clientes e a Mensagem não é nula
+                } else { //Se a Mensagem for Direcionada para Clientes e a Mensagem não é nula
                     switch (msg.type) {
                         case "Mensagem":
                             //Se Quem enviou a mensagem fui eu-> Lê a mensagem, mostra na GUI e coloca de volta pro JavaSpace
                             //if (msg.name.equals(meuNome)) {
                             System.out.println("Eu já li isso? " + msg.destinatarioLeu);
-                            System.out.println("Mensagem recebida de " + msg.name + "(" +msg.chatname+": " + msg.content);
+                            System.out.println("Mensagem recebida de " + msg.name + "(" + msg.chatname + ": " + msg.content);
                             Platform.runLater(() -> {
                                 main.getChatToolbarController().mostrarTextoMensagem(msg.name, msg.chatname, msg.content);
                             });
@@ -71,8 +70,33 @@ public class ReadMessageThread implements Runnable {
                             chatAtual = msg.chatname;
                             Platform.runLater(() -> {
                                 main.getGameController().adicionarSala(msg.chatname);
-                                
+
                             });
+                        case "Anonimo":
+                            if(nomeagora.equals("Anonimo")){
+                                System.out.println("O nome escolhido já existe. Novo nome: " + msg.name);
+                                Platform.runLater(() -> {
+                                    main.getClient().setNome(msg.name);
+                                    main.getGameController().setNome(msg.name);
+                                });
+                            }
+                            
+                        case "NewName":
+                            if (msg.content == null) {
+                                System.out.println("O nome escolhido já existe. Escolha outro nome!");
+                                Platform.runLater(() -> {
+                                    main.getGameController().noNewName();
+                                });
+                            } else {
+                                Platform.runLater(() -> {
+                                    this.meuNome = msg.content;
+                                    this.nomeagora = null;
+                                    main.getClient().setNome(msg.content);
+                                    main.getGameController().setNome(msg.content);
+                                });
+                                System.out.println("Troca de nome Efetuada. Novo nome: " + msg.content);
+                            }
+
                             break;
                         default:
                             break;

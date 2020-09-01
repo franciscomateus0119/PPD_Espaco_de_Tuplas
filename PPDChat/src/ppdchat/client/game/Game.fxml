@@ -26,14 +26,14 @@
             <Font name="Arial Bold" size="16.0" />
          </font>
       </Label>
-      <Label layoutX="402.0" layoutY="86.0" text="Entrar em uma sala">
+      <Label fx:id="LABEL_ALTERAR_NOME" layoutX="402.0" layoutY="86.0" text="Alterar Nome">
          <font>
             <Font name="Arial Bold" size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="TF_ENTRAR_SALA" disable="true" layoutX="376.0" layoutY="113.0" promptText="Digite o nome da sala" />
-      <Button fx:id="BUTTON_ENTRAR" disable="true" layoutX="534.0" layoutY="113.0" mnemonicParsing="false" text="Entrar" />
-      <Label layoutX="66.0" layoutY="150.0" text="CRIE OU ENTRE EM UM SALA">
+      <TextField fx:id="TF_MUDAR_NOME" layoutX="376.0" layoutY="113.0" promptText="Digite seu novo nome" visible="false" />
+      <Button fx:id="BUTTON_MUDAR" layoutX="534.0" layoutY="113.0" mnemonicParsing="false" onMouseClicked="#sendNewName" text="Mudar" visible="false" />
+      <Label fx:id="LABEL_START_MSG" layoutX="66.0" layoutY="150.0" text="CRIE OU ENTRE EM UM SALA">
          <font>
             <Font size="18.0" />
          </font>
@@ -45,5 +45,7 @@
       </Label>
       <Label fx:id="LABEL_SELECTED_CHAT" layoutX="42.0" layoutY="382.0" prefHeight="17.0" prefWidth="208.0" text="Selected Chat: None" />
       <HBox fx:id="HBOX_LISTVIEW" layoutX="376.0" layoutY="192.0" prefHeight="200.0" prefWidth="200.0" />
+      <Label fx:id="LABEL_ANONIMO" layoutX="242.0" layoutY="391.0" prefHeight="17.0" prefWidth="381.0" text="O nome que voce colocou ja existia! Nome alterado para:" visible="false" />
+      <Label fx:id="LABEL_NOME" layoutX="546.0" layoutY="19.0" text="Label" />
    </children>
 </AnchorPane>

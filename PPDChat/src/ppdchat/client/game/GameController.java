@@ -138,11 +138,17 @@ public class GameController {
     TextField TF_MSG;
     @FXML
     TextField TF_CRIAR_SALA;
+    @FXML TextField TF_MUDAR_NOME;
     @FXML
     Button BUTTON_SEND;
     @FXML
     Button BUTTON_CRIAR;
+    @FXML Button BUTTON_MUDAR;
     @FXML Label LABEL_SELECTED_CHAT;
+    @FXML Label LABEL_START_MSG;
+    @FXML Label LABEL_ANONIMO;
+    @FXML Label LABEL_ALTERAR_NOME;
+    @FXML Label LABEL_NOME;
     @FXML HBox HBOX_LISTVIEW;
     @FXML HBox HBOX_SALA;
     //@FXML ListView LISTVIEW_SALAS_DISPONIVEIS;
@@ -167,7 +173,7 @@ public class GameController {
 
     @FXML
     public void sendText(MouseEvent event) {
-        if(chatAtual!=null && !chatAtual.equals("")){
+        if(chatAtual!=null && !chatAtual.equals("") && !TF_MSG.getText().equals("") && TF_MSG.getText()!=null){
             String texto = TF_MSG.getText() + "\n";
             TF_MSG.clear();
             TF_MSG.setPromptText("Digite sua Mensagem");
@@ -183,12 +189,42 @@ public class GameController {
     public void enviarTextoMensagem(String texto) {
         Platform.runLater(() -> main.getClient().writeMessageToServer(nome, chatAtual, texto));
     }
+    
+    @FXML
+    public void sendNewName(MouseEvent event){
+        if(!TF_MUDAR_NOME.getText().equals("") && TF_MUDAR_NOME.getText()!=null){
+            
+        }
+    }
 
     public void setNome(String nome) {
         if (!nome.equals("") && !(nome == null)) {
             this.nome = nome;
+            LABEL_NOME.setText(nome);
         }
+        
 
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+
+    public void noNewName(){
+        TF_MUDAR_NOME.clear();
+        TF_MUDAR_NOME.setPromptText("Nome escolhido já existe!");
+        LABEL_ANONIMO.setText("O nome que voce colocou ja existia! Nome alterado para:" + nome);
+    }
+    
+    public void disableNewName(){
+        TF_MUDAR_NOME.setDisable(true);
+        TF_MUDAR_NOME.setVisible(false);
+        BUTTON_MUDAR.setDisable(true);
+        BUTTON_MUDAR.setVisible(false);
+        LABEL_ALTERAR_NOME.setDisable(true);
+        LABEL_ALTERAR_NOME.setVisible(false);
+        
     }
 
     @FXML
@@ -267,6 +303,8 @@ public class GameController {
             int index = listviewSalas.getSelectionModel().getSelectedIndex();
             if(!TA_BOX.isVisible()){
                 TA_BOX.setVisible(true);
+                LABEL_START_MSG.setVisible(false);
+                
             }
             LABEL_SELECTED_CHAT.setText("Selected Chat: " + selectedItem + " - Index : " + index);
             chatAtual = selectedItem;

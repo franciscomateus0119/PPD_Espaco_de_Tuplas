@@ -72,8 +72,8 @@ public class Client{
         this.mainController = mainController;
         //this.clientForm.setMain(mainController);
         System.out.println("MAINGAMECONTROLLER set!");
-        Platform.runLater(() -> mainController.getGameController().setNome(this.nome));
-        writeNewClient(this.nome);
+        //Platform.runLater(() -> mainController.getGameController().setNome(this.nome));
+        writeNewClient(null);
         writeNewClient(this.nome);
     }
 
@@ -141,6 +141,27 @@ public class Client{
             msg.destino = "Servidor";
             msg.type = "NewChat";
             msg.chatname = chatname;
+            msg.name = name;
+            Platform.runLater(() -> {
+                try {
+                    space.write(msg, null, 60 * 1000);
+                } catch (TransactionException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+            
+        }
+        catch(Exception e){e.printStackTrace();}
+    }
+    
+    public void writeNewName(String name, String newname){
+        try{
+            Message msg = new Message();
+            msg.destino = "Servidor";
+            msg.type = "NewName";
+            msg.content = newname;
             msg.name = name;
             Platform.runLater(() -> {
                 try {

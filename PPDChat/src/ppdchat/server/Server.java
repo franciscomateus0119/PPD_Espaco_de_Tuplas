@@ -5,6 +5,7 @@
  */
 package ppdchat.server;
 
+import java.util.Random;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,10 +30,10 @@ public class Server {
     private int clientesConectados = 0;
     private int reiniciarpartida = 0;
     int x = 0;
+    Random rand = new Random();
 
     //protected ArrayList<ClientForm> clients;
     //protected Map<String, ClientForm> clientbyname = new HashMap<>();
-    
     protected Map<String, String> clientchat = new HashMap<>();
     protected ArrayList<String> names;
     protected ArrayList<String> chatnames;
@@ -85,7 +86,7 @@ public class Server {
                             }
                             break;
                         case "NewChat":
-                            if(!chatnames.contains(msg.chatname)){
+                            if (!chatnames.contains(msg.chatname)) {
                                 System.out.println("Novo Chat criado: " + msg.chatname);
                                 chatnames.add(msg.chatname);
                                 msg.servidorLeu = true;
@@ -96,15 +97,39 @@ public class Server {
                                     x = x + 1;
                                 }
                             }
-                            
+
                             break;
                         case "NewClient":
-                            if (!names.contains(msg.name)) {
+                            if (!names.contains(msg.name) && !msg.name.equals("") && msg.name!=null) {
                                 System.out.println("Novo cliente adicionado: " + msg.name);
                                 names.add(msg.name);
                                 System.out.println("Total de clientes: " + names.size());
+                                writeNewName(msg.name, msg.name);
+                            } else {
+
+                                int n = rand.nextInt(1000);
+                                while (names.contains("Anonimo" + n)) {
+                                    n = rand.nextInt(1000);
+                                }
+                                names.add("Anonimo" + n);
+                                writeAnonimo("Anonimo" + n, msg.name);
                             }
                             break;
+                        case "NewName":
+                            
+                            if (!names.contains(msg.content)) {
+                                System.out.println(msg.name + "Mudou de nome para: " + msg.content);
+                                names.remove(msg.name);
+                                names.add(msg.content);
+                                writeNewName(msg.name, msg.content);
+                                System.out.println("Total de clientes: " + names.size());
+                            } else {
+                                System.out.println("Nome " +msg.content + " já existe. Nenhuma operação foi efetuada!");
+                                writeNewName(msg.name, null);
+                            }
+                            
+                            break;
+
                         default:
                             break;
                     }
@@ -140,7 +165,51 @@ public class Server {
         }
     }
 
-    public void writeNewChat(String name, String chatname, String destino){
+    public void writeAnonimo(String name, String destino) {
+        try {
+            Message msg = new Message();
+            msg.type = "Anonimo";
+            msg.destino = destino;
+            msg.name = name;
+            Platform.runLater(() -> {
+                try {
+                    space.write(msg, null, 60 * 1000);
+                    System.out.println("Mensagem enviada para: " + destino);
+                } catch (TransactionException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void writeNewName(String destino, String content) {
+        try {
+            Message msg = new Message();
+            msg.type = "NewName";
+            msg.destino = destino;
+            msg.content = content;
+            Platform.runLater(() -> {
+                try {
+                    space.write(msg, null, 60 * 1000);
+                    System.out.println("CHAT enviado para: " + destino);
+                } catch (TransactionException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeNewChat(String name, String chatname, String destino) {
         try {
             Message msg = new Message();
             msg.type = "NewChat";
@@ -162,7 +231,7 @@ public class Server {
             e.printStackTrace();
         }
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="Old Project">
 
     /*

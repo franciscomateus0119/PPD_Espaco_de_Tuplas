@@ -74,7 +74,7 @@ public class ReadMessageThread implements Runnable {
                             });
                         case "Anonimo":
                             if(nomeagora.equals("Anonimo")){
-                                System.out.println("O nome escolhido já existe. Novo nome: " + msg.name);
+                                System.out.println("(Anonimo CASE)Nome já existe. Novo nome: " + msg.name);
                                 Platform.runLater(() -> {
                                     main.getClient().setNome(msg.name);
                                     main.getGameController().setNome(msg.name);
@@ -82,11 +82,14 @@ public class ReadMessageThread implements Runnable {
                             }
                             
                         case "NewName":
+                            //Nome Ja Existe
                             if (msg.content == null) {
-                                System.out.println("O nome escolhido já existe. Escolha outro nome!");
+                                System.out.println("(NewName CASE)O nome escolhido já existe. Escolha outro nome!");
                                 Platform.runLater(() -> {
                                     main.getGameController().noNewName();
+                                    
                                 });
+                                //Novo Nome
                             } else {
                                 Platform.runLater(() -> {
                                     this.meuNome = msg.content;

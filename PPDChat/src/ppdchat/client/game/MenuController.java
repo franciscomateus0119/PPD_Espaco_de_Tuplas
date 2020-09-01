@@ -62,6 +62,7 @@ public class MenuController {
     @FXML
     public void connect(ActionEvent event){
         try{
+            
             if (!TF_NOME.getText().equals("")) {
                 client = new Client(TF_NOME.getText());
             }

@@ -100,23 +100,38 @@ public class Server {
 
                             break;
                         case "NewClient":
-                            if (!names.contains(msg.name) && !msg.name.equals("") && msg.name!=null) {
-                                System.out.println("Novo cliente adicionado: " + msg.name);
-                                names.add(msg.name);
-                                System.out.println("Total de clientes: " + names.size());
-                                writeNewName(msg.name, msg.name);
-                            } else {
-
-                                int n = rand.nextInt(1000);
-                                while (names.contains("Anonimo" + n)) {
-                                    n = rand.nextInt(1000);
+                            System.out.println("NEWCLIENT CASE ENTERED");
+                            //Se o nome não existe na lista
+                            if(msg.name == null){
+                                break;
+                            }
+                            if (!names.contains(msg.name)) {
+                                //Se o nome dado não for vazio/nulo -> Adiciona na lista
+                                if (!msg.name.equals("") && msg.name != null) {
+                                    System.out.println("Novo cliente adicionado: " + msg.name);
+                                    names.add(msg.name);
+                                    System.out.println("Total de clientes: " + names.size());
+                                    writeNewName(msg.name, msg.name);
+                                    break;
                                 }
-                                names.add("Anonimo" + n);
-                                writeAnonimo("Anonimo" + n, msg.name);
+                                //Se o nome já existe na lista  
+                            } else {
+                                //Se o nome dado não for vazio/nulo
+                                if (!msg.name.equals("") && msg.name != null) {
+                                    System.out.println("Nome ja existe. Criando novo nome!");
+                                    int n = rand.nextInt(1000);
+                                    while (names.contains("Anonimo" + n)) {
+                                        n = rand.nextInt(1000);
+                                    }
+                                    names.add("Anonimo" + n);
+                                    writeAnonimo("Anonimo" + n, msg.name);
+                                    break;
+                                }
+                                
                             }
                             break;
                         case "NewName":
-                            
+                            System.out.println("NEWNAME CASE ENTERED");
                             if (!names.contains(msg.content)) {
                                 System.out.println(msg.name + "Mudou de nome para: " + msg.content);
                                 names.remove(msg.name);

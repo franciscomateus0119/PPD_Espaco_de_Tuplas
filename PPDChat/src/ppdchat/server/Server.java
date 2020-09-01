@@ -143,6 +143,7 @@ public class Server {
             msg.destino = destino;
             msg.name = name;
             msg.content = message;
+            msg.chatname = chatname;
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);

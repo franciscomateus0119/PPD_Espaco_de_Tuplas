@@ -66,7 +66,7 @@ public class ReadMessageThread implements Runnable {
                             //if (msg.name.equals(meuNome)) {
                             System.out.println("Eu já li isso? " + msg.destinatarioLeu);
                             //System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content + ". Eu enviei esta mensagem. Ainda não li esta mensagem");
-                            System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content);
+                            System.out.println("Mensagem recebida de " + msg.name + "(" +msg.chatname+": " + msg.content);
                             Platform.runLater(() -> {
                                 main.getChatToolbarController().mostrarTextoMensagem(msg.name, msg.chatname, msg.content);
                             });

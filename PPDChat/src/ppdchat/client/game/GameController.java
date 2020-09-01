@@ -62,6 +62,7 @@ public class GameController {
     String nChat;
     String chatAtual = "";
     public ArrayList<String> chatnames = new ArrayList<>();
+    public ArrayList<TextArea> textareas = new ArrayList<>();
     Map<String, TextArea> chats = new HashMap<>();
     TextArea textareateste;
     ListView<String> listviewSalas;
@@ -235,6 +236,7 @@ public class GameController {
     public void adicionarSala(String nomedasala) {
         String textareaname = nomedasala;
         TextArea textarea = new TextArea();
+        /*
         textarea.setLayoutX(13);
         textarea.setLayoutY(14);
         textarea.setWrapText(true);
@@ -242,8 +244,10 @@ public class GameController {
         textarea.setPrefHeight(325);
         textarea.setVisible(true);
         textarea.toFront();
+        */
         chatnames.add(textareaname);
         chats.put(textareaname, textarea);
+        textareas.add(textarea);
         //HBOX_SALA.getChildren().addAll(textarea);
         items.add(textareaname);
         listviewSalas.setItems(items);
@@ -277,21 +281,26 @@ public class GameController {
             String selectedItem = listviewSalas.getSelectionModel().getSelectedItem();
             int index = listviewSalas.getSelectionModel().getSelectedIndex();
             //Deixa invisível todas as salas
+            //
+            /*
             for (Map.Entry<String, TextArea> entry : chats.entrySet()) {
-                /*
+                
                 String key = entry.getKey();
                 TextArea value = entry.getValue();
-                */
+                
                 TextArea textarea = entry.getValue();
                 textarea.setVisible(false);
                 textarea.setDisable(true);
                 textarea.toBack();
                 // ...
             }
+                
             chats.get(selectedItem).setVisible(true);
             chats.get(selectedItem).setDisable(false);
             chats.get(selectedItem).toFront();
-            HBOX_SALA.getChildren().setAll(chats.get(selectedItem));
+            */
+            //HBOX_SALA.getChildren().setAll(chats.get(selectedItem));
+            
             LABEL_SELECTED_CHAT.setText("Selected Chat: " + selectedItem + " - Index : " + index);
             chatAtual = selectedItem;
             System.out.println("Entrou na sala: " + selectedItem);

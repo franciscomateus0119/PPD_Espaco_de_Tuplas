@@ -76,17 +76,28 @@ public class ChatToolbarController{
         Platform.runLater(() -> {
             //main.getGameController().TA_BOX.appendText(mensagem);
             //main.getGameController().TA_BOX.appendText(main.getGameController().TA_BOX.getText());
+            /*
             main.getGameController().textareateste.appendText(texto);
             main.getGameController().TA_BOX.clear();
             main.getGameController().TA_BOX.appendText(main.getGameController().textareateste.getText());
+            */
+            /*main.getGameController().chats.get(chatname).appendText(mensagem);
+            main.getGameController().TA_BOX.clear();
+            main.getGameController().TA_BOX.appendText(main.getGameController().chats.get(chatname).getText());
+            */
+            //main.getGameController().TA_BOX.appendText(mensagem + " - " + chatname);
             if(main.getGameController().chatAtual.equals(chatname)){
-                System.out.println("Chat Atual: " + main.getGameController().chatAtual);
-                main.getGameController().chats.get(chatname).appendText(mensagem);
-                System.out.println("Chat escolhido: " + main.getGameController().chats.get(chatname).getId());
+                
+                //System.out.println("Chat Atual: " + main.getGameController().chatAtual);
+                //main.getGameController().chats.get(chatname).appendText(mensagem);
+                //System.out.println("Chat escolhido: " + main.getGameController().chats.get(chatname).getId());
                 //main.getGameController().TA_BOX = main.getGameController().chats.get(chatname);
                //main.getGameController().TA_BOX.clear();
                 //main.getGameController().TA_BOX.appendText(main.getGameController().chats.get(chatname).getText());
                 //int index = main.getGameController().HBOX_SALA.getChildren().indexOf(main.getGameController().chats.get(chatname));
+                main.getGameController().chats.get(chatname).appendText(mensagem);
+                main.getGameController().TA_BOX.clear();
+                main.getGameController().TA_BOX.appendText(main.getGameController().chats.get(chatname).getText());
                 
             }
             

@@ -29,6 +29,7 @@ public class Server {
     private int clientesConectados = 0;
     private int reiniciarpartida = 0;
     int x = 0;
+    private boolean primeirasala = true;
 
     //protected ArrayList<ClientForm> clients;
     //protected Map<String, ClientForm> clientbyname = new HashMap<>();
@@ -81,7 +82,12 @@ public class Server {
                             }
                             break;
                         case "NewChat":
+                            System.out.println("NewChat Acionado! Pedido para criar a sala: " + msg.chatname);
                             //Procurar por lista de salas
+                            if(!primeirasala){
+                                ArrayList<String> novoArray = new ArrayList<>();
+                                writeNewChat(msg.name, novoArray, "Espaco");
+                            }
                             Message templ = new Message();
                             templ.destino = "Espaco";
                             templ.type = "ListaChat";
@@ -97,6 +103,7 @@ public class Server {
                                 ArrayList<String> newarray = new ArrayList<>();
                                 newarray = listachat.chatList;
                                 if (!newarray.contains(msg.chatname)) {
+                                    newarray.add(msg.chatname);
                                     System.out.println("Novo Chat criado: " + msg.chatname);
                                     writeChat(msg.chatname, "Espaco");
                                     msg.servidorLeu = true;
@@ -105,7 +112,7 @@ public class Server {
                                         writeNewChat(msg.name, newarray, names.get(x));
                                         x = x + 1;
                                     }
-                                    newarray.add(msg.chatname);
+                                    
                                     writeListaChat(newarray, "Espaco");
                                 }
 
@@ -166,14 +173,21 @@ public class Server {
                             break;
                         case "EntrarRequest":
                             System.out.println("Pedido de " + msg.name + " para sair de " + msg.content + " para " + msg.chatname);
-                            if (msg.content != null && !msg.content.equals("")) {
+                            //Origem não é nula  >Procura se a sala origem existe
+                            if (msg.content != null && !msg.content.equals("") && !primeirasala) {
                                 Message temp2 = new Message();
                                 temp2.destino = "Espaco";
                                 temp2.type = "Chat";
-                                temp2.chatname = msg.content;
+                                temp2.chatname = msg.content; //Nome da sala não nulo
                                 Message sairchat = (Message) space.take(temp2, null, 10 * 1000);
-                                //Se a sala existir, remover o usuário da sua lista de usuários presentes
+                                //Se a sala existir -> Remova seu nome da sala origem!
                                 if (sairchat != null) {
+                                    ArrayList<String> newlist = sairchat.userInChatList;
+                                    newlist.remove(msg.name);
+                                    sairchat.userInChatList = newlist;
+                                    System.out.println("Saiu de" + msg.content);
+                                    space.write(sairchat, null, 180 * 1000);
+                                    /*
                                     if (sairchat.userInChatList != null) {
                                         ArrayList<String> newlist = sairchat.userInChatList;
                                         newlist.remove(msg.name);
@@ -181,20 +195,56 @@ public class Server {
                                         System.out.println("Saiu de" + msg.content);
                                         space.write(sairchat, null, 180 * 1000);
                                     }
+                                    */
 
                                 }
 
                             }
+                            //Origem é nula
+                            else if((msg.content == null || !msg.content.equals(""))){
+                                /*
+                                Message temp2 = new Message();
+                                temp2.destino = "Espaco";
+                                temp2.type = "Chat";
+                                temp2.chatname = msg.content;
+                                Message primeirochat = (Message) space.take(temp2, null, 10 * 1000);
+                                //Se a sala existir, adicionar o usuário da sua lista de usuários presentes
+                                if (primeirochat != null) {
+                                    ArrayList<String> newlist = primeirochat.userInChatList;
+                                    newlist.add(msg.name);
+                                    primeirochat.userInChatList = newlist;
+                                    System.out.println("Entrou em" + msg.content);
+                                    space.write(primeirochat, null, 180 * 1000);
+                                    primeirasala = false;
+                                    /*
+                                    if (primeirochat.userInChatList != null) {
+                                        ArrayList<String> newlist = primeirochat.userInChatList;
+                                        newlist.add(msg.name);
+                                        primeirochat.userInChatList = newlist;
+                                        System.out.println("Entrou em" + msg.content);
+                                        space.write(primeirochat, null, 180 * 1000);
+                                    }
+                                    
+
+                                }
+                                */
+                            }
+                            //Origem é nula e não é a primeira sala -->
+                            //else if((msg.content == null || !msg.content.equals("")) && !primeirasala){
+                            
+                            //}
 
                             //Procurar a Sala que se deseja entrar no Espaço
                             Message temp = new Message();
                             temp.destino = "Espaco";
                             temp.type = "Chat";
                             temp.chatname = msg.chatname;
-                            Message chatmsg = (Message) space.take(temp, null, 10 * 1000);
+                            Message chatmsg = (Message) space.take(temp, null, 20 * 1000);
+                            //Sala destino é nula!
                             if (chatmsg == null) {
                                 System.out.println("A sala" + msg.chatname + " NÃO foi encontrada!");
                                 writeEnterRequestResult(msg.name, msg.chatname, "Falhou");
+                                //Sala destino não é nula!
                             } else {
                                 System.out.println("A sala" + msg.chatname + " FOI encontrada!");
                                 if (chatmsg.userInChatList == null) {

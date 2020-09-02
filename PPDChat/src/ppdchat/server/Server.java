@@ -25,9 +25,6 @@ import ppdchat.server.Lookup;
  * @author Matheus
  */
 public class Server {
-
-    private int clientesConectados = 0;
-    private int reiniciarpartida = 0;
     int x = 0;
     private boolean primeirasala = true;
 
@@ -35,7 +32,7 @@ public class Server {
     //protected Map<String, ClientForm> clientbyname = new HashMap<>();
     protected Map<String, String> clientchat = new HashMap<>();
     protected Map<String, ArrayList<String>> usersinchat = new HashMap<>();
-    protected ArrayList<String> names;
+    //protected ArrayList<String> names;
     //protected ArrayList<String> chatnames;
     //public Map<Integer, String> names = new HashMap<>();
 
@@ -43,8 +40,7 @@ public class Server {
     JavaSpace space;
 
     public Server() throws RemoteException {
-        //clients = new ArrayList<>();
-        names = new ArrayList<>();
+        //names = new ArrayList<>();
         //chatnames = new ArrayList<>();
         this.finder = new Lookup(JavaSpace.class);
         this.space = (JavaSpace) finder.getService();
@@ -59,7 +55,8 @@ public class Server {
 
     public void messageHandler() {
         System.out.println("A função messageHandler() foi iniciada!");
-        writeUserList(names);
+        ArrayList<String> firstarray = new ArrayList<>();
+        writeUserList(firstarray);
         while (true) {
             try {
                 Message template = new Message();
@@ -75,11 +72,22 @@ public class Server {
                             System.out.println("Destino da Mensagem: " + msg.destino);
                             System.out.println("Mensagem recebida de " + msg.name + ": " + msg.content);
                             msg.servidorLeu = true;
-                            x = 0;
-                            while (x < names.size()) {
-                                writeMessage(msg.name + ": ", msg.chatname, msg.content, names.get(x));
-                                x = x + 1;
+                            
+                            Message userTemp = new Message();
+                            userTemp.type = "ListaUsuarios";
+                            userTemp.destino = "Espaco";
+                            Message userList = (Message) space.read(userTemp, null, 60 * 1000);
+                            if(userList!=null){
+                                ArrayList<String> newUserArray = new ArrayList<>();
+                                newUserArray = userList.userInChatList;
+                                x = 0;
+                                while (x < newUserArray.size()) {
+                                    writeMessage(msg.name + ": ", msg.chatname, msg.content, newUserArray.get(x));
+                                    x = x + 1;
+                                }
                             }
+                            //msg.namesList = listanomes;
+                            
                             break;
                         case "NewChat":
                             System.out.println("NewChat Acionado! Pedido para criar a sala: " + msg.chatname);
@@ -93,7 +101,7 @@ public class Server {
                             Message templ = new Message();
                             templ.destino = "Espaco";
                             templ.type = "ListaChat";
-                            Message listachat = (Message) space.take(templ, null, 20 * 1000);
+                            Message listachat = (Message) space.take(templ, null, 60 * 1000);
                             //Se a lista não existe ->Crie a primeira sala, primeiro elemento da lista de salas e informe a todos
                             if (listachat == null) {
                                 ArrayList<String> newarray = new ArrayList<>();
@@ -104,11 +112,20 @@ public class Server {
                                 //Cria a lista de salas
                                 writeListaChat(newarray, "Espaco");
                                 //Informa aos usuarios a criação da nova sala
-                                int x = 0;
-                                while (x < names.size()) {
-                                    writeNewChat(msg.name, msg.chatname, newarray, names.get(x));
-                                    x = x + 1;
+                                Message userTemp2 = new Message();
+                                userTemp2.type = "ListaUsuarios";
+                                userTemp2.destino = "Espaco";
+                                Message userList2 = (Message) space.read(userTemp2, null, 60 * 1000);
+                                if(userList2!=null){
+                                    ArrayList<String> newUserArray2 = new ArrayList<>();
+                                    newUserArray2 = userList2.userInChatList;
+                                    x = 0;
+                                    while (x < newUserArray2.size()) {
+                                        writeNewChat(msg.name, msg.chatname, newarray, newUserArray2.get(x));
+                                        x = x + 1;
+                                    }
                                 }
+                                
                                 msg.servidorLeu = true;
                                 System.out.println("Primeira Sala e Lista de Salas criados!");
                                 
@@ -122,14 +139,22 @@ public class Server {
                                     writeChat(msg.chatname, "Espaco");
                                     System.out.println("Sala " + msg.chatname + " criada!");
                                     msg.servidorLeu = true;
-                                    x = 0;
-                                    while (x < names.size()) {
-                                        writeNewChat(msg.name,msg.chatname, newarray, names.get(x));
-                                        x = x + 1;
+                                    Message userTemp3 = new Message();
+                                    userTemp3.type = "ListaUsuarios";
+                                    userTemp3.destino = "Espaco";
+                                    Message userList3 = (Message) space.read(userTemp3, null, 60 * 1000);
+                                    if (userList3 != null) {
+                                        ArrayList<String> newUserArray3 = new ArrayList<>();
+                                        newUserArray3 = userList3.userInChatList;
+                                        x = 0;
+                                        while (x < newUserArray3.size()) {
+                                            writeNewChat(msg.name, msg.chatname, newarray, newUserArray3.get(x));
+                                            x = x + 1;
+                                        }
+
+                                        writeListaChat(newarray, "Espaco");
+                                        System.out.println("Sala " + msg.chatname + " adicionada à lista de salas");
                                     }
-                                    
-                                    writeListaChat(newarray, "Espaco");
-                                    System.out.println("Sala " + msg.chatname + " adicionada à lista de salas");
                                 }
 
                             }
@@ -140,7 +165,7 @@ public class Server {
                             Message temp4 = new Message();
                             temp4.destino = "Espaco";
                             temp4.type = "ListaChat";
-                            Message listadechat = (Message) space.take(temp4, null, 20 * 1000);
+                            Message listadechat = (Message) space.take(temp4, null, 60 * 1000);
                             //Se a lista não existe
                             if (listadechat == null) {
 
@@ -155,20 +180,27 @@ public class Server {
                                     System.out.println("Novo Chat criado: " + msg.name + msg.chatname);
                                     writeChat(msg.name + msg.chatname, "Espaco");
                                     msg.servidorLeu = true;
-                                    x = 0;
-                                    while (x < names.size()) {
-                                        if(msg.name.equals(names.get(x))){
-                                            writeNewChat(msg.chatname, msg.name + msg.chatname,newarray, names.get(x));
+                                    Message userTemp4 = new Message();
+                                    userTemp4.type = "ListaUsuarios";
+                                    userTemp4.destino = "Espaco";
+                                    Message userList4 = (Message) space.read(userTemp4, null, 60 * 1000);
+                                    if (userList4 != null) {
+                                        ArrayList<String> newUserArray4 = new ArrayList<>();
+                                        newUserArray4 = userList4.userInChatList;
+                                        x = 0;
+                                        while (x < newUserArray4.size()) {
+                                            if (msg.name.equals(newUserArray4.get(x))) {
+                                                writeNewChat(msg.chatname, msg.name + msg.chatname, newarray, newUserArray4.get(x));
+                                            }
+                                            if (msg.chatname.equals(newUserArray4.get(x))) {
+                                                writeNewChat(msg.name, msg.name + msg.chatname, newarray, newUserArray4.get(x));
+                                            }
+                                            x = x + 1;
                                         }
-                                        if(msg.chatname.equals(names.get(x))){
-                                            writeNewChat(msg.name, msg.name + msg.chatname,newarray, names.get(x));
-                                        }
-                                        x = x + 1;
+                                        newarray.add(msg.name + msg.chatname);
+                                        writeListaChat(newarray, "Espaco");
                                     }
-                                    newarray.add(msg.name + msg.chatname);
-                                    writeListaChat(newarray, "Espaco");
                                 }
-
                             }
 
                             break;
@@ -176,15 +208,38 @@ public class Server {
                             if (msg.name == null) {
                                 System.out.println("O NOME É NULOOOOOOOOOO");
                             }
-                            if (!names.contains(msg.name) && msg.name != null && !msg.name.equals("")) {
-                                System.out.println("Novo cliente adicionado: " + msg.name);
-                                names.add(msg.name);
-                                System.out.println("Total de clientes: " + names.size());
-                                Message temp = new Message();
-                                temp.destino = "Espaco";
-                                temp.type = "ListaUsuarios";
-                                space.take(temp, null, 15 * 1000);
-                                writeUserList(names);
+                            Message userTemp5 = new Message();
+                            userTemp5.type = "ListaUsuarios";
+                            userTemp5.destino = "Espaco";
+                            Message userList5 = (Message) space.take(userTemp5, null, 60 * 1000);
+                            if (userList5 != null) {
+                                ArrayList<String> newUserArray5 = new ArrayList<>();
+                                //newUserArray5 = userList5.userInChatList;
+                                if (userList5.userInChatList == null) {
+                                    if (msg.name != null && !msg.name.equals("")) {
+                                        newUserArray5.add(msg.name);
+                                        System.out.println("Novo cliente adicionado: " + msg.name);
+                                        userList5.userInChatList = newUserArray5;
+                                        System.out.println("Total de clientes: " + userList5.userInChatList.size());
+                                        Message temp = new Message();
+                                        temp.destino = "Espaco";
+                                        temp.type = "ListaUsuarios";
+                                        space.take(temp, null, 15 * 1000);
+                                        writeUserList(userList5.userInChatList);
+                                    }
+                                }
+                                else {
+                                    if (!userList5.userInChatList.contains(msg.name) && msg.name != null && !msg.name.equals("")) {
+                                        System.out.println("Novo cliente adicionado: " + msg.name);
+                                        userList5.userInChatList.add(msg.name);
+                                        System.out.println("Total de clientes: " + userList5.userInChatList.size());
+                                        Message temp = new Message();
+                                        temp.destino = "Espaco";
+                                        temp.type = "ListaUsuarios";
+                                        space.take(temp, null, 15 * 1000);
+                                        writeUserList(userList5.userInChatList);
+                                    }
+                                }
                             }
                             break;
                         case "EntrarRequest":
@@ -203,59 +258,21 @@ public class Server {
                                     sairchat.userInChatList = newlist;
                                     System.out.println("Saiu de" + msg.content);
                                     space.write(sairchat, null, 180 * 1000);
-                                    /*
-                                    if (sairchat.userInChatList != null) {
-                                        ArrayList<String> newlist = sairchat.userInChatList;
-                                        newlist.remove(msg.name);
-                                        sairchat.userInChatList = newlist;
-                                        System.out.println("Saiu de" + msg.content);
-                                        space.write(sairchat, null, 180 * 1000);
-                                    }
-                                    */
+                                    
 
                                 }
 
                             }
                             //Origem é nula
-                            else if((msg.content == null || !msg.content.equals(""))){
-                                /*
-                                Message temp2 = new Message();
-                                temp2.destino = "Espaco";
-                                temp2.type = "Chat";
-                                temp2.chatname = msg.content;
-                                Message primeirochat = (Message) space.take(temp2, null, 10 * 1000);
-                                //Se a sala existir, adicionar o usuário da sua lista de usuários presentes
-                                if (primeirochat != null) {
-                                    ArrayList<String> newlist = primeirochat.userInChatList;
-                                    newlist.add(msg.name);
-                                    primeirochat.userInChatList = newlist;
-                                    System.out.println("Entrou em" + msg.content);
-                                    space.write(primeirochat, null, 180 * 1000);
-                                    primeirasala = false;
-                                    /*
-                                    if (primeirochat.userInChatList != null) {
-                                        ArrayList<String> newlist = primeirochat.userInChatList;
-                                        newlist.add(msg.name);
-                                        primeirochat.userInChatList = newlist;
-                                        System.out.println("Entrou em" + msg.content);
-                                        space.write(primeirochat, null, 180 * 1000);
-                                    }
-                                    
-
-                                }
-                                */
-                            }
-                            //Origem é nula e não é a primeira sala -->
-                            //else if((msg.content == null || !msg.content.equals("")) && !primeirasala){
+                            else if((msg.content == null || !msg.content.equals(""))){ }
                             
-                            //}
 
                             //Procurar a Sala que se deseja entrar no Espaço
                             Message temp = new Message();
                             temp.destino = "Espaco";
                             temp.type = "Chat";
                             temp.chatname = msg.chatname;
-                            Message chatmsg = (Message) space.take(temp, null, 20 * 1000);
+                            Message chatmsg = (Message) space.take(temp, null, 60 * 1000);
                             //Sala destino é nula!
                             if (chatmsg == null) {
                                 System.out.println("A sala" + msg.chatname + " NÃO foi encontrada!");
@@ -286,7 +303,7 @@ public class Server {
                             Message temp3 = new Message();
                             temp3.destino = "Espaco";
                             temp3.type = "ListaChat";
-                            Message listChat = (Message) space.read(temp3, null, 20 * 1000);
+                            Message listChat = (Message) space.read(temp3, null, 60 * 1000);
                             if (listChat != null) {
                                 ArrayList<String> listadenomes = new ArrayList<>();
                                 listadenomes = listChat.chatList;
@@ -299,7 +316,7 @@ public class Server {
                             temp5.destino = "Espaco";
                             temp5.type = "Chat";
                             temp5.chatname = msg.chatname;
-                            Message selectedChat = (Message) space.read(temp5, null, 20 * 1000);
+                            Message selectedChat = (Message) space.read(temp5, null, 60 * 1000);
                             //Verifica se o Chat ainda existe
                             if (selectedChat != null) {
                                 ArrayList<String> listadenomes = new ArrayList<>();

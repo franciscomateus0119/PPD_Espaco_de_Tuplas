@@ -94,20 +94,33 @@ public class Server {
                             templ.destino = "Espaco";
                             templ.type = "ListaChat";
                             Message listachat = (Message) space.take(templ, null, 20 * 1000);
-                            //Se a lista não existe ->Crie a primeira sala e o primeiro elemento da lista de salas
+                            //Se a lista não existe ->Crie a primeira sala, primeiro elemento da lista de salas e informe a todos
                             if (listachat == null) {
                                 ArrayList<String> newarray = new ArrayList<>();
                                 newarray.add(msg.chatname);
-                                writeNewChat(msg.name, msg.chatname,newarray, "Espaco");
+                                //Cria o chat e poe no espaço
+                                writeChat(msg.chatname,"Espaco");
+                                //writeNewChat(msg.name, newarray, "Espaco");
+                                //Cria a lista de salas
                                 writeListaChat(newarray, "Espaco");
+                                //Informa aos usuarios a criação da nova sala
+                                int x = 0;
+                                while (x < names.size()) {
+                                    writeNewChat(msg.name, msg.chatname, newarray, names.get(x));
+                                    x = x + 1;
+                                }
+                                msg.servidorLeu = true;
+                                System.out.println("Primeira Sala e Lista de Salas criados!");
+                                
                             } //Se a lista existe
                             else {
                                 ArrayList<String> newarray = new ArrayList<>();
                                 newarray = listachat.chatList;
                                 if (!newarray.contains(msg.chatname)) {
                                     newarray.add(msg.chatname);
-                                    System.out.println("Novo Chat criado: " + msg.chatname);
+                                    //System.out.println("Novo Chat criado: " + msg.chatname);
                                     writeChat(msg.chatname, "Espaco");
+                                    System.out.println("Sala " + msg.chatname + " criada!");
                                     msg.servidorLeu = true;
                                     x = 0;
                                     while (x < names.size()) {
@@ -116,6 +129,7 @@ public class Server {
                                     }
                                     
                                     writeListaChat(newarray, "Espaco");
+                                    System.out.println("Sala " + msg.chatname + " adicionada à lista de salas");
                                 }
 
                             }
@@ -333,7 +347,7 @@ public class Server {
             e.printStackTrace();
         }
     }
-
+    //Informar que um novoChat foi criado!
     public void writeNewChat(String name, String chatname, ArrayList<String> listasalas, String destino) {
         try {
             Message msg = new Message();
@@ -345,7 +359,7 @@ public class Server {
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);
-                    System.out.println("CHAT enviado para: " + destino);
+                    System.out.println("(writeNewChat)NewCHAT " +chatname +" enviado para: " + destino);
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (RemoteException ex) {
@@ -357,7 +371,7 @@ public class Server {
             e.printStackTrace();
         }
     }
-
+    //Botar o Chat no Espaço
     public void writeChat(String chatname, String destino) {
         try {
             Message msg = new Message();
@@ -367,7 +381,7 @@ public class Server {
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 180 * 1000);
-                    System.out.println("CHAT enviado para: " + destino);
+                    System.out.println("(writeChat)CHAT" + chatname+" enviado para: " + destino);
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (RemoteException ex) {
@@ -412,7 +426,7 @@ public class Server {
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);
-                    System.out.println("Lista de Usuários da Sala enviada para o JavaSpace");
+                    System.out.println("(writeEnterRequestResult) Lista de Usuários da Sala enviada para o JavaSpace");
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (RemoteException ex) {
@@ -434,7 +448,7 @@ public class Server {
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);
-                    System.out.println("Lista de Salas enviada para o JavaSpace");
+                    System.out.println("(AtualizarListaSala)Lista de Salas enviada para o JavaSpace");
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (RemoteException ex) {
@@ -456,7 +470,7 @@ public class Server {
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);
-                    System.out.println("Lista de Usuários da Sala enviada para o JavaSpace");
+                    System.out.println("(AtualizarListaUser) Lista de Usuários da Sala enviada para o JavaSpace");
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (RemoteException ex) {

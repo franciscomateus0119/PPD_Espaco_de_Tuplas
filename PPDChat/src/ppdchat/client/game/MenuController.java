@@ -79,6 +79,7 @@ public class MenuController {
     
     @FXML
     public void verificarnome(MouseEvent event){
+        
         if (space == null) {
             System.out.println("Procurando pelo servico JavaSpace...");
             CONFIG.setVisible(true);

@@ -13,6 +13,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import net.jini.core.lease.Lease;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
 import ppdchat.client.Client;
@@ -204,7 +205,14 @@ public class Server {
                                     newlist.remove(msg.name);
                                     sairchat.userInChatList = newlist;
                                     System.out.println("Saiu de" + msg.content);
-                                    space.write(sairchat, null, 180 * 1000);
+                                    if(sairchat.userInChatList.size()==0){
+                                        System.out.println("Sala "+msg.content+" será apagada em 10 minutos." );
+                                        space.write(sairchat, null, 600 * 1000);
+                                    }
+                                    else{
+                                        space.write(sairchat, null, Lease.FOREVER);
+                                    }
+                                    
                                 }
 
                             }

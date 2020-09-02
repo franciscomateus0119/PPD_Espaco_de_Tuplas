@@ -145,7 +145,7 @@ public class Server {
                             if (listadechat == null) {
 
                                 ArrayList<String> newarray = new ArrayList<>();
-                                newarray.add(msg.name + msg.chatname);
+                                newarray.add("(P)"+msg.name + msg.chatname);
                                 writeListaChat(newarray, "Espaco");
                             } //Se a lista existe
                             else {
@@ -153,19 +153,19 @@ public class Server {
                                 newarray = listadechat.chatList;
                                 if (!newarray.contains(msg.name + msg.chatname)) {
                                     System.out.println("Novo Chat criado: " + msg.name + msg.chatname);
-                                    writeChat(msg.name + msg.chatname, "Espaco");
+                                    writeChat("(P)"+msg.name + msg.chatname, "Espaco");
                                     msg.servidorLeu = true;
                                     x = 0;
                                     while (x < names.size()) {
                                         if(msg.name.equals(names.get(x))){
-                                            writeNewChat(msg.chatname, msg.name + msg.chatname,newarray, names.get(x));
+                                            writeNewChat(msg.chatname, "(P)"+msg.name + msg.chatname,newarray, names.get(x));
                                         }
                                         if(msg.chatname.equals(names.get(x))){
-                                            writeNewChat(msg.name, msg.name + msg.chatname,newarray, names.get(x));
+                                            writeNewChat(msg.name, "(P)"+msg.name + msg.chatname,newarray, names.get(x));
                                         }
                                         x = x + 1;
                                     }
-                                    newarray.add(msg.name + msg.chatname);
+                                    newarray.add("(P)"+msg.name + msg.chatname);
                                     writeListaChat(newarray, "Espaco");
                                 }
 

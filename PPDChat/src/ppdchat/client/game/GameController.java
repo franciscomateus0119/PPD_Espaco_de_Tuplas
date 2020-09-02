@@ -283,14 +283,32 @@ public class GameController {
         int tamanho = nomedassalas.size();
         //items.clear();
         for(int h = 0;h<tamanho;h++){
-            if(!chatnames.contains(nomedassalas.get(h))){
-                TextArea textarea = new TextArea();
-                chatnames.add(nomedassalas.get(h));
-                chats.put(nomedassalas.get(h), textarea);
-                textareas.add(textarea);
-                items.add(nomedassalas.get(h));
-                listviewSalas.setItems(items);
-                System.out.println("Nova sala disponível: " + nomedassalas.get(h));
+            //Se a sequencia de conversapriva (P) estiver no chat
+            if(nomedassalas.get(h).contains("(P)")){
+                //Se o nome da pessoa estiver contida no nome da sala
+                if(nomedassalas.get(h).contains(nome)){
+                    //Se a sala ainda não foi adicionada
+                    if(!chatnames.contains(nomedassalas.get(h))){
+                        TextArea textarea = new TextArea();
+                        chatnames.add(nomedassalas.get(h));
+                        chats.put(nomedassalas.get(h), textarea);
+                        textareas.add(textarea);
+                        items.add(nomedassalas.get(h));
+                        listviewSalas.setItems(items);
+                        System.out.println("Nova sala privada disponível: " + nomedassalas.get(h));
+                    }
+                }
+            }
+            else{
+                if(!chatnames.contains(nomedassalas.get(h))){
+                    TextArea textarea = new TextArea();
+                    chatnames.add(nomedassalas.get(h));
+                    chats.put(nomedassalas.get(h), textarea);
+                    textareas.add(textarea);
+                    items.add(nomedassalas.get(h));
+                    listviewSalas.setItems(items);
+                    System.out.println("Nova sala disponível: " + nomedassalas.get(h));
+                }
             }
   
         }  

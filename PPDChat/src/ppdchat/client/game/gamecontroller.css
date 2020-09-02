@@ -5,6 +5,13 @@
 .mainFxmlClass {
 
 }
+
+.bodybg{
+    -fx-background-image: url("conteudo/gradient furado.jpg");
+    -fx-background-size: 600 413;   
+    -fx-background-position: center;
+    
+}
    
 .sendButton {
     /*

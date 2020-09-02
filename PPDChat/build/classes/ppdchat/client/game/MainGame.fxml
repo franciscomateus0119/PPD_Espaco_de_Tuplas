@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import java.net.*?>
 <?import java.util.*?>
@@ -7,11 +8,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="440.0" prefWidth="670.0" styleClass="bodybg" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ppdchat.client.game.MainGameController">
+<AnchorPane id="AnchorPane" prefHeight="440.0" prefWidth="822.0" styleClass="bodybg" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ppdchat.client.game.MainGameController">
     <stylesheets>
         <URL value="@maingamecontroller.css" />
     </stylesheets>
     <children>
+      <ImageView fitHeight="440.0" fitWidth="822.0" pickOnBounds="true" preserveRatio="true" />
         <VBox layoutX="300.0" layoutY="20.0" prefHeight="375.0" prefWidth="360.0">
               <children>
                   <fx:include fx:id="chatToolbar" source="ChatToolbar.fxml" />

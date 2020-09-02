@@ -84,19 +84,21 @@ public class Server {
                         case "NewChat":
                             System.out.println("NewChat Acionado! Pedido para criar a sala: " + msg.chatname);
                             //Procurar por lista de salas
+                            /*
                             if(!primeirasala){
                                 ArrayList<String> novoArray = new ArrayList<>();
                                 writeNewChat(msg.name, novoArray, "Espaco");
                             }
+                            */
                             Message templ = new Message();
                             templ.destino = "Espaco";
                             templ.type = "ListaChat";
                             Message listachat = (Message) space.take(templ, null, 20 * 1000);
-                            //Se a lista não existe
+                            //Se a lista não existe ->Crie a primeira sala e o primeiro elemento da lista de salas
                             if (listachat == null) {
-
                                 ArrayList<String> newarray = new ArrayList<>();
                                 newarray.add(msg.chatname);
+                                writeNewChat(msg.name, msg.chatname,newarray, "Espaco");
                                 writeListaChat(newarray, "Espaco");
                             } //Se a lista existe
                             else {
@@ -109,7 +111,7 @@ public class Server {
                                     msg.servidorLeu = true;
                                     x = 0;
                                     while (x < names.size()) {
-                                        writeNewChat(msg.name, newarray, names.get(x));
+                                        writeNewChat(msg.name,msg.chatname, newarray, names.get(x));
                                         x = x + 1;
                                     }
                                     
@@ -142,10 +144,10 @@ public class Server {
                                     x = 0;
                                     while (x < names.size()) {
                                         if(msg.name.equals(names.get(x))){
-                                            writeNewChat(msg.chatname, newarray, names.get(x));
+                                            writeNewChat(msg.chatname, msg.name + msg.chatname,newarray, names.get(x));
                                         }
                                         if(msg.chatname.equals(names.get(x))){
-                                            writeNewChat(msg.name, newarray, names.get(x));
+                                            writeNewChat(msg.name, msg.name + msg.chatname,newarray, names.get(x));
                                         }
                                         x = x + 1;
                                     }
@@ -332,12 +334,13 @@ public class Server {
         }
     }
 
-    public void writeNewChat(String name, ArrayList<String> listasalas, String destino) {
+    public void writeNewChat(String name, String chatname, ArrayList<String> listasalas, String destino) {
         try {
             Message msg = new Message();
             msg.type = "NewChat";
             msg.destino = destino;
             msg.name = name;
+            msg.chatname = chatname;
             msg.chatList = listasalas;
             Platform.runLater(() -> {
                 try {

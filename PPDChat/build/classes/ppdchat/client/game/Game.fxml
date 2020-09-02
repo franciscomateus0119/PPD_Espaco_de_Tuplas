@@ -11,50 +11,45 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="413.0" prefWidth="900.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ppdchat.client.game.GameController">
+<AnchorPane id="AnchorPane" prefHeight="413.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ppdchat.client.game.GameController">
     <stylesheets>
         <URL value="@gamecontroller.css" />
     </stylesheets>
    <children>
-      <TextArea fx:id="TA_BOX" focusTraversable="false" layoutX="13.0" layoutY="14.0" prefHeight="325.0" prefWidth="350.0" visible="false" />
-      <TextField fx:id="TF_MSG" alignment="CENTER" disable="true" layoutX="42.0" layoutY="351.0" prefHeight="25.0" prefWidth="208.0" promptText="Digite sua Mensagem" visible="false" />
-      <Button fx:id="BUTTON_SEND" disable="true" layoutX="265.0" layoutY="351.0" mnemonicParsing="false" onMouseClicked="#sendText" text="Enviar" visible="false" />
-      <Button fx:id="BUTTON_CRIAR" layoutX="538.0" layoutY="53.0" mnemonicParsing="false" onMouseClicked="#criarSala" text="Criar" />
-      <TextField fx:id="TF_CRIAR_SALA" layoutX="375.0" layoutY="53.0" promptText="Digite o nome da sala" />
-      <Label layoutX="421.0" layoutY="27.0" text="Criar uma sala">
-         <font>
-            <Font name="Arial Bold" size="16.0" />
-         </font>
-      </Label>
-      <Label layoutX="402.0" layoutY="86.0" text="Entrar em uma sala">
-         <font>
-            <Font name="Arial Bold" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="TF_ENTRAR_SALA" layoutX="376.0" layoutY="113.0" promptText="Digite o nome da sala" />
-      <Button fx:id="BUTTON_ENTRAR" layoutX="534.0" layoutY="113.0" mnemonicParsing="false" onMouseClicked="#entrarSalaRequest" text="Entrar" />
       <Label layoutX="66.0" layoutY="150.0" text="CRIE OU ENTRE EM UM SALA">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="413.0" layoutY="167.0" text="Salas Disponíveis">
+      <TextField fx:id="TF_CRIAR_SALA_USER" layoutX="93.0" layoutY="207.0" promptText="Digite o nome do Usuario" visible="false" />
+      <TextField fx:id="TF_ENTRAR_SALA" layoutX="93.0" layoutY="180.0" promptText="Digite o nome da sala" visible="false" />
+      <TextArea fx:id="TA_BOX" focusTraversable="false" layoutX="13.0" layoutY="14.0" prefHeight="325.0" prefWidth="350.0" visible="false" />
+      <TextField fx:id="TF_MSG" alignment="CENTER" disable="true" layoutX="42.0" layoutY="351.0" prefHeight="25.0" prefWidth="208.0" promptText="Digite sua Mensagem" visible="false" />
+      <Button fx:id="BUTTON_SEND" disable="true" layoutX="265.0" layoutY="351.0" mnemonicParsing="false" onMouseClicked="#sendText" text="Enviar" visible="false" />
+      <Button fx:id="BUTTON_CRIAR" layoutX="533.0" layoutY="364.0" mnemonicParsing="false" onMouseClicked="#criarSala" prefHeight="25.0" prefWidth="63.0" text="Criar" />
+      <TextField fx:id="TF_CRIAR_SALA" alignment="CENTER" layoutX="490.0" layoutY="326.0" promptText="Digite o nome da sala" />
+      <Label layoutX="509.0" layoutY="297.0" text="Criar uma sala">
          <font>
             <Font name="Arial Bold" size="16.0" />
          </font>
       </Label>
-      <Label fx:id="LABEL_SELECTED_CHAT" layoutX="42.0" layoutY="382.0" prefHeight="17.0" prefWidth="208.0" text="Selected Chat: None" />
-      <HBox fx:id="HBOX_LISTVIEW" layoutX="376.0" layoutY="192.0" prefHeight="200.0" prefWidth="200.0" />
-      <Button fx:id="BUTTON_ATUALIZAR" layoutX="576.0" layoutY="164.0" mnemonicParsing="false" onMouseClicked="#atualizarListaSalas" text="Atualizar" />
-      <HBox fx:id="HBOX_USERVIEW" layoutX="655.0" layoutY="192.0" prefHeight="200.0" prefWidth="200.0" />
-      <Button fx:id="BUTTON_USUARIOS" layoutX="817.0" layoutY="162.0" mnemonicParsing="false" onMouseClicked="#atualizarListaUsuarios" text="Atualizar" />
-      <Label fx:id="LABEL_SELECTED_USER" layoutX="655.0" layoutY="39.0" prefHeight="17.0" prefWidth="208.0" text="Selected User None" />
-      <Label layoutX="649.0" layoutY="68.0" text="Criar uma sala com Usuario">
+      <Button fx:id="BUTTON_ENTRAR" layoutX="379.0" layoutY="252.0" mnemonicParsing="false" onMouseClicked="#entrarSalaRequest" prefHeight="25.0" prefWidth="63.0" text="Entrar" />
+      <Label layoutX="382.0" layoutY="18.0" text="Salas Disponíveis">
          <font>
             <Font name="Arial Bold" size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="TF_CRIAR_SALA_USER" layoutX="653.0" layoutY="97.0" promptText="Digite o nome do Usuario" />
-      <Button fx:id="BUTTON_CRIAR_USER" layoutX="816.0" layoutY="97.0" mnemonicParsing="false" onMouseClicked="#criarSalaUser" text="Criar" />
+      <Label fx:id="LABEL_SELECTED_CHAT" layoutX="42.0" layoutY="382.0" prefHeight="17.0" prefWidth="208.0" text="Selected Chat: None" visible="false" />
+      <HBox fx:id="HBOX_LISTVIEW" alignment="TOP_CENTER" layoutX="350.0" layoutY="47.0" prefHeight="200.0" prefWidth="200.0" />
+      <Button fx:id="BUTTON_ATUALIZAR" layoutX="458.0" layoutY="252.0" mnemonicParsing="false" onMouseClicked="#atualizarListaSalas" text="Atualizar" />
+      <HBox fx:id="HBOX_USERVIEW" alignment="TOP_CENTER" layoutX="582.0" layoutY="45.0" prefHeight="200.0" prefWidth="200.0" />
+      <Button fx:id="BUTTON_USUARIOS" layoutX="702.0" layoutY="252.0" mnemonicParsing="false" onMouseClicked="#atualizarListaUsuarios" prefHeight="25.0" prefWidth="75.0" text="Atualizar" />
+      <Label fx:id="LABEL_SELECTED_USER" layoutX="655.0" layoutY="39.0" prefHeight="17.0" prefWidth="208.0" text="Selected User None" visible="false" />
+      <Label layoutX="618.0" layoutY="18.0" text="Usuarios da Sala">
+         <font>
+            <Font name="Arial Bold" size="16.0" />
+         </font>
+      </Label>
+      <Button fx:id="BUTTON_CRIAR_USER" layoutX="599.0" layoutY="252.0" mnemonicParsing="false" onMouseClicked="#criarSalaUser" prefHeight="25.0" prefWidth="75.0" text="Criar" />
    </children>
 </AnchorPane>

@@ -259,7 +259,7 @@ public class GameController {
             TF_CRIAR_SALA_USER.clear();
             TF_CRIAR_SALA_USER.setPromptText("Esta sala ja existe!");
         }
-        else if(!TF_CRIAR_SALA_USER.getText().equals("") && TF_CRIAR_SALA_USER.getText()!=null){
+        else if(!TF_CRIAR_SALA_USER.getText().equals("") && TF_CRIAR_SALA_USER.getText()!=null && !TF_CRIAR_SALA_USER.getText().equals(nome)){
             String textareaUsername = TF_CRIAR_SALA_USER.getText();
             Platform.runLater(()->{
                 main.getClient().writeNewUserChatToServer(nome, textareaUsername);
@@ -267,9 +267,13 @@ public class GameController {
             System.out.println("Nova salaUser criada: " + textareaUsername);
             TF_CRIAR_SALA_USER.clear();
         }
+        else if(TF_CRIAR_SALA_USER.getText().equals(nome)){
+            TF_CRIAR_SALA_USER.clear();
+            TF_CRIAR_SALA_USER.setPromptText("ESCOLHA UM NOME QUE NÃO SEJA O SEU");
+        }
         else{
             TF_CRIAR_SALA_USER.clear();
-            TF_CRIAR_SALA_USER.setPromptText("DIGITE UM NOME NÃO VAZIO");
+            TF_CRIAR_SALA_USER.setPromptText("ESCOLHA UM NOME NÃO VAZIO");
         }
     }
     
@@ -304,7 +308,7 @@ public class GameController {
                 //chats.put(nomesdosusers.get(f), textarea);
                 //textareas.add(textarea);
                 usuarios.add(nomesdosusers.get(f));
-                listviewSalas.setItems(usuarios);
+                listviewUsuarios.setItems(usuarios);
                 System.out.println("Novo usuario disponível: " + nomesdosusers.get(f));
             }
   

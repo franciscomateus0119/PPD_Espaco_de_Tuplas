@@ -85,7 +85,7 @@ public class Server {
                             Message templ = new Message();
                             templ.destino = "Espaco";
                             templ.type = "ListaChat";
-                            Message listachat = (Message) space.take(templ, null, 10 * 1000);
+                            Message listachat = (Message) space.take(templ, null, 20 * 1000);
                             //Se a lista não existe
                             if (listachat == null) {
 
@@ -117,7 +117,7 @@ public class Server {
                             Message temp4 = new Message();
                             temp4.destino = "Espaco";
                             temp4.type = "ListaChat";
-                            Message listadechat = (Message) space.take(temp4, null, 10 * 1000);
+                            Message listadechat = (Message) space.take(temp4, null, 20 * 1000);
                             //Se a lista não existe
                             if (listadechat == null) {
 
@@ -129,16 +129,16 @@ public class Server {
                                 ArrayList<String> newarray = new ArrayList<>();
                                 newarray = listadechat.chatList;
                                 if (!newarray.contains(msg.name + msg.chatname)) {
-                                    System.out.println("Novo Chat criado: " + msg.chatname);
-                                    writeChat(msg.chatname, "Espaco");
+                                    System.out.println("Novo Chat criado: " + msg.name + msg.chatname);
+                                    writeChat(msg.name + msg.chatname, "Espaco");
                                     msg.servidorLeu = true;
                                     x = 0;
                                     while (x < names.size()) {
                                         if(msg.name.equals(names.get(x))){
-                                            writeNewChat(msg.name, newarray, names.get(x));
+                                            writeNewChat(msg.chatname, newarray, names.get(x));
                                         }
                                         if(msg.chatname.equals(names.get(x))){
-                                            writeNewChat(msg.chatname, newarray, names.get(x));
+                                            writeNewChat(msg.name, newarray, names.get(x));
                                         }
                                         x = x + 1;
                                     }
@@ -220,7 +220,7 @@ public class Server {
                             Message temp3 = new Message();
                             temp3.destino = "Espaco";
                             temp3.type = "ListaChat";
-                            Message listChat = (Message) space.read(temp3, null, 10 * 1000);
+                            Message listChat = (Message) space.read(temp3, null, 20 * 1000);
                             if (listChat != null) {
                                 ArrayList<String> listadenomes = new ArrayList<>();
                                 listadenomes = listChat.chatList;
@@ -233,7 +233,7 @@ public class Server {
                             temp5.destino = "Espaco";
                             temp5.type = "Chat";
                             temp5.chatname = msg.chatname;
-                            Message selectedChat = (Message) space.read(temp5, null, 10 * 1000);
+                            Message selectedChat = (Message) space.read(temp5, null, 20 * 1000);
                             //Verifica se o Chat ainda existe
                             if (selectedChat != null) {
                                 ArrayList<String> listadenomes = new ArrayList<>();

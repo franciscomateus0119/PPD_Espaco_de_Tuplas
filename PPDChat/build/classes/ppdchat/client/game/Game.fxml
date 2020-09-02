@@ -23,7 +23,7 @@
       </Label>
       <TextField fx:id="TF_CRIAR_SALA_USER" layoutX="93.0" layoutY="207.0" promptText="Digite o nome do Usuario" visible="false" />
       <TextField fx:id="TF_ENTRAR_SALA" layoutX="93.0" layoutY="180.0" promptText="Digite o nome da sala" visible="false" />
-      <TextArea fx:id="TA_BOX" focusTraversable="false" layoutX="13.0" layoutY="14.0" prefHeight="325.0" prefWidth="350.0" visible="false" />
+      <TextArea fx:id="TA_BOX" focusTraversable="false" layoutX="13.0" layoutY="14.0" prefHeight="325.0" prefWidth="350.0" />
       <TextField fx:id="TF_MSG" alignment="CENTER" disable="true" layoutX="42.0" layoutY="351.0" prefHeight="25.0" prefWidth="208.0" promptText="Digite sua Mensagem" visible="false" />
       <Button fx:id="BUTTON_SEND" disable="true" layoutX="265.0" layoutY="351.0" mnemonicParsing="false" onMouseClicked="#sendText" text="Enviar" visible="false" />
       <Button fx:id="BUTTON_CRIAR" layoutX="527.0" layoutY="364.0" mnemonicParsing="false" onMouseClicked="#criarSala" prefHeight="20.0" prefWidth="75.0" text="Criar" />
@@ -51,5 +51,6 @@
          </font>
       </Label>
       <Button fx:id="BUTTON_CRIAR_USER" layoutX="602.0" layoutY="252.0" mnemonicParsing="false" onMouseClicked="#criarSalaUser" prefHeight="20.0" prefWidth="75.0" text="Criar" />
+      <TextArea fx:id="TA_BOX_2" focusTraversable="false" layoutX="13.0" layoutY="14.0" prefHeight="325.0" prefWidth="350.0" visible="false" />
    </children>
 </AnchorPane>

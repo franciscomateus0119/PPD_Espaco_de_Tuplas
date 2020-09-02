@@ -402,29 +402,17 @@ public class GameController {
         listviewSalas.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> ov, String old_val, String new_val) -> {
             String selectedItem = listviewSalas.getSelectionModel().getSelectedItem();
             int index = listviewSalas.getSelectionModel().getSelectedIndex();
-            /*
-            if(!TA_BOX.isVisible()){
-                TA_BOX.setVisible(true);
-            }
-            */
             LABEL_SELECTED_CHAT.setText("Selected Chat: " + selectedItem + " - Index : " + index);
             TF_ENTRAR_SALA.setText(selectedItem);
-            //chatAtual = selectedItem;
             System.out.println("Sala selecionada: " + selectedItem);
         });
     }
     public void listViewUsuariosListener() {
         listviewUsuarios.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> ov, String old_val, String new_val) -> {
             String selectedItem = listviewUsuarios.getSelectionModel().getSelectedItem();
-            int index = listviewUsuarios.getSelectionModel().getSelectedIndex();
-            /*
-            if(!TA_BOX.isVisible()){
-                TA_BOX.setVisible(true);
-            }
-            */
+            int index = listviewUsuarios.getSelectionModel().getSelectedIndex();    
             LABEL_SELECTED_USER.setText("Selected Chat: " + selectedItem + " - Index : " + index);
             TF_CRIAR_SALA_USER.setText(selectedItem);
-            //chatAtual = selectedItem;
             System.out.println("Sala selecionada: " + selectedItem);
         });
     }

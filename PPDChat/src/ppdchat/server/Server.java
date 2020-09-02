@@ -97,16 +97,18 @@ public class Server {
                             //Se a lista não existe ->Crie a primeira sala, primeiro elemento da lista de salas e informe a todos
                             if (listachat == null) {
                                 ArrayList<String> newarray = new ArrayList<>();
+                                ArrayList<Boolean> newBooleanarray = new ArrayList<>();
                                 newarray.add(msg.chatname);
+                                newBooleanarray.add(true);
                                 //Cria o chat e poe no espaço
-                                writeChat(msg.chatname,"Espaco");
+                                writeChat(msg.chatname,"Public","Espaco");
                                 //writeNewChat(msg.name, newarray, "Espaco");
                                 //Cria a lista de salas
-                                writeListaChat(newarray, "Espaco");
+                                writeListaChat(newarray, "Espaco", newBooleanarray);
                                 //Informa aos usuarios a criação da nova sala
                                 int x = 0;
                                 while (x < names.size()) {
-                                    writeNewChat(msg.name, msg.chatname, newarray, names.get(x));
+                                    writeNewChat(msg.name,null, msg.chatname, newarray, names.get(x),newBooleanarray);
                                     x = x + 1;
                                 }
                                 msg.servidorLeu = true;
@@ -115,20 +117,22 @@ public class Server {
                             } //Se a lista existe
                             else {
                                 ArrayList<String> newarray = new ArrayList<>();
+                                ArrayList<Boolean> newBooleanarray = new ArrayList<>();
                                 newarray = listachat.chatList;
+                                newBooleanarray = listachat.chatPublico;
                                 if (!newarray.contains(msg.chatname)) {
                                     newarray.add(msg.chatname);
                                     //System.out.println("Novo Chat criado: " + msg.chatname);
-                                    writeChat(msg.chatname, "Espaco");
+                                    writeChat(msg.chatname,"Public", "Espaco");
                                     System.out.println("Sala " + msg.chatname + " criada!");
                                     msg.servidorLeu = true;
                                     x = 0;
                                     while (x < names.size()) {
-                                        writeNewChat(msg.name,msg.chatname, newarray, names.get(x));
+                                        writeNewChat(msg.name,null,msg.chatname, newarray, names.get(x),newBooleanarray);
                                         x = x + 1;
                                     }
                                     
-                                    writeListaChat(newarray, "Espaco");
+                                    writeListaChat(newarray, "Espaco",newBooleanarray);
                                     System.out.println("Sala " + msg.chatname + " adicionada à lista de salas");
                                 }
 
@@ -145,28 +149,33 @@ public class Server {
                             if (listadechat == null) {
 
                                 ArrayList<String> newarray = new ArrayList<>();
+                                ArrayList<Boolean> newBooleanarray = new ArrayList<>();
                                 newarray.add(msg.name + msg.chatname);
-                                writeListaChat(newarray, "Espaco");
+                                newBooleanarray.add(false);
+                                writeListaChat(newarray, "Espaco",newBooleanarray);
                             } //Se a lista existe
                             else {
                                 ArrayList<String> newarray = new ArrayList<>();
+                                ArrayList<Boolean> newBooleanarray = new ArrayList<>();
                                 newarray = listadechat.chatList;
+                                newBooleanarray= listadechat.chatPublico;
                                 if (!newarray.contains(msg.name + msg.chatname)) {
                                     System.out.println("Novo Chat criado: " + msg.name + msg.chatname);
-                                    writeChat(msg.name + msg.chatname, "Espaco");
+                                    newBooleanarray.add(false);
+                                    writeChat(msg.name + msg.chatname,"Individual", "Espaco");
                                     msg.servidorLeu = true;
                                     x = 0;
                                     while (x < names.size()) {
                                         if(msg.name.equals(names.get(x))){
-                                            writeNewChat(msg.chatname, msg.name + msg.chatname,newarray, names.get(x));
+                                            writeNewChat(msg.chatname, msg.name, msg.name + msg.chatname,newarray, names.get(x),newBooleanarray);
                                         }
                                         if(msg.chatname.equals(names.get(x))){
-                                            writeNewChat(msg.name, msg.name + msg.chatname,newarray, names.get(x));
+                                            writeNewChat(msg.name, msg.chatname, msg.name + msg.chatname,newarray, names.get(x),newBooleanarray);
                                         }
                                         x = x + 1;
                                     }
                                     newarray.add(msg.name + msg.chatname);
-                                    writeListaChat(newarray, "Espaco");
+                                    writeListaChat(newarray, "Espaco",newBooleanarray);
                                 }
 
                             }
@@ -289,8 +298,10 @@ public class Server {
                             Message listChat = (Message) space.read(temp3, null, 20 * 1000);
                             if (listChat != null) {
                                 ArrayList<String> listadenomes = new ArrayList<>();
+                                ArrayList<Boolean> listaBoolean = new ArrayList<>();
                                 listadenomes = listChat.chatList;
-                                writeAtualizarListaSala(msg.name, listadenomes);
+                                listaBoolean = listChat.chatPublico;
+                                writeAtualizarListaSala(msg.name, listadenomes,listaBoolean);
                             }
 
                             break;
@@ -348,14 +359,16 @@ public class Server {
         }
     }
     //Informar que um novoChat foi criado!
-    public void writeNewChat(String name, String chatname, ArrayList<String> listasalas, String destino) {
+    public void writeNewChat(String name, String otherPerson, String chatname, ArrayList<String> listasalas, String destino,ArrayList<Boolean> listBool){
         try {
             Message msg = new Message();
             msg.type = "NewChat";
             msg.destino = destino;
             msg.name = name;
+            msg.otherPerson = otherPerson;
             msg.chatname = chatname;
             msg.chatList = listasalas;
+            msg.chatPublico = listBool;
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);
@@ -372,12 +385,13 @@ public class Server {
         }
     }
     //Botar o Chat no Espaço
-    public void writeChat(String chatname, String destino) {
+    public void writeChat(String chatname, String visibilidade,String destino) {
         try {
             Message msg = new Message();
             msg.type = "Chat";
             msg.destino = destino;
             msg.chatname = chatname;
+            msg.content = visibilidade;
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 180 * 1000);
@@ -439,12 +453,13 @@ public class Server {
         }
     }
 
-    public void writeAtualizarListaSala(String name, ArrayList<String> nomedassalas) {
+    public void writeAtualizarListaSala(String name, ArrayList<String> nomedassalas, ArrayList<Boolean> listBool) {
         try {
             Message msg = new Message();
             msg.type = "AtualizarListaSala";
             msg.destino = name;
             msg.chatList = nomedassalas;
+            msg.chatPublico = listBool;
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);
@@ -484,12 +499,13 @@ public class Server {
 
     }
 
-    public void writeListaChat(ArrayList<String> arrayList, String destino) {
+    public void writeListaChat(ArrayList<String> arrayList, String destino,ArrayList<Boolean> listBool) {
         try {
             Message msg = new Message();
             msg.type = "ListaChat";
             msg.destino = destino;
             msg.chatList = arrayList;
+            msg.chatPublico = listBool;
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);

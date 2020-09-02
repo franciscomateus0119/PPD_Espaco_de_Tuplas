@@ -277,21 +277,40 @@ public class GameController {
         }
     }
     
-    public void adicionarSala(ArrayList<String> nomedassalas) {
+    public void adicionarSala(ArrayList<String> nomedassalas, ArrayList<Boolean> listBool) {
         //String textareaname = nomedasala;
         
         int tamanho = nomedassalas.size();
+        int size = listBool.size();
+        int y = 0;
         //items.clear();
         for(int h = 0;h<tamanho;h++){
-            if(!chatnames.contains(nomedassalas.get(h))){
-                TextArea textarea = new TextArea();
-                chatnames.add(nomedassalas.get(h));
-                chats.put(nomedassalas.get(h), textarea);
-                textareas.add(textarea);
-                items.add(nomedassalas.get(h));
-                listviewSalas.setItems(items);
-                System.out.println("Nova sala disponível: " + nomedassalas.get(h));
+            if(y<=size){
+                if(!chatnames.contains(nomedassalas.get(h))){
+                    if (Boolean.TRUE.equals(listBool.get(y).booleanValue())) {
+                        TextArea textarea = new TextArea();
+                        chatnames.add(nomedassalas.get(h));
+                        chats.put(nomedassalas.get(h), textarea);
+                        textareas.add(textarea);
+                        items.add(nomedassalas.get(h));
+                        listviewSalas.setItems(items);
+                        System.out.println("Nova sala disponível: " + nomedassalas.get(h));
+                    } else {
+                        if (nomedassalas.get(h).contains(nome)) {
+                            TextArea textarea = new TextArea();
+                            chatnames.add(nomedassalas.get(h));
+                            chats.put(nomedassalas.get(h), textarea);
+                            textareas.add(textarea);
+                            items.add(nomedassalas.get(h));
+                            listviewSalas.setItems(items);
+                            System.out.println("Nova sala disponível: " + nomedassalas.get(h));
+                        }
+                    }
+
+                }
             }
+            
+            y++;
   
         }  
     }

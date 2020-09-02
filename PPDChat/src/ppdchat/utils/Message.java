@@ -9,8 +9,10 @@ public class Message implements Entry {
     public String chatname;
     public String name;
     public String content;
+    public String otherPerson;
     public Boolean servidorLeu = false;
     public Boolean destinatarioLeu = false;
+    public ArrayList<Boolean> chatPublico;
     //public ArrayList<String> quemLeu = new ArrayList<>();
     public ArrayList<String> namesList;
     public ArrayList<String> chatList;

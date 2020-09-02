@@ -36,7 +36,7 @@ public class Server {
     protected Map<String, String> clientchat = new HashMap<>();
     protected Map<String, ArrayList<String>> usersinchat = new HashMap<>();
     protected ArrayList<String> names;
-    protected ArrayList<String> chatnames;
+    //protected ArrayList<String> chatnames;
     //public Map<Integer, String> names = new HashMap<>();
 
     Lookup finder;
@@ -45,7 +45,7 @@ public class Server {
     public Server() throws RemoteException {
         //clients = new ArrayList<>();
         names = new ArrayList<>();
-        chatnames = new ArrayList<>();
+        //chatnames = new ArrayList<>();
         this.finder = new Lookup(JavaSpace.class);
         this.space = (JavaSpace) finder.getService();
         if (space == null) {
@@ -82,7 +82,35 @@ public class Server {
                             }
                             break;
                         case "NewChat":
-                            if(!chatnames.contains(msg.chatname)){
+                            //Procurar por lista de salas
+                            Message templ = new Message();
+                            templ.destino = "Espaco";
+                            templ.type = "ListaChat";
+                            Message listachat = (Message) space.take(templ, null, 10 * 1000);
+                            //Se a lista não existe
+                            if (listachat == null) {
+
+                                ArrayList<String> newarray = new ArrayList<>();
+                                newarray.add(msg.chatname);
+                                writeListaChat(newarray, "Espaco");
+                            } //Se a lista existe
+                            else {
+                                ArrayList<String> newarray = new ArrayList<>();
+                                newarray = listachat.chatList;
+                                if (!newarray.contains(msg.chatname)) {
+                                    System.out.println("Novo Chat criado: " + msg.chatname);
+                                    writeChat(msg.chatname, "Espaco");
+                                    msg.servidorLeu = true;
+                                    x = 0;
+                                    while (x < names.size()) {
+                                        writeNewChat(msg.name, newarray, names.get(x));
+                                        x = x + 1;
+                                    }
+                                    newarray.add(msg.chatname);
+                                    writeListaChat(newarray, "Espaco");
+                                }
+                                /*
+                             if(!chatnames.contains(msg.chatname)){
                                 System.out.println("Novo Chat criado: " + msg.chatname);
                                 chatnames.add(msg.chatname);
                                 writeChat(msg.chatname,"Espaco");
@@ -93,6 +121,9 @@ public class Server {
                                     x = x + 1;
                                 }
                             }
+                                 */
+                            }
+                           
                             
                             break;
                         case "NewClient":
@@ -113,11 +144,11 @@ public class Server {
                         case "EntrarRequest":
                             System.out.println("Pedido de " + msg.name + " para sair de " + msg.content + " para " + msg.chatname);
                             if (msg.content != null && !msg.content.equals("")) {
-                                Message templ = new Message();
-                                templ.destino = "Espaco";
-                                templ.type = "Chat";
-                                templ.chatname = msg.content;
-                                Message sairchat = (Message) space.take(templ, null, 10 * 1000);
+                                Message temp2 = new Message();
+                                temp2.destino = "Espaco";
+                                temp2.type = "Chat";
+                                temp2.chatname = msg.content;
+                                Message sairchat = (Message) space.take(temp2, null, 10 * 1000);
                                 //Se a sala existir, remover o usuário da sua lista de usuários presentes
                                 if (sairchat != null) {
                                     if(sairchat.userInChatList != null){
@@ -164,7 +195,16 @@ public class Server {
 
                             break;
                         case "AtualizarListaSala":
-                            writeAtualizarListaSala(msg.name,chatnames);
+                            Message temp3 = new Message();
+                            temp3.destino = "Espaco";
+                            temp3.type = "ListaChat";
+                            Message listChat = (Message) space.read(temp3, null, 10 * 1000);
+                            if(listChat!=null){
+                                ArrayList<String> listadenomes = new ArrayList<>();
+                                listadenomes = listChat.chatList;
+                                writeAtualizarListaSala(msg.name,listadenomes);
+                            }
+                            
                             break;
                         case "Lista":
                             msg.servidorLeu = true;
@@ -317,6 +357,28 @@ public class Server {
             e.printStackTrace();
         }
 
+    }
+    
+    public void writeListaChat(ArrayList<String> arrayList, String destino){
+        try {
+            Message msg = new Message();
+            msg.type = "ListaChat";
+            msg.destino = destino;
+            msg.chatList = arrayList;
+            Platform.runLater(() -> {
+                try {
+                    space.write(msg, null, 60 * 1000);
+                    System.out.println("(writeListaChat)Lista de Salas enviada para o JavaSpace");
+                }  catch (TransactionException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     // <editor-fold defaultstate="collapsed" desc="Old Project">

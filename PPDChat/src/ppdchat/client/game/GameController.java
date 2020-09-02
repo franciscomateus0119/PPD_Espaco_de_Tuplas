@@ -213,8 +213,8 @@ public class GameController {
             String textareaname = TF_CRIAR_SALA.getText();
             Platform.runLater(() -> {
                 main.getClient().writeNewChatToServer(nome, textareaname);
-                main.getClient().writeNewChatToServer(nome, textareaname);
-                main.getClient().writeNewChatToServer(nome, textareaname);
+                //main.getClient().writeNewChatToServer(nome, textareaname);
+                //main.getClient().writeNewChatToServer(nome, textareaname);
             });
             System.out.println("Nova sala criada: " + textareaname);
             TF_CRIAR_SALA.clear();

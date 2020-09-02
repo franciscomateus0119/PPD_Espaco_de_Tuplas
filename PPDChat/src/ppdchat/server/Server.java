@@ -190,14 +190,16 @@ public class Server {
                         case "EntrarRequest":
                             System.out.println("Pedido de " + msg.name + " para sair de " + msg.content + " para " + msg.chatname);
                             //Origem não é nula  >Procura se a sala origem existe
-                            if (msg.content != null && !msg.content.equals("") && !primeirasala) {
+                            if (msg.content != null && !msg.content.equals("")) {
                                 Message temp2 = new Message();
                                 temp2.destino = "Espaco";
                                 temp2.type = "Chat";
                                 temp2.chatname = msg.content; //Nome da sala não nulo
-                                Message sairchat = (Message) space.take(temp2, null, 10 * 1000);
+                                Message sairchat = (Message) space.take(temp2, null, 20 * 1000);
                                 //Se a sala existir -> Remova seu nome da sala origem!
+                                
                                 if (sairchat != null) {
+                                    System.out.println(msg.content+ " Encontrada! Saindo dela...");
                                     ArrayList<String> newlist = sairchat.userInChatList;
                                     newlist.remove(msg.name);
                                     sairchat.userInChatList = newlist;

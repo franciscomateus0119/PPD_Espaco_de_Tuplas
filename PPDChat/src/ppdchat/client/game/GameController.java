@@ -316,7 +316,8 @@ public class GameController {
     
     public void adicionarUser(ArrayList<String> nomesdosusers) {
         //String textareaname = nomedasala;
-        
+        listviewUsuarios.getItems().clear();
+        usernames.clear();
         int tamanho = nomesdosusers.size();
         //items.clear();
         for(int f = 0;f<tamanho;f++){
@@ -329,6 +330,13 @@ public class GameController {
                 listviewUsuarios.setItems(usuarios);
                 System.out.println("Novo usuario disponível: " + nomesdosusers.get(f));
             }
+            /*
+            else{
+                usuarios.add(nomesdosusers.get(f));
+                listviewUsuarios.setItems(usuarios);
+                System.out.println("Novo usuario disponível: " + nomesdosusers.get(f));
+            }
+            */
   
         }  
     }

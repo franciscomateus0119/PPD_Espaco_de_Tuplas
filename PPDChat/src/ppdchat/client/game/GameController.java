@@ -61,11 +61,14 @@ public class GameController {
     String nChat;
     String chatAtual = "";
     public ArrayList<String> chatnames = new ArrayList<>();
+    public ArrayList<String> usernames = new ArrayList<>();
     public ArrayList<TextArea> textareas = new ArrayList<>();
     Map<String, TextArea> chats = new HashMap<>();
     TextArea textareateste;
     ListView<String> listviewSalas;
+    ListView<String> listviewUsuarios;
     ObservableList<String> items;
+    ObservableList<String> usuarios;
 
     // <editor-fold defaultstate="collapsed" desc="Old Project">
     /*
@@ -140,6 +143,7 @@ public class GameController {
     TextField TF_CRIAR_SALA;
     @FXML
     TextField TF_ENTRAR_SALA;
+    @FXML TextField TF_CRIAR_SALA_USER;
     @FXML
     Button BUTTON_SEND;
     @FXML
@@ -148,8 +152,14 @@ public class GameController {
     Button BUTTON_ENTRAR;
     @FXML
     Button BUTTON_ATUALIZAR;
+    @FXML
+    Button BUTTON_USUARIOS;
+    @FXML Button BUTTON_CRIAR_USER;
+    
     @FXML Label LABEL_SELECTED_CHAT;
+    @FXML Label LABEL_SELECTED_USER;
     @FXML HBox HBOX_LISTVIEW;
+    @FXML HBox HBOX_USERVIEW;
     @FXML HBox HBOX_SALA;
     //@FXML ListView LISTVIEW_SALAS_DISPONIVEIS;
 
@@ -164,11 +174,21 @@ public class GameController {
         listviewSalas.setVisible(true);
         listviewSalas.toFront();
         HBOX_LISTVIEW.getChildren().addAll(listviewSalas);
+        listviewUsuarios = new ListView<>();
+        listviewUsuarios.setPrefWidth(200);
+        listviewUsuarios.setPrefHeight(200);
+        listviewUsuarios.setLayoutX(376);
+        listviewUsuarios.setLayoutY(192);
+        listviewUsuarios.setVisible(true);
+        listviewUsuarios.toFront();
+        HBOX_USERVIEW.getChildren().addAll(listviewUsuarios);
         textareateste = new TextArea();
         
         items = FXCollections.observableArrayList();
+        usuarios = FXCollections.observableArrayList();
         aceitarEnter();
         listViewListener();
+        listViewUsuariosListener();
     }
 
     @FXML
@@ -201,6 +221,14 @@ public class GameController {
     public void atualizarListaSalas(MouseEvent event){
         main.getClient().writeAtualizarListaSala(nome);
     }
+    
+    @FXML
+    public void atualizarListaUsuarios(MouseEvent event){
+        if(chatAtual!=null && !chatAtual.equals("")){
+            main.getClient().writeAtualizarListaUser(nome, chatAtual);
+        }
+        
+    }
 
     @FXML
     public void criarSala(MouseEvent event) {
@@ -225,6 +253,26 @@ public class GameController {
 
     }
     
+    @FXML
+    public void criarSalaUser(MouseEvent event){
+        if(chatnames.contains(TF_CRIAR_SALA_USER.getText()) && !TF_CRIAR_SALA_USER.getText().equals("") && TF_CRIAR_SALA_USER.getText()!=null){
+            TF_CRIAR_SALA_USER.clear();
+            TF_CRIAR_SALA_USER.setPromptText("Esta sala ja existe!");
+        }
+        else if(!TF_CRIAR_SALA_USER.getText().equals("") && TF_CRIAR_SALA_USER.getText()!=null){
+            String textareaUsername = TF_CRIAR_SALA_USER.getText();
+            Platform.runLater(()->{
+                main.getClient().writeNewUserChatToServer(nome, textareaUsername);
+            });
+            System.out.println("Nova salaUser criada: " + textareaUsername);
+            TF_CRIAR_SALA_USER.clear();
+        }
+        else{
+            TF_CRIAR_SALA_USER.clear();
+            TF_CRIAR_SALA_USER.setPromptText("DIGITE UM NOME NÃO VAZIO");
+        }
+    }
+    
     public void adicionarSala(ArrayList<String> nomedassalas) {
         //String textareaname = nomedasala;
         
@@ -244,6 +292,25 @@ public class GameController {
         }  
     }
     
+    public void adicionarUser(ArrayList<String> nomesdosusers) {
+        //String textareaname = nomedasala;
+        
+        int tamanho = nomesdosusers.size();
+        //items.clear();
+        for(int f = 0;f<tamanho;f++){
+            if(!usernames.contains(nomesdosusers.get(f))){
+                //TextArea textarea = new TextArea();
+                usernames.add(nomesdosusers.get(f));
+                //chats.put(nomesdosusers.get(f), textarea);
+                //textareas.add(textarea);
+                usuarios.add(nomesdosusers.get(f));
+                listviewSalas.setItems(usuarios);
+                System.out.println("Novo usuario disponível: " + nomesdosusers.get(f));
+            }
+  
+        }  
+    }
+    
     @FXML
     public void entrarSalaRequest(MouseEvent event){
         if(TF_ENTRAR_SALA.getText()!=null && !TF_ENTRAR_SALA.getText().equals("")){
@@ -255,6 +322,7 @@ public class GameController {
             });
         }
     }
+
     
     public void entrarSala(String sala){
         chatAtual = sala;
@@ -311,6 +379,21 @@ public class GameController {
             */
             LABEL_SELECTED_CHAT.setText("Selected Chat: " + selectedItem + " - Index : " + index);
             TF_ENTRAR_SALA.setText(selectedItem);
+            //chatAtual = selectedItem;
+            System.out.println("Sala selecionada: " + selectedItem);
+        });
+    }
+    public void listViewUsuariosListener() {
+        listviewUsuarios.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> ov, String old_val, String new_val) -> {
+            String selectedItem = listviewUsuarios.getSelectionModel().getSelectedItem();
+            int index = listviewUsuarios.getSelectionModel().getSelectedIndex();
+            /*
+            if(!TA_BOX.isVisible()){
+                TA_BOX.setVisible(true);
+            }
+            */
+            LABEL_SELECTED_USER.setText("Selected Chat: " + selectedItem + " - Index : " + index);
+            TF_CRIAR_SALA_USER.setText(selectedItem);
             //chatAtual = selectedItem;
             System.out.println("Sala selecionada: " + selectedItem);
         });

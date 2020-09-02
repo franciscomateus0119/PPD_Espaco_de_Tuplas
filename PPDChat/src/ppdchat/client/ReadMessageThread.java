@@ -93,6 +93,11 @@ public class ReadMessageThread implements Runnable {
                                 main.getGameController().adicionarSala(msg.chatList);
                             });
                             break;
+                        case "AtualizarListaUser":
+                            Platform.runLater(()->{
+                                main.getGameController().adicionarUser(msg.userInChatList);
+                            });
+                            break;
                         default:
                             break;
                     }

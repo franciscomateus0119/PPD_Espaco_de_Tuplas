@@ -165,6 +165,27 @@ public class Client{
         catch(Exception e){e.printStackTrace();}
     }
     
+    public void writeNewUserChatToServer(String name, String chatname){
+        try{
+            Message msg = new Message();
+            msg.destino = "Servidor";
+            msg.type = "NewUserChat";
+            msg.chatname = chatname;
+            msg.name = name;
+            Platform.runLater(() -> {
+                try {
+                    space.write(msg, null, 60 * 1000);
+                } catch (TransactionException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+            
+        }
+        catch(Exception e){e.printStackTrace();}
+    }
+    
     public void writeEntrarSalaRequest(String name, String chatname, String chatAtual){
         try{
             Message msg = new Message();
@@ -193,6 +214,27 @@ public class Client{
             msg.destino = "Servidor";
             msg.type = "AtualizarListaSala";
             msg.name = name;
+            Platform.runLater(() -> {
+                try {
+                    space.write(msg, null, 60 * 1000);
+                } catch (TransactionException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+            
+        }
+        catch(Exception e){e.printStackTrace();}
+    }
+    
+    public void writeAtualizarListaUser(String name, String chatname){
+        try{
+            Message msg = new Message();
+            msg.destino = "Servidor";
+            msg.type = "AtualizarListaUser";
+            msg.name = name;
+            msg.chatname = chatname;
             Platform.runLater(() -> {
                 try {
                     space.write(msg, null, 60 * 1000);

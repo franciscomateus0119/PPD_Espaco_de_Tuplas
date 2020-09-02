@@ -27,11 +27,17 @@
          <effect>
             <InnerShadow />
          </effect></TextArea>
-      <TextField fx:id="TF_MSG" alignment="CENTER" layoutX="28.0" layoutY="356.0" prefHeight="25.0" prefWidth="260.0" promptText="Digite sua Mensagem" />
-      <TextField fx:id="TF_CRIAR_SALA" alignment="CENTER" layoutX="474.0" layoutY="317.0" prefHeight="33.0" prefWidth="215.0" promptText="Digite o nome da sala">
+      <TextField fx:id="TF_MSG" alignment="CENTER" layoutX="32.0" layoutY="356.0" prefHeight="25.0" prefWidth="260.0" promptText="Digite sua Mensagem">
+         <effect>
+            <InnerShadow height="8.0" radius="3.5" width="8.0" />
+         </effect></TextField>
+      <TextField fx:id="TF_CRIAR_SALA" alignment="CENTER" layoutX="474.0" layoutY="317.0" prefHeight="25.0" prefWidth="215.0" promptText="Digite o nome da sala">
          <font>
             <Font name="Arial" size="12.0" />
-         </font></TextField>
+         </font>
+         <effect>
+            <InnerShadow height="15.0" radius="7.0" width="15.0" />
+         </effect></TextField>
       <Label layoutX="509.0" layoutY="297.0" text="Criar uma sala" visible="false">
          <font>
             <Font name="Arial Bold" size="16.0" />
@@ -43,32 +49,32 @@
          </font>
       </Label>
       <Label fx:id="LABEL_SELECTED_CHAT" layoutX="42.0" layoutY="382.0" prefHeight="17.0" prefWidth="208.0" text="Selected Chat: None" visible="false" />
-      <HBox fx:id="HBOX_LISTVIEW" alignment="TOP_CENTER" layoutX="376.0" layoutY="45.0" prefHeight="200.0" prefWidth="200.0" />
-      <HBox fx:id="HBOX_USERVIEW" alignment="TOP_CENTER" layoutX="586.0" layoutY="45.0" prefHeight="200.0" prefWidth="200.0" />
+      <HBox fx:id="HBOX_LISTVIEW" alignment="TOP_CENTER" layoutX="376.0" layoutY="45.0" prefHeight="200.0" prefWidth="208.0" />
+      <HBox fx:id="HBOX_USERVIEW" alignment="TOP_CENTER" layoutX="604.0" layoutY="43.0" prefHeight="200.0" prefWidth="215.0" />
       <Label fx:id="LABEL_SELECTED_USER" layoutX="655.0" layoutY="39.0" prefHeight="17.0" prefWidth="208.0" text="Selected User None" visible="false" />
       <Label layoutX="618.0" layoutY="18.0" text="Usuarios da Sala" visible="false">
          <font>
             <Font name="Arial Bold" size="16.0" />
          </font>
       </Label>
-      <ImageView fx:id="BUTTON_USUARIOS" fitHeight="40.0" fitWidth="100.0" layoutX="692.0" layoutY="250.0" onMouseClicked="#atualizarListaUsuarios" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="BUTTON_USUARIOS" fitHeight="40.0" fitWidth="110.0" layoutX="711.0" layoutY="248.0" onMouseClicked="#atualizarListaUsuarios" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@conteudo/Atualizar_Usuarios_A.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="BUTTON_ATUALIZAR" fitHeight="40.0" fitWidth="100.0" layoutX="479.0" layoutY="250.0" onMouseClicked="#atualizarListaSalas" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="BUTTON_ATUALIZAR" fitHeight="40.0" fitWidth="110.0" layoutX="478.0" layoutY="251.0" onMouseClicked="#atualizarListaSalas" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@conteudo/Atualizar_Salas_A.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="BUTTON_CRIAR" fitHeight="40.0" fitWidth="100.0" layoutX="531.0" layoutY="363.0" onMouseClicked="#criarSala" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="BUTTON_CRIAR" fitHeight="40.0" fitWidth="110.0" layoutX="531.0" layoutY="363.0" onMouseClicked="#criarSala" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@conteudo/Criar_Sala_A.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="BUTTON_ENTRAR" fitHeight="40.0" fitWidth="100.0" layoutX="377.0" layoutY="250.0" onMouseClicked="#entrarSalaRequest" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="BUTTON_ENTRAR" fitHeight="40.0" fitWidth="110.0" layoutX="369.0" layoutY="250.0" onMouseClicked="#entrarSalaRequest" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@conteudo/Button_Entrar_A.png" />
+            <Image url="@conteudo/Button_Entrar_A(1).png" />
          </image>
       </ImageView>
       <ImageView fitHeight="100.0" fitWidth="150.0" layoutX="404.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
@@ -76,7 +82,7 @@
             <Image url="@conteudo/SalasDisponiveis.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="100.0" fitWidth="150.0" layoutX="605.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="100.0" fitWidth="150.0" layoutX="623.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@conteudo/Usuarios%20da%20sala.png" />
          </image>
@@ -86,15 +92,18 @@
             <Image url="@conteudo/Crie%20uma%20Sala.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="BUTTON_CRIAR_USER" fitHeight="40.0" fitWidth="100.0" layoutX="589.0" layoutY="250.0" onMouseClicked="#criarSalaUser" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="BUTTON_CRIAR_USER" fitHeight="40.0" fitWidth="110.0" layoutX="602.0" layoutY="249.0" onMouseClicked="#criarSalaUser" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@conteudo/Criar_Sala_A.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="BUTTON_SEND" fitHeight="30.0" fitWidth="30.0" layoutX="310.0" layoutY="354.0" onMouseClicked="#sendText" pickOnBounds="true" preserveRatio="true" styleClass="sendButton">
+      <ImageView fx:id="BUTTON_SEND" fitHeight="30.0" fitWidth="30.0" layoutX="314.0" layoutY="354.0" onMouseClicked="#sendText" pickOnBounds="true" preserveRatio="true" styleClass="sendButton">
          <image>
-            <Image url="@conteudo/SendIcon2.png" />
+            <Image url="@conteudo/SendIcon3.png" />
          </image>
+         <effect>
+            <DropShadow color="WHITE" height="9.14" radius="3.035" width="5.0" />
+         </effect>
       </ImageView>
    </children>
 </AnchorPane>

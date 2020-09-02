@@ -70,71 +70,7 @@ public class GameController {
     ObservableList<String> items;
     ObservableList<String> usuarios;
 
-    // <editor-fold defaultstate="collapsed" desc="Old Project">
-    /*
-    Boolean circle_a_on = true;
-    Boolean circle_b_on = true;
-    Boolean circle_c_on = true;
-    Boolean circle_d_on = true;
     
-    Boolean circle_a_ready = false;
-    Boolean circle_b_ready = false;
-    Boolean circle_c_ready = false;
-    Boolean circle_d_ready = false;
-    
-    
-    Boolean sou_A = false;
-    Boolean sou_B = false;
-    Boolean sou_C = false;
-    Boolean sou_D = false;
-    
-    Boolean resgatar = false;
-    Boolean firstResgate = false;
-    Boolean resgatarChat = false;
-    
-    String meuNome = "X";
-    String lastSelected;
-    
-    
-    
-    Color green = Color.LIGHTGREEN;
-    Color gray = Color.LIGHTGRAY;
-    
-    
-    Map<String, Circle> circles = new HashMap<>();
-    Map<String, Button> togglebuttons = new HashMap<>();
-    Map<String, Circle> button_to_circle = new HashMap<>();
-    Map<String, String> contatos = new HashMap<>();
-   
-    @FXML Circle CIRCLE_A;
-    @FXML Circle CIRCLE_B;
-    @FXML Circle CIRCLE_C;
-    @FXML Circle CIRCLE_D;
-    
-    @FXML Rectangle RECTANGLE_A;
-    @FXML Rectangle RECTANGLE_B;
-    @FXML Rectangle RECTANGLE_C;
-    @FXML Rectangle RECTANGLE_D;
-    
-    
-    @FXML Button BUTTON_SWITCH_A;
-    @FXML Button BUTTON_SWITCH_B;
-    @FXML Button BUTTON_SWITCH_C;
-    @FXML Button BUTTON_SWITCH_D;
-    
-
-    
-    @FXML Label LABEL_CHAT;
-    @FXML Label LABEL_CONTATO_A;
-    @FXML Label LABEL_CONTATO_B;
-    @FXML Label LABEL_CONTATO_C;
-    @FXML Label LABEL_CONTATO_D;
-            
-    @FXML TextField TF_GAME;
-    
-    @FXML ImageView IMAGE_SEND;
-     */
-    //</editor-fold>
     @FXML
     TextArea TA_BOX;
     @FXML
@@ -145,16 +81,16 @@ public class GameController {
     TextField TF_ENTRAR_SALA;
     @FXML TextField TF_CRIAR_SALA_USER;
     @FXML
-    Button BUTTON_SEND;
+    ImageView BUTTON_SEND;
     @FXML
-    Button BUTTON_CRIAR;
+    ImageView BUTTON_CRIAR;
     @FXML
-    Button BUTTON_ENTRAR;
+    ImageView BUTTON_ENTRAR;
     @FXML
-    Button BUTTON_ATUALIZAR;
+    ImageView BUTTON_ATUALIZAR;
     @FXML
-    Button BUTTON_USUARIOS;
-    @FXML Button BUTTON_CRIAR_USER;
+    ImageView BUTTON_USUARIOS;
+    @FXML ImageView BUTTON_CRIAR_USER;
     
     @FXML Label LABEL_SELECTED_CHAT;
     @FXML Label LABEL_SELECTED_USER;

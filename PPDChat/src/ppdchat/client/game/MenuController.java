@@ -27,6 +27,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -48,7 +49,7 @@ import ppdchat.utils.*;
 public class MenuController {
     //private Client client;
     private boolean jogoIniciado;
-    BackgroundImage startimg = new BackgroundImage( new Image( getClass().getResource("conteudo/start.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+    BackgroundImage startimg = new BackgroundImage( new Image( getClass().getResource("conteudo/StartAllChat.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
     Background startbg = new Background(startimg);
     String nome;
     public Random random;
@@ -59,6 +60,7 @@ public class MenuController {
     
     @FXML private Button buttonConnect;
     @FXML private Button BUTTON_VERIFICAR;
+    @FXML private ImageView CONFIG;
     
     private JavaSpace space = null;
     private Lookup finder;
@@ -79,6 +81,7 @@ public class MenuController {
     public void verificarnome(MouseEvent event){
         if (space == null) {
             System.out.println("Procurando pelo servico JavaSpace...");
+            CONFIG.setVisible(true);
             finder = new Lookup(JavaSpace.class);
             space = (JavaSpace) finder.getService();
             if (space != null) {
@@ -129,6 +132,7 @@ public class MenuController {
                 }
 
             }
+            CONFIG.setVisible(false);
             
         } catch (Exception e) {
             e.printStackTrace();

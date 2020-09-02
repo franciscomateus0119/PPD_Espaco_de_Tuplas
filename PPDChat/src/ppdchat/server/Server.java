@@ -204,7 +204,7 @@ public class Server {
                                     ArrayList<String> newlist = sairchat.userInChatList;
                                     newlist.remove(msg.name);
                                     sairchat.userInChatList = newlist;
-                                    System.out.println("Saiu de" + msg.content);
+                                    System.out.println("Saiu de " + msg.content);
                                     if(sairchat.userInChatList.size()==0){
                                         System.out.println("Sala "+msg.content+" será apagada em 10 minutos." );
                                         space.write(sairchat, null, 600 * 1000);
@@ -241,7 +241,7 @@ public class Server {
                                 }
 
                                 try {
-                                    space.write(chatmsg, null, 180 * 1000);
+                                    space.write(chatmsg, null, Lease.FOREVER);
                                     writeEnterRequestResult(msg.name, msg.chatname, "Sucesso");
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -301,7 +301,7 @@ public class Server {
             msg.chatname = chatname;
             Platform.runLater(() -> {
                 try {
-                    space.write(msg, null, 60 * 1000);
+                    space.write(msg, null, 300 * 1000);
                     System.out.println("Mensagem enviada para: " + destino);
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -325,7 +325,7 @@ public class Server {
             msg.chatList = listasalas;
             Platform.runLater(() -> {
                 try {
-                    space.write(msg, null, 60 * 1000);
+                    space.write(msg, null, Lease.FOREVER);
                     System.out.println("(writeNewChat)NewCHAT " +chatname +" enviado para: " + destino);
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -347,7 +347,7 @@ public class Server {
             msg.chatname = chatname;
             Platform.runLater(() -> {
                 try {
-                    space.write(msg, null, 180 * 1000);
+                    space.write(msg, null, 600*1000);
                     System.out.println("(writeChat)CHAT" + chatname+" enviado para: " + destino);
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -369,7 +369,7 @@ public class Server {
             msg.namesList = listanomes;
             Platform.runLater(() -> {
                 try {
-                    space.write(msg, null, 60 * 1000);
+                    space.write(msg, null, Lease.FOREVER);
                     System.out.println("Lista de Usuários enviada para o JavaSpace");
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -392,7 +392,7 @@ public class Server {
             msg.content = result;
             Platform.runLater(() -> {
                 try {
-                    space.write(msg, null, 60 * 1000);
+                    space.write(msg, null, 600 * 1000);
                     System.out.println("(writeEnterRequestResult) Lista de Usuários da Sala enviada para o JavaSpace");
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -414,7 +414,7 @@ public class Server {
             msg.chatList = nomedassalas;
             Platform.runLater(() -> {
                 try {
-                    space.write(msg, null, 60 * 1000);
+                    space.write(msg, null, 600 * 1000);
                     System.out.println("(AtualizarListaSala)Lista de Salas enviada para o JavaSpace");
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -436,7 +436,7 @@ public class Server {
             msg.userInChatList = nomesdosusuarios;
             Platform.runLater(() -> {
                 try {
-                    space.write(msg, null, 60 * 1000);
+                    space.write(msg, null, 600 * 1000);
                     System.out.println("(AtualizarListaUser) Lista de Usuários da Sala enviada para o JavaSpace");
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -459,7 +459,7 @@ public class Server {
             msg.chatList = arrayList;
             Platform.runLater(() -> {
                 try {
-                    space.write(msg, null, 60 * 1000);
+                    space.write(msg, null, 600 * 1000);
                     System.out.println("(writeListaChat)Lista de Salas enviada para o JavaSpace");
                 } catch (TransactionException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);

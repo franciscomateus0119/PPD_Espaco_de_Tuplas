@@ -25,7 +25,7 @@
             <InnerShadow height="10.0" radius="4.5" width="10.0" />
          </effect></TextField>
       <Button fx:id="BUTTON_VERIFICAR" layoutX="53.0" layoutY="146.0" mnemonicParsing="false" onMouseClicked="#verificarnome" text="Verificar Nome" />
-      <ImageView fitHeight="150.0" fitWidth="100.0" layoutX="51.0" layoutY="175.0" pickOnBounds="true" preserveRatio="true" visible="false">
+      <ImageView fx:id="CONFIG" fitHeight="150.0" fitWidth="100.0" layoutX="51.0" layoutY="175.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@conteudo/Realizando%20Configurações.png" />
          </image>

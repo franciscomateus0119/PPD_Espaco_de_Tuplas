@@ -35,8 +35,6 @@ public class MainGameController {
     private ChatToolbarController chatToolbarController;
     private Client client;
     private Stage mainStage;
-    //private Client clientInstance
-    //private SpaceHandler spacehandler;
     
     int numero = 0;
     Random rand;
@@ -73,8 +71,6 @@ public class MainGameController {
         
         gameController.init(this);
         System.out.println("GAMECONTROLLER set!");
-        //client.writeUserListServer();
-        //client.readUserList(numero, rand);
         client.setGameController(this);
         Platform.runLater(() -> {
             client.startThread();
@@ -93,13 +89,6 @@ public class MainGameController {
     public Client getClient() {
         return client;
     }
-    /*
-    public SpaceHandler getSpacehandler() {
-        return spacehandler;
-    }
-    */
-    
-
     public static MainGameController getG() {
         return g;
     }

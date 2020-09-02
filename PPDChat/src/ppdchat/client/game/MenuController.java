@@ -70,24 +70,9 @@ public class MenuController {
     @FXML
     public void initialize() {
         buttonConnect.setBackground(startbg);
-        /*
-        System.out.println("Procurando pelo servico JavaSpace...");
-        
-        finder = new Lookup(JavaSpace.class);
-        space = (JavaSpace) finder.getService();
-        if(space==null){
-            System.out.println("NULL");
-        }
-        else{
-            System.out.println("Encontrado: " + space);
-        }
-        */
         temp = new Message();
         temp.destino = "Espaco";
-        temp.type = "ListaUsuarios";
-        
-        
-        
+        temp.type = "ListaUsuarios"; 
     }
     
     @FXML
@@ -107,11 +92,9 @@ public class MenuController {
         }
         BUTTON_VERIFICAR.setDisable(true);
         BUTTON_VERIFICAR.setOpacity(0.5);
-        //TF_NOME.clear();
         try {
             if (TF_NOME.getText() != null && !TF_NOME.getText().equals("")) {
                 nome = TF_NOME.getText();
-                //TF_NOME.clear();
                 if (mensagem != null) {
                     System.out.println("Lista de nomes encontrada! Tamanho:  " + mensagem.namesList.size());
                     getnames = mensagem.namesList;
@@ -156,29 +139,9 @@ public class MenuController {
     @FXML
     public void connect(ActionEvent event){
         try{
-            //client = new Client();
-            //clientInstance = Client.getInstance();
-            //Registry registry = LocateRegistry.getRegistry();
-            //ServerInterface server = (ServerInterface) registry.lookup("BizingoRMIServer");
-            /*
-            if (!TF_NOME.getText().equals("")) {
-                //client = new Client(TF_NOME.getText());
-                nome = TF_NOME.getText();
-                TF_NOME.clear();
-                
-            }
-            else {
-                //client = new Client("Anonimo");
-                //clientInstance.setNome("Anonimo");
-                client = new Client("Anonimo");
-                //client.setNome("Anonimo");
-            }
-            */
             client = new Client(nome, space);
             System.out.println("Setting MenuController");
-            //clientInstance.setMenuController(this);
             client.setMenuController(this);
-            //server.registerClient(client);
         }
         catch(Exception e){
             e.printStackTrace();

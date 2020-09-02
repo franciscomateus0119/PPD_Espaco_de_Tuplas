@@ -28,21 +28,5 @@ public class InitServer extends Application{
             System.out.println("Failed Server Initialization!");
             e.printStackTrace();
         }
-        /*
-        try{
-            ServerInterface server = new Server();
-            ServerInterface serverinterface = (ServerInterface) UnicastRemoteObject.exportObject((ServerInterface) server, 0);
-            Registry registry = LocateRegistry.createRegistry(1099);
-            registry.bind("BizingoRMIServer", serverinterface);
-            System.out.println("Server Started Sucessfully!");
-        }
-        catch(RemoteException e){
-            System.out.println("Failed Server Initialization!");
-            e.printStackTrace();
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-        */
     }
 }
